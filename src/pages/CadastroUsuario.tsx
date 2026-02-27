@@ -46,7 +46,7 @@ const CriarUsuario = () => {
         setMessage(null); // Limpa mensagem anterior
 
         try {
-            const response = await fetch("http://127.0.0.1:8001/cadastro", {
+            const response = await fetch("https://backend-weld-five-44.vercel.app/cadastro", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values)

@@ -1,14 +1,20 @@
 // src/services/api.ts
-const API_URL = "https://backend-weld-five-44.vercel.app"; 
+const API_URL = "https://backend-weld-five-44.vercel.app";
+const TOKEN = "sKuHU5d4SdQG8odtbnbSOGpKb_KgjZej_JJMD3mRCvQ";
+
+const headers = {
+  Authorization: `Bearer ${TOKEN}`,
+  "Content-Type": "application/json",
+};
 
 export async function fetchDimensoes() {
   const [locais, faixas, sexos, modelos, anos_original, anos_projecoes] = await Promise.all([
-    fetch(`${API_URL}/dimensoes/locais`).then(r => r.json()),
-    fetch(`${API_URL}/dimensoes/faixas`).then(r => r.json()),
-    fetch(`${API_URL}/dimensoes/sexos`).then(r => r.json()),
-    fetch(`${API_URL}/dimensoes/modelos`).then(r => r.json()),
-    fetch(`${API_URL}/dimensoes/anos_original`).then(r => r.json()),
-    fetch(`${API_URL}/dimensoes/anos_projecoes`).then(r => r.json()),
+    fetch(`${API_URL}/dimensoes/locais`, { headers }).then(r => r.json()),
+    fetch(`${API_URL}/dimensoes/faixas`, { headers }).then(r => r.json()),
+    fetch(`${API_URL}/dimensoes/sexos`, { headers }).then(r => r.json()),
+    fetch(`${API_URL}/dimensoes/modelos`, { headers }).then(r => r.json()),
+    fetch(`${API_URL}/dimensoes/anos_original`, { headers }).then(r => r.json()),
+    fetch(`${API_URL}/dimensoes/anos_projecoes`, { headers }).then(r => r.json()),
   ]);
 
   return { locais, faixas, sexos, modelos, anos_original, anos_projecoes };
@@ -29,7 +35,7 @@ export async function fetchTabuaOriginal(params: FilterParams) {
     if (value) query.append(key, value.toString());
   });
 
-  const res = await fetch(`${API_URL}/original?${query.toString()}`);
+  const res = await fetch(`${API_URL}/original?${query.toString()}`, { headers });
   if (!res.ok) throw new Error("Falha ao buscar dados");
   return res.json();
 }
@@ -41,7 +47,7 @@ export async function fetchTabuaProjecoes(params: FilterParams) {
     if (value) query.append(key, value.toString());
   });
 
-  const res = await fetch(`${API_URL}/previsoes?${query.toString()}`);
+  const res = await fetch(`${API_URL}/previsoes?${query.toString()}`, { headers });
   if (!res.ok) throw new Error("Falha ao buscar dados");
   return res.json();
 }
