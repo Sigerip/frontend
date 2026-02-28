@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchDimensoes, fetchTabuaProjecoes } from "@/lib/api";
 import { DimFaixa, DimLocal, DimModelo, DimSexo, PaginatedResponse, Projecoes } from "@/lib/services";
 import { kMaxLength } from "buffer";
-import { Target } from "lucide-react";
+import { Loader2, Target } from "lucide-react";
 import { useEffect, useState } from "react";
 import Previsoes from "@/components/charts/Previsoes";
 
@@ -78,73 +78,79 @@ const DadosPrevisao = () => {
             </div>
             <h1 className="text-4xl font-bold mb-4">Previsão de Mortalidade</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Modelos preditivos para taxas de mortalidade futuras
+              Resultados dos modelos de previsão de mortalidade
             </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-            <div>
-              <label className="block text-sm font-medium mb-2">Ano</label>
-              <select
-                value={filters.ano}
-                onChange={(e) => handleFilterChange("ano", e.target.value)}
-                className="w-full px-3 py-2 border rounded-md"
-              >
-                {ano.map((ano) => (
-                  <option key={ano} value={ano}>
-                    {ano}
-                  </option>
-                ))}
-
-                
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-2">Local</label>
-              <select
-                value={filters.local}
-                onChange={(e) => handleFilterChange("local", e.target.value)}
-                className="w-full px-3 py-2 border rounded-md"
-              >
-                {locais.map((local) =>(
-                  <option value={local.id_local} key={local.id_local}>
-                    {local.nome_local}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-2"> Modelo</label>
-              <select
-                value={filters.modelo}
-                onChange={(e) => handleFilterChange("modelo", e.target.value)}
-                className="w-full px-3 py-2 border rounded-md"
-              >
-                {modelos.map((modelo) => (
-                  <option value={modelo.id_modelo} key={modelo.id_modelo}>{modelo.descricao}</option>
-                ))}
-              </select>
-            </div>
-
           </div>
 
           <Tabs defaultValue="previsao" className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-              <TabsTrigger value="previsao">Previsões</TabsTrigger>
-              <TabsTrigger value="modelo">Modelo</TabsTrigger>
+              <TabsTrigger value="previsao">Gráficos</TabsTrigger>
+              <TabsTrigger value="modelo">Tabela</TabsTrigger>
             </TabsList>
+
+            
+
             
             <TabsContent value="previsao" className="mt-6">
-              <Card>
+              <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle>Projeções Futuras</CardTitle>
-                  <CardDescription>
-                    Previsões baseadas em modelos estatísticos avançados
-                  </CardDescription>
+                  <h3 className="text-center mt-6 text-3xl font-bold">Mortalidade Por Faixa-Etária</h3>
+                  <CardTitle className="flex items-center gap-2">
+                    
+                    {isRefreshing && (
+                      <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                    )}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Ano</label>
+                      <select
+                        value={filters.ano}
+                        onChange={(e) => handleFilterChange("ano", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {ano.map((ano) => (
+                          <option key={ano} value={ano}>
+                            {ano}
+                          </option>
+                        ))}
+
+                        
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Local</label>
+                      <select
+                        value={filters.local}
+                        onChange={(e) => handleFilterChange("local", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {locais.map((local) =>(
+                          <option value={local.id_local} key={local.id_local}>
+                            {local.nome_local}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2"> Modelo</label>
+                      <select
+                        value={filters.modelo}
+                        onChange={(e) => handleFilterChange("modelo", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {modelos.map((modelo) => (
+                          <option value={modelo.id_modelo} key={modelo.id_modelo}>{modelo.descricao}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                  </div>
+                
                   <Previsoes dados={dados} faixas={faixas} sexos={sexos} />
                 </CardContent>
               </Card>
@@ -196,22 +202,6 @@ const DadosPrevisao = () => {
               </Card>
             </TabsContent>
           </Tabs>
-
-          <div className="mt-8">
-            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-              <CardHeader>
-                <CardTitle>Aplicações das Previsões</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
-                  As previsões de mortalidade são fundamentais para planejamento de políticas 
-                  públicas, alocação de recursos em saúde e desenvolvimento de estratégias 
-                  de prevenção. Nossos modelos auxiliam gestores na tomada de decisões 
-                  baseadas em evidências.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
     </div>

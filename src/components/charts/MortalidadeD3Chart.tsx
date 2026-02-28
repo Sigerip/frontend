@@ -211,8 +211,8 @@ const MortalidadeD3Chart = ({
       .attr("y", isMobile ? 18 : 25)
       .attr("text-anchor", "middle")
       .style("font-size", isMobile ? "12px" : "16px")
-      .style("font-weight", "600")
-      .text(isMobile ? "Taxa de Mortalidade (log)" : "Taxa Central de Mortalidade");
+      .style("font-weight", "600");
+      //.text(isMobile ? "Taxa de Mortalidade (log)" : "Taxa Central de Mortalidade");
 
     // Tooltip selection
     // const tooltip = d3.select(tooltipRef.current);

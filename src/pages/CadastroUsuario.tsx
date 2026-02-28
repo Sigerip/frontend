@@ -46,7 +46,7 @@ const CriarUsuario = () => {
         setMessage(null); // Limpa mensagem anterior
 
         try {
-            const response = await fetch("https://backend-weld-five-44.vercel.app/cadastro", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/cadastro`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values)

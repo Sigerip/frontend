@@ -1,6 +1,6 @@
 // src/services/api.ts
-const API_URL = "https://backend-weld-five-44.vercel.app";
-const TOKEN = "sKuHU5d4SdQG8odtbnbSOGpKb_KgjZej_JJMD3mRCvQ";
+const API_URL = import.meta.env.VITE_API_URL;
+const TOKEN = import.meta.env.VITE_TOKEN;
 
 const headers = {
   Authorization: `Bearer ${TOKEN}`,

@@ -88,7 +88,7 @@ const DadosMortalidade = () => {
             </div>
             <h1 className="text-4xl font-bold mb-4">Dados de Mortalidade</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Análise das taxas centrais de mortalidade por faixa etária
+              Análise dos dados originais coletados
             </p>
           </div>          
 
@@ -99,7 +99,7 @@ const DadosMortalidade = () => {
             </TabsList>
 
             <TabsContent value="tabela" className="mt-6">
-              <h2 className="text-4xl font-bold mb-4 text-center">Tabua de Mortalidade</h2>
+              <h3 className="text-3xl font-bold mb-4 text-center">Tábua de Mortalidade</h3>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                   <div>
@@ -155,11 +155,12 @@ const DadosMortalidade = () => {
             </TabsContent>
 
             <TabsContent value="graficos" className="mt-6">
-              <h2 className="text-4xl font-bold mb-4 text-center">Gráfico da Curva de Mortalidade</h2>
+
               <Card className="mb-6">
                 <CardHeader>
+                  <h3 className="text-center mt-6 text-3xl font-bold">Mortalidade Por Faixa-Etária</h3>
                   <CardTitle className="flex items-center gap-2">
-                    Filtros
+                    
                     {isRefreshing && (
                       <Loader2 className="h-4 w-4 animate-spin text-primary" />
                     )}
@@ -201,48 +202,42 @@ const DadosMortalidade = () => {
                     </div>                
                   </div>
                   <MortalidadeD3Chart dados={dados} faixas={faixas} sexos={sexos} />
-                </CardContent>
-              </Card>
-
-              <h2 className="text-4xl font-bold mb-4 text-center mt-24">Força de Mortalidade</h2>
-              <Card>
-                <CardHeader>
-                </CardHeader>
-                <CardContent>
+                
+                  <h3 className="text-center mt-12 text-3xl font-bold mb-6">Mortalidade Por Ano</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Faixa</label>
-                    <select
-                      value={filters.faixa}
-                      onChange={(e) => handleFilterChange("faixa", e.target.value)}
-                      className="w-full px-3 py-2 border rounded-md"
-                    >
-                      {faixas.map((faixa) => (
-                        <option key={faixa.id_faixa} value={faixa.id_faixa}>
-                          {faixa.descricao}
-                        </option>
-                      ))}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Faixa</label>
+                      <select
+                        value={filters.faixa}
+                        onChange={(e) => handleFilterChange("faixa", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {faixas.map((faixa) => (
+                          <option key={faixa.id_faixa} value={faixa.id_faixa}>
+                            {faixa.descricao}
+                          </option>
+                        ))}
 
-                      
-                    </select>
+                        
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Local</label>
+                      <select
+                        value={filters.local2}
+                        onChange={(e) => handleFilterChange("local2", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {locais.map((local2) =>(
+                          <option value={local2.id_local} key={local2.id_local}>
+                            {local2.nome_local}
+                          </option>
+                        ))}
+                      </select>
+                    </div>                
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Local</label>
-                    <select
-                      value={filters.local2}
-                      onChange={(e) => handleFilterChange("local2", e.target.value)}
-                      className="w-full px-3 py-2 border rounded-md"
-                    >
-                      {locais.map((local2) =>(
-                        <option value={local2.id_local} key={local2.id_local}>
-                          {local2.nome_local}
-                        </option>
-                      ))}
-                    </select>
-                  </div>                
-                </div>
                   <DadosMortalidade2 dados={dados2} faixas={faixas} sexos={sexos}/>
                 </CardContent>
               </Card>
