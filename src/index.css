@@ -119,3 +119,7 @@ All colors MUST be HSL.
 html {
   scroll-behavior: smooth;
 }
+
+.justificado {
+  text-align: justify;
+}

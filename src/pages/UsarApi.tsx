@@ -3,28 +3,28 @@ import React from 'react';
 export default function DocumentacaoAPI() {
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h1>Documentação da API</h1>
+      <h1 className='text-4xl font-bold mb-6'>Instruções de uso da API</h1>
       <p>
-        Bem-vindo à documentação da nossa API de dados atuariais e demográficos. 
-        Para acessar os endpoints abaixo, você precisa de um <strong>Token de Acesso</strong> válido.
+        Bem-vindo a página de instruções de uso da nossa API de dados atuariais e demográficos. 
+        Para acessar os endpoints abaixo, você precisa de um <strong>Token de Acesso</strong> válido,  podendo ser solicitado na página <a href="/solicitar-token" className='text-blue-500 font-medium hover:underline'>Solicitar Token</a>.
       </p>
 
       <hr style={{ margin: '20px 0' }} />
 
-      <h2>🔒 Como Autenticar (Bearer Token)</h2>
+      <h2 className='text-2xl font-semibold mb-4'>🔒 Como Autenticar (Bearer Token)</h2>
       <p>
         Todas as requisições devem incluir o seu token no cabeçalho (Header) <code>Authorization</code>, 
         utilizando o formato <strong>Bearer</strong>. 
       </p>
       
-      <div style={{ backgroundColor: '#f4f4f4', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
+      <div style={{ backgroundColor: '#f4f4f4', padding: '15px', borderRadius: '8px', marginBottom: '20px' }} className='mt-4'>
         <strong>Formato do Cabeçalho:</strong>
         <pre style={{ margin: '10px 0 0 0' }}>Authorization: Bearer SEU_TOKEN_AQUI</pre>
       </div>
 
       <hr style={{ margin: '20px 0' }} />
 
-      <h2>📍 Endpoints Disponíveis</h2>
+      <h2 className='text-2xl font-semibold mb-4'>📍 Endpoints Disponíveis</h2>
       <p>A URL base da API é: <code>{'https://backend-weld-five-44.vercel.app'}</code></p>
 
       <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -48,9 +48,9 @@ export default function DocumentacaoAPI() {
 
       <hr style={{ margin: '20px 0' }} />
 
-      <h2 className='text-3xl font-bold'>💻 Exemplos de Uso</h2>
+      <h2 className='text-2xl font-bold'>💻 Exemplos de Uso</h2>
       
-      <h3 className='mt-6 text-2xl font-semibold mb-4'>JavaScript (Fetch API)</h3>
+      <h3 className='mt-6 text-xl font-semibold mb-4'>JavaScript (Fetch API)</h3>
       <pre style={{ backgroundColor: '#2d2d2d', color: '#ccc', padding: '15px', borderRadius: '8px', overflowX: 'auto' }}>
 {`const token = "SEU_TOKEN_RECEBIDO_POR_EMAIL";
 
@@ -66,7 +66,7 @@ fetch("https://backend-weld-five-44.vercel.app/previsoes", {
 .catch(error => console.error("Erro:", error));`}
       </pre>
 
-      <h3 className='mt-6 text-2xl font-semibold mb-4'>Python (Requests)</h3>
+      <h3 className='mt-6 text-xl font-semibold mb-4'>Python (Requests)</h3>
       <pre style={{ backgroundColor: '#2d2d2d', color: '#ccc', padding: '15px', borderRadius: '8px', overflowX: 'auto' }}>
 {`import requests
 

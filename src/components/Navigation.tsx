@@ -17,7 +17,7 @@ const Navigation = () => {
     { path: "/mortalidade-infantil", label: "Mortalidade Infantil" },
     { path: "/previsao-mortalidade", label: "Previsão Mortalidade" },
     { path: "/previsao-expectativa", label: "Previsão Expectativa" },
-    { path: "/cadastro-api", label: "Cadastro API" },
+    { path: "/solicitar-token", label: "Solicitar Token" },
     { path: "/usar-api", label: "Usar API" }
   ];
 
@@ -29,7 +29,7 @@ const Navigation = () => {
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-              <img src="../../public/img/logo.jpg" alt="logo" className="h-full w-full rounded-full object-cover" />
+              <img src="/img/logo.jpg" alt="logo" className="h-full w-full rounded-full object-cover" />
             </div>
             <span className="font-bold text-xl bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               OIAtuarial

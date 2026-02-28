@@ -103,12 +103,12 @@ const Home = () => {
             {[
               {
                 name: "UFPB",
-                logo: "../../public/img/brasao.png",
+                logo: "/img/brasao.png",
                 link: "http://www.cnpq.br/"
               },
               {
                 name: "PROEX",
-                logo: "../../public/img/PROEXFULL.png",
+                logo: "/img/PROEXFULL.png",
                 link: "https://www.gov.br/capes/pt-br"
               },].map((sponsor, index) => (
               <a
