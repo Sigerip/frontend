@@ -60,8 +60,8 @@ const CriarUsuario = () => {
                 setMessage({ text: data.mensagem, type: 'success' });
                 
                 setTimeout(() => {
-                    navigate("/metodologia"); 
-                }, 2000);
+                    navigate("/usar-api"); 
+                }, 4000);
                 
                 form.reset();
             } else {

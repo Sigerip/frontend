@@ -15,6 +15,7 @@ import MortalidadePage from "./pages/MortalidadePage";
 import Teste from "./pages/teste1";
 import NotFound from "./pages/NotFound";
 import CadastroUsuario from "./pages/CadastroUsuario";
+import UsarApi from "./pages/UsarApi";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/mortalidade" element={<MortalidadePage />} />
           <Route path="/previsao-expectativa" element={<PrevisaoExpectativa />} />
           <Route path="/cadastro-api" element={<CadastroUsuario />} />
+          <Route path="/usar-api" element={<UsarApi />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

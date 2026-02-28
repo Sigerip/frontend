@@ -18,6 +18,7 @@ const Navigation = () => {
     { path: "/previsao-mortalidade", label: "Previsão Mortalidade" },
     { path: "/previsao-expectativa", label: "Previsão Expectativa" },
     { path: "/cadastro-api", label: "Cadastro API" },
+    { path: "/usar-api", label: "Usar API" }
   ];
 
   const isActive = (path: string) => location.pathname === path;
