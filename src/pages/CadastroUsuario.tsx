@@ -13,13 +13,17 @@ import { useNavigate } from 'react-router-dom';
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2, AlertCircle, Key, Mail, Code, Activity } from "lucide-react";
+import { Description } from "@radix-ui/react-toast";
+
+
 
 const formSchema = z.object({
     nome: z.string().min(1, "O nome é obrigatório"),
     email: z.string().email("Email inválido"),
     uso: z.enum(["academico", "profissional", "pessoal"], {
         errorMap: () => ({ message: "Selecione um uso válido" })
-    })
+    }),
+    descricao: z.string().min(1, "Este campo é obrigatório"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -35,9 +39,12 @@ const CriarUsuario = () => {
         defaultValues: {
             nome: "",
             email: "",
-            uso: "academico"
+            uso: "academico",
+            descricao: "",
         }
     });
+
+    const usoSelecionado = form.watch("uso");
 
     const onSubmit = async (values: FormData) => {
         setIsLoading(true);
@@ -189,6 +196,29 @@ const CriarUsuario = () => {
                                                     <SelectItem value="pessoal">Pessoal</SelectItem>
                                                 </SelectContent>
                                             </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="descricao"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            {/* A Label muda baseada no watch */}
+                                            <FormLabel className="text-slate-700 font-medium">
+                                                {usoSelecionado === "pessoal" ? "Descrição" : "Instituição/Empresa"}
+                                            </FormLabel>
+                                            
+                                            <FormControl>
+                                                {/* O placeholder também muda para ajudar o usuário */}
+                                                <Input 
+                                                    placeholder={usoSelecionado === "pessoal" ? "Descreva brevemente o uso..." : "Nome da Instituição ou Empresa"} 
+                                                    {...field} 
+                                                    className="border-slate-300 focus-visible:ring-blue-500" 
+                                                />
+                                            </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
