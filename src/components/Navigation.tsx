@@ -23,13 +23,13 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/30">
+      <div className="mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           
           {/* LADO ESQUERDO: Logo e Título 
               Adicionado mr-8 xl:mr-16 para afastar o menu "Início" e space-x-3 para afastar o nome da bolinha */}
-          <Link to="/" className="flex items-center space-x-3 mr-8 xl:mr-16 shrink-0">
+          <Link to="/" className="flex items-center space-x-2 mr-8 xl:mr-8 shrink-0">
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
               <img src="/img/logo.jpg" alt="logo" className="h-full w-full rounded-full object-cover" />
             </div>
