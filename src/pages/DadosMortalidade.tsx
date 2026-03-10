@@ -201,7 +201,13 @@ const DadosMortalidade = () => {
                       </select>
                     </div>                
                   </div>
-                  <MortalidadeD3Chart dados={dados} faixas={faixas} sexos={sexos} />
+                  {loading ? (
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
+                  ) : (
+                    <MortalidadeD3Chart dados={dados} faixas={faixas} sexos={sexos} />
+                  )}
                 
                   <h3 className="text-center mt-12 text-3xl font-bold mb-6">Mortalidade Por Ano</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,7 +244,13 @@ const DadosMortalidade = () => {
                       </select>
                     </div>                
                   </div>
-                  <DadosMortalidade2 dados={dados2} faixas={faixas} sexos={sexos}/>
+                  {loading ? (
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary"/>
+                    </div>
+                  ) : (
+                    <DadosMortalidade2 dados={dados2} faixas={faixas} sexos={sexos}/>
+                  )}
                 </CardContent>
               </Card>
 
