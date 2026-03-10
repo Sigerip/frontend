@@ -12,9 +12,9 @@ const MultiLangCodeBlock = () => {
 import pandas as pd
 
 token = "SEU TOKEN AQUI"
-dados = "DADOS QUE ESTÁ BUSCANDO"
+endpoint = "ENDPOINT AQUI"
 
-url = f"https://backend-weld-five-44.vercel.app/oiatuarial_api/{dados}"
+url = f"https://backend-weld-five-44.vercel.app/oiatuarial_api/{endpoint}"
 headers = {
     "Authorization": f"Bearer {token}"
 }
@@ -37,10 +37,10 @@ install.packages('httr')
 library(httr)
 library(arrow)
 
-dados <- "DADOS QUE ESTÁ BUSCANDO"
 token <- "SEU TOKEM AQUI"
+endpoint <- "ENDPOINT AQUI"
 
-url <- paste0("https://backend-weld-five-44.vercel.app/oiatuarial_api/", dados)
+url <- paste0("https://backend-weld-five-44.vercel.app/oiatuarial_api/", endpoint)
 headers <- add_headers(Authorization = paste0("Bearer ", token))
 
 
