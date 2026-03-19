@@ -10,9 +10,9 @@ import DadosMortalidade from "./pages/DadosMortalidade";
 import ExpectativaVida from "./pages/ExpectativaVida";
 import MortalidadeInfantil from "./pages/NotFound";
 import PrevisaoMortalidade from "./pages/PrevisaoMortalidade";
-import PrevisaoExpectativa from "./pages/NotFound";
+import PrevisaoExpectativa from "./pages/PrevisaoExpectativa";
 import MortalidadePage from "./pages/MortalidadePage";
-import Teste from "./pages/teste1";
+import Teste from "./pages/teste2";
 import NotFound from "./pages/NotFound";
 import CadastroUsuario from "./pages/CadastroUsuario";
 import UsarApi from "./pages/UsarApi";
@@ -28,7 +28,7 @@ const App = () => (
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/teste1" element={<Teste />}/>
+          <Route path="/teste2" element={<Teste />}/>
           <Route path="/metodologia" element={<Metodologia />} />
           <Route path="/dados-mortalidade" element={<DadosMortalidade />} />
           <Route path="/expectativa-vida" element={<ExpectativaVida />} />

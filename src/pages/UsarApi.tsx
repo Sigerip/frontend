@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Key, Code2, Network, CheckCircle2 } from 'lucide-react';
+import { Key, Code2, Network, CheckCircle2, Clipboard } from 'lucide-react';
+import { ClipboardCheck } from "@/components/animate-ui/icons/clipboard-check";
 
 // Componente de Bloco de Código com Abas
 const MultiLangCodeBlock = () => {
   const [activeTab, setActiveTab] = useState('python');
+  const [isCopied, setIsCopied] = useState(false);
 
   const snippets = {
     python: {
@@ -53,22 +55,48 @@ print(head(dados))`
     }
   };
 
+  const handleCopy = async () => {
+    try {
+      const currentCode = snippets[activeTab].code;
+
+      await navigator.clipboard.writeText(currentCode);
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+
+      }, 2000);
+    } catch (err) {
+      console.error('Falha ao copiar o texto: ', err);
+    }
+  }
+
   return (
     <div className="my-6 rounded-xl overflow-hidden border border-zinc-800 shadow-lg">
-      <div className="flex bg-zinc-900 border-b border-zinc-800">
-        {(Object.keys(snippets) as Array<keyof typeof snippets>).map((lang) => (
-          <button
-            key={lang}
-            onClick={() => setActiveTab(lang)}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === lang
-                ? 'text-primary border-b-2 border-primary bg-zinc-800/50'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30'
-            }`}
-          >
-            {snippets[lang].name}
-          </button>
-        ))}
+      <div className="flex items-center justify-between bg-zinc-900 border-b border-zinc-800">
+        <div className='flex'>
+          {(Object.keys(snippets) as Array<keyof typeof snippets>).map((lang) => (
+            <button
+              key={lang}
+              onClick={() => setActiveTab(lang)}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === lang
+                  ? 'text-primary border-b-2 border-primary bg-zinc-800/50'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30'
+              }`}
+            >
+              {snippets[lang].name}
+            </button>
+          ))}
+        </div>
+        <button 
+          onClick={handleCopy}
+          className='p-1.5 rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30 transition-colors'>
+          {isCopied ? (
+            <ClipboardCheck size={18} className="text-green-500" transition={{ duration: 0.8 }}/>
+          ): (
+            <Clipboard animateOnHover size={18} />
+          )}
+        </button>
       </div>
       <pre className="p-4 bg-[#1e1e1e] text-zinc-100 overflow-x-auto text-sm">
         <code>{snippets[activeTab as keyof typeof snippets].code}</code>

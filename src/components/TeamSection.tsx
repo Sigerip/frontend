@@ -100,14 +100,13 @@ export function TeamSection() {
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">Conheça nosso time</h2>
           
         </div>
         
         {/* 3. Botão que chama a função de toggle */}
         <div className="text-center">
           <Button onClick={toggleTeamVisibility} size="lg">
-            {isTeamVisible ? 'Ocultar Equipe' : 'Ver Equipe Completa'}
+            {isTeamVisible ? 'Ocultar Equipe' : 'Conheça nosso time'}
           </Button>
         </div>
 

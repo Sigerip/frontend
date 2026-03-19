@@ -1,8 +1,66 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp } from "lucide-react";
+import { Loader2, TrendingUp } from "lucide-react";
+import { DimFaixa, DimLocal, DimSexo, PaginatedResponse, type Projecoes } from "@/lib/services";
+import { fetchDimensoes, fetchTabuaProjecoes } from "@/lib/api";
+import ExpectativaVidaChart from "@/components/charts/expectativa";
+import DownloadButton from "@/components/DownloadButton";
 
-const PrevisaoExpectativa = () => {
+const ExpectativaVida = () => {
+  const [locais, setLocais] = useState<DimLocal[]>([]);
+  const [faixas, setFaixas] = useState<DimFaixa[]>([]);
+  const [sexos, setSexos] = useState<DimSexo[]>([]);
+
+  const [dados, setDados] = useState<Projecoes[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const [filters, setFilters] = useState({
+    local: 1,
+    faixa: 1,
+    page: 1,
+  });
+
+  // Carregar dimensões
+  useEffect(() => {
+    async function loadDims() {
+      try {
+        const dims = await fetchDimensoes();
+        setLocais(dims.locais);
+        setFaixas(dims.faixas);
+        setSexos(dims.sexos);
+      } catch (err) {
+        console.error("Erro ao carregar dimensões:", err);
+      }
+    }
+    loadDims();
+  }, []);
+
+  // Carregar dados com filtros
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      try {
+        const apiparams: any = { page: filters.page };
+        if (filters.local) apiparams.local = filters.local;
+        if (filters.faixa) apiparams.faixa = filters.faixa;
+
+        const response: PaginatedResponse<Projecoes> = await fetchTabuaProjecoes(apiparams);
+        setDados(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [filters]);
+
+  const handleFilterChange = (field: string, value: string | number) => {
+    setFilters(prev => ({ ...prev, [field]: Number(value), page: 1 }));
+  };
+
   return (
     <div className="min-h-screen py-12">
       <div className="container mx-auto px-4">
@@ -11,103 +69,157 @@ const PrevisaoExpectativa = () => {
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-primary/10 text-primary mb-4">
               <TrendingUp className="h-8 w-8" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">Previsão de Expectativa de Vida</h1>
+            <h1 className="text-4xl font-bold mb-4">Expectativa de Vida</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Projeções da expectativa de vida para os próximos anos
+              Análise da expectativa de vida no Brasil entre 2000-2023
             </p>
           </div>
 
-          <Tabs defaultValue="previsao" className="w-full">
+          <Tabs defaultValue="grafico" className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-              <TabsTrigger value="previsao">Previsões</TabsTrigger>
-              <TabsTrigger value="cenarios">Cenários</TabsTrigger>
+              <TabsTrigger value="grafico">Gráfico</TabsTrigger>
+              <TabsTrigger value="tabela">Tabela</TabsTrigger>
             </TabsList>
-            
-            <TabsContent value="previsao" className="mt-6">
+
+            <TabsContent value="grafico" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Projeções da Expectativa de Vida</CardTitle>
-                  <CardDescription>
-                    Tendências futuras baseadas em análise histórica
-                  </CardDescription>
+                  <h3 className="text-center mt-2 text-3xl font-bold">Expectativa de Vida por Ano</h3>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-96 flex items-center justify-center bg-muted/30 rounded-lg">
-                    <p className="text-muted-foreground">
-                      Gráfico de projeções será implementado
-                    </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Faixa Etária</label>
+                      <select
+                        value={filters.faixa}
+                        onChange={(e) => handleFilterChange("faixa", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {faixas.map((faixa) => (
+                          <option key={faixa.id_faixa} value={faixa.id_faixa}>
+                            {faixa.descricao}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Local</label>
+                      <select
+                        value={filters.local}
+                        onChange={(e) => handleFilterChange("local", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {locais.map((local) => (
+                          <option value={local.id_local} key={local.id_local}>
+                            {local.nome_local}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
+
+                  {loading ? (
+                    <div className="h-96 flex items-center justify-center bg-muted/30 rounded-lg">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
+                  ) : (
+                    <ExpectativaVidaChart dados={dados} faixas={faixas} sexos={sexos} />
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
-            
-            <TabsContent value="cenarios" className="mt-6">
+
+            <TabsContent value="tabela" className="mt-6">
+              <h3 className="text-3xl font-bold mb-4 text-center">Dados de Expectativa de Vida</h3>
               <Card>
-                <CardHeader>
-                  <CardTitle>Análise de Cenários</CardTitle>
-                  <CardDescription>
-                    Diferentes cenários de desenvolvimento e impacto
-                  </CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                  <div>
+                    <CardDescription>{dados.length} registros filtrados</CardDescription>
+                  </div>
+                  <DownloadButton
+                    dados={dados}
+                    filename={`expectativa_vida_${filters.local}_faixa${filters.faixa}`}
+                    disabled={loading}
+                  />
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="p-4 bg-muted/30 rounded-lg">
-                      <h4 className="font-semibold mb-2">Cenário Otimista</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Avanços significativos em saúde pública e qualidade de vida
-                      </p>
+                <CardContent className={`transition-opacity duration-300 ${isRefreshing ? 'opacity-50' : 'opacity-100'}`}>
+                  {/* Filtros na tabela também */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Faixa Etária</label>
+                      <select
+                        value={filters.faixa}
+                        onChange={(e) => handleFilterChange("faixa", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {faixas.map((faixa) => (
+                          <option key={faixa.id_faixa} value={faixa.id_faixa}>
+                            {faixa.descricao}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="p-4 bg-muted/30 rounded-lg">
-                      <h4 className="font-semibold mb-2">Cenário Base</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Manutenção das tendências atuais de desenvolvimento
-                      </p>
-                    </div>
-                    <div className="p-4 bg-muted/30 rounded-lg">
-                      <h4 className="font-semibold mb-2">Cenário Conservador</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Desafios em saúde pública e aspectos socioeconômicos
-                      </p>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Local</label>
+                      <select
+                        value={filters.local}
+                        onChange={(e) => handleFilterChange("local", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {locais.map((local) => (
+                          <option value={local.id_local} key={local.id_local}>
+                            {local.nome_local}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
+
+                  {dados.length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y">
+                        <thead>
+                          <tr className="bg-muted/50">
+                            <th className="px-4 py-3 text-left text-sm font-medium">Ano</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium">Faixa</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium">Local</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium">Sexo</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium">ex (anos)</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                          {dados.slice(0, 100).map((item) => (
+                            <tr key={item.id} className="hover:bg-muted/50">
+                              <td className="px-4 py-2 text-sm">{item.ano}</td>
+                              <td className="px-4 py-2 text-sm">{faixas.find(f => f.id_faixa === item.id_faixa)?.descricao || item.id_faixa}</td>
+                              <td className="px-4 py-2 text-sm">{locais.find(f => f.id_local === item.id_local)?.nome_local || item.id_local}</td>
+                              <td className="px-4 py-2 text-sm">{sexos.find(f => f.id_sexo === item.id_sexo)?.descricao || item.id_sexo}</td>
+                              <td className="px-4 py-2 text-sm font-mono">{item.ex?.toFixed(2)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {dados.length > 100 && (
+                        <p className="text-sm text-muted-foreground mt-4 text-center">
+                          Mostrando 100 de {dados.length} registros
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="h-48 flex items-center justify-center bg-muted/30 rounded-lg">
+                      <p className="text-muted-foreground">Nenhum dado disponível</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
-
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Fatores Considerados</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Tendências históricas de mortalidade</li>
-                  <li>• Avanços em saúde pública</li>
-                  <li>• Desenvolvimento socioeconômico</li>
-                  <li>• Políticas de saúde preventiva</li>
-                </ul>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Aplicações Práticas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Planejamento previdenciário</li>
-                  <li>• Políticas de saúde pública</li>
-                  <li>• Investimentos em infraestrutura</li>
-                  <li>• Estratégias de desenvolvimento</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default PrevisaoExpectativa;
+export default ExpectativaVida;

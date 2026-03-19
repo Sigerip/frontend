@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
       colors: {
         "sigerip-dark": "hsl(var(--sigerip-dark))",
         "sigerip-blue": "hsl(var(--sigerip-blue))",
