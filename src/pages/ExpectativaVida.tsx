@@ -71,7 +71,7 @@ const ExpectativaVida = () => {
             </div>
             <h1 className="text-4xl font-bold mb-4">Expectativa de Vida</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Análise da expectativa de vida no Brasil entre 2000-2023
+              Análise da evolução da expectativa de vida no Brasil entre 2000-2023.
             </p>
           </div>
 
@@ -83,11 +83,8 @@ const ExpectativaVida = () => {
 
             <TabsContent value="grafico" className="mt-6">
               <Card>
-                <CardHeader>
-                  <h3 className="text-center mt-2 text-3xl font-bold">Expectativa de Vida por Ano</h3>
-                </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                     <div>
                       <label className="block text-sm font-medium mb-2">Faixa Etária</label>
                       <select
@@ -208,8 +205,8 @@ const ExpectativaVida = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="h-48 flex items-center justify-center bg-muted/30 rounded-lg">
-                      <p className="text-muted-foreground">Nenhum dado disponível</p>
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                   )}
                 </CardContent>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, TrendingUp } from "lucide-react";
-import { DimFaixa, DimLocal, DimSexo, PaginatedResponse, type Projecoes } from "@/lib/services";
+import { DimFaixa, DimLocal, DimModelo, DimSexo, PaginatedResponse, type Projecoes } from "@/lib/services";
 import { fetchDimensoes, fetchTabuaProjecoes } from "@/lib/api";
 import ExpectativaVidaChart from "@/components/charts/expectativa";
 import DownloadButton from "@/components/DownloadButton";
@@ -11,6 +11,7 @@ const ExpectativaVida = () => {
   const [locais, setLocais] = useState<DimLocal[]>([]);
   const [faixas, setFaixas] = useState<DimFaixa[]>([]);
   const [sexos, setSexos] = useState<DimSexo[]>([]);
+  const [modelos, setModelos] = useState<DimModelo[]>([]);
 
   const [dados, setDados] = useState<Projecoes[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ const ExpectativaVida = () => {
     local: 1,
     faixa: 1,
     page: 1,
+    modelo: 1,
   });
 
   // Carregar dimensões
@@ -30,6 +32,7 @@ const ExpectativaVida = () => {
         setLocais(dims.locais);
         setFaixas(dims.faixas);
         setSexos(dims.sexos);
+        setModelos(dims.modelos);
       } catch (err) {
         console.error("Erro ao carregar dimensões:", err);
       }
@@ -45,6 +48,7 @@ const ExpectativaVida = () => {
         const apiparams: any = { page: filters.page };
         if (filters.local) apiparams.local = filters.local;
         if (filters.faixa) apiparams.faixa = filters.faixa;
+        if (filters.modelo) apiparams.modelo = filters.modelo;
 
         const response: PaginatedResponse<Projecoes> = await fetchTabuaProjecoes(apiparams);
         setDados(response.data);
@@ -69,9 +73,9 @@ const ExpectativaVida = () => {
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-primary/10 text-primary mb-4">
               <TrendingUp className="h-8 w-8" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">Expectativa de Vida</h1>
+            <h1 className="text-4xl font-bold mb-4">Previsão da Expectativa de Vida</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Análise da expectativa de vida no Brasil entre 2000-2023
+              Análise da previsão da expectativa de vida no Brasil entre 2024-2070.
             </p>
           </div>
 
@@ -83,11 +87,9 @@ const ExpectativaVida = () => {
 
             <TabsContent value="grafico" className="mt-6">
               <Card>
-                <CardHeader>
-                  <h3 className="text-center mt-2 text-3xl font-bold">Expectativa de Vida por Ano</h3>
-                </CardHeader>
+                
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 mt-5">
                     <div>
                       <label className="block text-sm font-medium mb-2">Faixa Etária</label>
                       <select
@@ -113,6 +115,21 @@ const ExpectativaVida = () => {
                         {locais.map((local) => (
                           <option value={local.id_local} key={local.id_local}>
                             {local.nome_local}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Modelo</label>
+                      <select
+                        value={filters.modelo}
+                        onChange={(e) => handleFilterChange("modelo", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {modelos.map((modelo) => (
+                          <option value={modelo.id_modelo} key={modelo.id_modelo}>
+                            {modelo.descricao}
                           </option>
                         ))}
                       </select>
@@ -145,7 +162,7 @@ const ExpectativaVida = () => {
                 </CardHeader>
                 <CardContent className={`transition-opacity duration-300 ${isRefreshing ? 'opacity-50' : 'opacity-100'}`}>
                   {/* Filtros na tabela também */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">Faixa Etária</label>
                       <select
@@ -175,6 +192,21 @@ const ExpectativaVida = () => {
                         ))}
                       </select>
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Modelo</label>
+                      <select
+                        value={filters.modelo}
+                        onChange={(e) => handleFilterChange("modelo", e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                      >
+                        {modelos.map((modelo) => (
+                          <option value={modelo.id_modelo} key={modelo.id_modelo}>
+                            {modelo.descricao}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
                   </div>
 
                   {dados.length > 0 ? (
@@ -186,6 +218,7 @@ const ExpectativaVida = () => {
                             <th className="px-4 py-3 text-left text-sm font-medium">Faixa</th>
                             <th className="px-4 py-3 text-left text-sm font-medium">Local</th>
                             <th className="px-4 py-3 text-left text-sm font-medium">Sexo</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium">Modelo</th>
                             <th className="px-4 py-3 text-left text-sm font-medium">ex (anos)</th>
                           </tr>
                         </thead>
@@ -196,6 +229,7 @@ const ExpectativaVida = () => {
                               <td className="px-4 py-2 text-sm">{faixas.find(f => f.id_faixa === item.id_faixa)?.descricao || item.id_faixa}</td>
                               <td className="px-4 py-2 text-sm">{locais.find(f => f.id_local === item.id_local)?.nome_local || item.id_local}</td>
                               <td className="px-4 py-2 text-sm">{sexos.find(f => f.id_sexo === item.id_sexo)?.descricao || item.id_sexo}</td>
+                              <td className="px-4 py-2 text-sm">{modelos.find(m => m.id_modelo === item.id_modelo)?.descricao || item.id_modelo}</td>
                               <td className="px-4 py-2 text-sm font-mono">{item.ex?.toFixed(2)}</td>
                             </tr>
                           ))}
@@ -208,8 +242,8 @@ const ExpectativaVida = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="h-48 flex items-center justify-center bg-muted/30 rounded-lg">
-                      <p className="text-muted-foreground">Nenhum dado disponível</p>
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                   )}
                 </CardContent>

@@ -14,10 +14,13 @@ import {
   BookOpen,
   Lightbulb,
   Shield,
+  TrendingUpDown,
 } from "lucide-react";
 import { TeamSection } from "@/components/TeamSection";
 import { motion } from "motion/react";
 import { link } from "fs";
+// Importe junto com seus outros imports (ajuste o caminho da pasta)
+import backgroundGif from '../../public/img/chart.gif';
 
 const Home = () => {
   const features = [
@@ -54,13 +57,13 @@ const Home = () => {
   const stats = [
     { icon: BarChart3, label: "Originais", link: "/dados-mortalidade" },
     { icon: Activity, label: "Mort. Infantil", link: "/mortalidade-infantil" },
-    { icon: Target, label: "Projeções", link: "/previsao-mortalidade" },
     { icon: TrendingUp, label: "Expec. de Vida", link: "/expectativa-vida" },
+    { icon: TrendingUpDown, label: "Projeções", link: "/previsao-mortalidade" },
   ];
 
   const highlights = [
     "Tábuas de mortalidade atualizadas por região",
-    "Modelos preditivos com machine learning",
+    "Modelos preditivos para projeção de mortalidade",
     "Dados do SIM/DATASUS e IBGE",
     "Aplicações em ciências atuariais e demografia",
   ];
@@ -68,13 +71,29 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* ===== HERO SECTION ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-sigerip-dark via-sigerip-dark to-primary py-24 md:py-28">
-        {/* Decorative pattern */}
-        <div className="absolute inset-0 bg-dot-pattern" />
-        {/* Decorative circles */}
-        <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+      {/* 1. Removi as cores de fundo daqui para colocá-las em camadas internas */}
+      <section className="relative overflow-hidden py-24 md:py-28">
+        
+        {/* CAMADA 1: O GIF animado (Fica lá no fundo) */}
+        <div 
+          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${backgroundGif})`,
+          backgroundPosition: 'center 5%' }}
+          
+        />
 
+        {/* CAMADA 2: O Degradê Azul (Fica por cima do GIF) */}
+        {/* Adicionei /80 e /90 nas cores para dar transparência e deixar o GIF aparecer */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-sigerip-dark/90 via-sigerip-dark/80 to-primary/90" />
+
+        {/* Decorative pattern original (adicionei -z-10 pra não ficar por cima do texto) */}
+        <div className="absolute inset-0 bg-dot-pattern -z-10 opacity-50" />
+        
+        {/* Decorative circles originais (adicionei -z-10) */}
+        <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl -z-10" />
+        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl -z-10" />
+
+        {/* === O SEU CONTEÚDO CONTINUA INTACTO A PARTIR DAQUI === */}
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             {/* Badge */}
@@ -83,7 +102,7 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-sm font-medium text-white/90 mb-6">
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-sm font-medium text-white/90">
                 <Lightbulb className="h-3.5 w-3.5" />
                 Observatório de Inteligência
               </span>
@@ -91,7 +110,7 @@ const Home = () => {
 
             {/* Title */}
             <motion.h1
-              className="mt-4 mb-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+              className="mb-6 mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -121,8 +140,7 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-                
-                <h2 className="text-center text-white mb-4 font-bold text-2xl">Explore nossos dados</h2>
+                <h2 className="mb-4 text-center text-2xl font-bold text-white">Explore nossos dados</h2>
             </motion.div>
           </div>
 
@@ -133,23 +151,21 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
           >
-            <div className="glass rounded-2xl px-260 py-5">
+            <div className="glass px-260 rounded-2xl py-5">
               <div className="grid grid-cols-4 divide-x divide-white/10">
                 {stats.map((stat, index) => {
                   const Icon = stat.icon;
                   return (
-                    <Link to={stat.link} className="block h-full group">
+                    <Link to={stat.link} key={index} className="group block h-full">
                       <div
-                        key={index}
-                        className="flex flex-col items-center px-4 
-                                  transition-all duration-300 ease-in-out
-                                  hover:scale-110 
-                                  rounded-xl cursor-pointer"
+                        className="flex cursor-pointer flex-col items-center rounded-xl px-4 
+                                  transition-all duration-300 ease-in-out 
+                                  hover:scale-110"
                       >
                         <Icon className="mb-2 h-5 w-5 text-blue-300 
                                         transition-colors duration-300 
                                         group-hover:text-blue-400" />
-                        <span className="text-1xl font-bold text-white
+                        <span className="text-sm font-bold text-white text-center leading-tight
                                         transition-colors duration-300
                                         group-hover:text-blue-200">
                           {stat.label}
@@ -182,7 +198,7 @@ const Home = () => {
                 Inteligência aplicada à{" "}
                 <span className="text-primary">ciência atuarial</span>
               </h2>
-              <p className="text-muted-foreground leading-relaxed text-base">
+              <p className="text-muted-foreground leading-relaxed text-base text-justify">
                 O OI Atuarial é um projeto de extensão da UFPB que desenvolve
                 ferramentas para análise demográfica e atuarial. Utilizamos
                 dados públicos do SIM/DATASUS e IBGE para construir tábuas de

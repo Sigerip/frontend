@@ -16,6 +16,7 @@ const DadosPrevisao = () => {
   const [modelos, setModelos] = useState<DimModelo[]>([]);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [ano, setAno] = useState<number[]>([]);
 
@@ -47,7 +48,7 @@ const DadosPrevisao = () => {
 
   useEffect(() => {
     async function loadData() {
-      //setLoading(true);
+      setLoading(true);
       try {
         const apiparams: any = {page:filters.page};
         if (filters.ano) apiparams.ano = filters.ano;
@@ -59,6 +60,8 @@ const DadosPrevisao = () => {
       }
       catch (err) {
         console.error("Erro ao carregar dados:", err);
+      } finally {
+        setLoading(false);
       }
     }
     loadData();
@@ -77,8 +80,8 @@ const DadosPrevisao = () => {
               <Target className="h-8 w-8" />
             </div>
             <h1 className="text-4xl font-bold mb-4">Previsão de Mortalidade</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Resultados dos modelos de previsão de mortalidade
+            <p className="text-lg text-muted-foreground mx-auto">
+              Resultados dos modelos de previsão de mortalidade para os anos 2024 - 2070.
             </p>
           </div>
 
@@ -93,17 +96,9 @@ const DadosPrevisao = () => {
             
             <TabsContent value="previsao" className="mt-6">
               <Card className="mb-6">
-                <CardHeader>
-                  <h3 className="text-center mt-6 text-3xl font-bold">Mortalidade Por Faixa-Etária</h3>
-                  <CardTitle className="flex items-center gap-2">
-                    
-                    {isRefreshing && (
-                      <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                    )}
-                  </CardTitle>
-                </CardHeader>
+                
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 mb-3">
                     <div>
                       <label className="block text-sm font-medium mb-2">Ano</label>
                       <select
@@ -150,8 +145,15 @@ const DadosPrevisao = () => {
                     </div>
 
                   </div>
-                
-                  <Previsoes dados={dados} faixas={faixas} sexos={sexos} />
+
+                  {loading ? (
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
+                  ) : (
+                    <Previsoes dados={dados} faixas={faixas} sexos={sexos} />
+                  )}
+
                 </CardContent>
               </Card>
             </TabsContent>
@@ -194,8 +196,8 @@ const DadosPrevisao = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="h-48 flex items-center justify-center bg-muted/30 rounded-lg">
-                      <p className="text-muted-foreground">Nenhum dado disponivel</p>
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                   )}
                 </CardContent>

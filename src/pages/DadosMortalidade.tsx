@@ -88,7 +88,7 @@ const DadosMortalidade = () => {
             </div>
             <h1 className="text-4xl font-bold mb-4">Dados de Mortalidade</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Análise dos dados originais coletados
+              Análise dos dados originais coletados para previsões.
             </p>
           </div>          
 
@@ -113,6 +113,7 @@ const DadosMortalidade = () => {
                   />
                 </CardHeader>
                 <CardContent className={`transition-opacity duration-300 ${isRefreshing ? 'opacity-50' : 'opacity-100'}`}>
+
                   {dados.length > 0 ? (
                     <div className="overflow-x-auto">
                       <table className="min-w-full divide-y">
@@ -146,8 +147,8 @@ const DadosMortalidade = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="h-48 flex items-center justify-center bg-muted/30 rounded-lg">
-                      <p className="text-muted-foreground">Nenhum dado disponivel</p>
+                    <div className="h-96 flex items-center justify-center bg-muted/30">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                   )}
                 </CardContent>
@@ -158,7 +159,7 @@ const DadosMortalidade = () => {
 
               <Card className="mb-6">
                 <CardHeader>
-                  <h3 className="text-center mt-6 text-3xl font-bold">Mortalidade Por Faixa-Etária</h3>
+                  <h3 className="text-center mt-6 text-2xl font-bold">Mortalidade Por Faixa-Etária</h3>
                   <CardTitle className="flex items-center gap-2">
                     
                     {isRefreshing && (
