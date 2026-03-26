@@ -202,7 +202,7 @@ const MortalidadeD3Chart = ({
       .attr("text-anchor", "middle")
       .style("font-size", isMobile ? "11px" : "13px")
       .style("font-weight", "500")
-      .text("log₁₀(nMx)");
+      .text("Log(nMx)");
 
     // Título
     svg
