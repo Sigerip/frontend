@@ -1,0 +1,142 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{longtable}
+\geometry{margin=2.5cm}
+
+\title{Relatório do Sistema Frontend \\ \large Observatório de Inteligência Atuarial}
+\author{Documentação gerada com base no código existente}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Resumo executivo}
+Aplicação React (Vite + TypeScript) que consome uma API de mortalidade/expectativa de vida, exibe gráficos D3 responsivos e tabelas filtráveis, e permite exportar dados. O público-alvo é leigo: basta seguir os passos deste relatório para rodar, entender a estrutura e recriar os gráficos.
+
+\section{Como rodar rapidamente}
+\begin{enumerate}[leftmargin=*]
+  \item Pré-requisitos: Node 18+, npm.
+  \item Crie \texttt{.env} na raiz com: \texttt{VITE\_API\_URL=http://localhost:3001} e (se necessário) \texttt{VITE\_TOKEN=<seu\_token>}.
+  \item No terminal: \texttt{npm install} e depois \texttt{npm run dev}. Acesse \url{http://localhost:5173}.
+\end{enumerate}
+
+\section{Estrutura principal}
+\begin{itemize}[leftmargin=*]
+  \item \texttt{src/main.tsx}: monta a aplicação.
+  \item \texttt{src/App.tsx}: roteamento (React Router) + provedor do React Query.
+  \item \texttt{src/pages/}: telas de negócio (\texttt{Home}, \texttt{DadosMortalidade}, \texttt{ExpectativaVida}, \texttt{PrevisaoMortalidade}, \texttt{PrevisaoExpectativa}, \texttt{Metodologia}). Algumas páginas de teste/backup existem mas não são usadas (\texttt{teste*.tsx}, \texttt{UsarApi backup.tsx}).
+  \item \texttt{src/lib/api.ts}: chamadas \texttt{fetchDimensoes}, \texttt{fetchTabuaOriginal}, \texttt{fetchTabuaProjecoes}.
+  \item \texttt{src/lib/services.ts}: tipos (tabua, projeções, dimensões) e serviços legados. Atenção: há uso de \texttt{api.get()} inexistente; ver melhorias.
+  \item \texttt{src/components/charts/}: gráficos D3 (\texttt{expectativa.tsx}, \texttt{MortalidadeD3Chart.tsx}, \texttt{DadosMortalidade2.tsx}). \texttt{Previsoes.tsx} é apenas exemplo e não renderiza gráfico real.
+  \item \texttt{src/components/ui/}: biblioteca shadcn/Radix pronta para uso.
+  \item \texttt{src/components/DownloadButton.tsx}: exporta CSV/XLSX/JSON.
+\end{itemize}
+
+\section{Fluxo de dados e filtros}
+\begin{enumerate}[leftmargin=*]
+  \item Páginas carregam dimensões (\texttt{locais}, \texttt{faixas}, \texttt{sexos}, \texttt{modelos}, \texttt{anos}) via \texttt{fetchDimensoes}.
+  \item Filtros são mantidos em \texttt{useState}. Mudanças de filtro disparam novo \texttt{fetchTabuaOriginal} (dados observados) ou \texttt{fetchTabuaProjecoes} (previsões).
+  \item Dados retornam em formato paginado \texttt{\{data, total, page, per\_page, pages\}} e são passados para gráficos e tabelas.
+  \item Exportação usa o array atual; não há paginação server-side no botão.
+\end{enumerate}
+
+\section{Rotas e o que cada uma mostra}
+\begin{longtable}{p{3cm}p{11cm}}
+\textbf{Rota} & \textbf{Descrição curta} \\
+\hline
+/\ & Landing page com links rápidos e apresentação do projeto. \\
+/dados-mortalidade & Dois gráficos: (1) mortalidade por faixa etária (log nMx) e (2) mortalidade por ano. Tabela com filtros por ano/local/faixa. \\
+/expectativa-vida & Gráfico de expectativa de vida (ex) por ano e sexo; tabela filtrável por faixa/local. \\
+/previsao-mortalidade & Gráfico previsto (usa componente \texttt{Previsoes} --- atualmente apenas exemplo); tabela de projeções. \\
+/previsao-expectativa & Similar à rota anterior, mas com projeções de ex; usa dimensões de modelo. \\
+/metodologia & Página textual com a explicação estatística (IBGE, Lee-Carter, ARIMA+ETS+NNAR etc.). \\
+/mortalidade-infantil & Aponta para \texttt{NotFound} (rota a ser implementada). \\
+/solicitar-token, /usar-api & Fluxo de token/uso de API (páginas simples). \\
+\end{longtable}
+
+\section{Tipos de dados principais (arquivo \texttt{services.ts})}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{TabuaMortalidade}: \texttt{id, id\_faixa, id\_local, id\_sexo, ano, nMx, nqx, nAx, lx, ndx, nLx, Tx, ex}.
+  \item \textbf{Projecoes}: mesma estrutura, adiciona \texttt{id\_modelo}.
+  \item \textbf{Dimensões}: \texttt{DimLocal (id\_local, nome\_local)}, \texttt{DimFaixa (id\_faixa, descricao)}, \texttt{DimSexo}, \texttt{DimModelo}.
+  \item \textbf{PaginatedResponse<T>}: \texttt{data, total, page, per\_page, pages}.
+\end{itemize}
+
+\section{Como construir gráficos D3 (guia para leigos)}
+\subsection*{Passo a passo genérico}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Prepare os dados}: filtre valores válidos (ex: \texttt{nMx > 0} ou \texttt{ex > 0}); ordene pelo eixo x.
+  \item \textbf{Crie um contêiner responsivo}: use \texttt{div} com \texttt{ref} e \texttt{ResizeObserver} para medir largura; ajuste altura (ex.: 50\% da largura em desktop, 80\% em mobile).
+  \item \textbf{Monte escalas}: \texttt{scaleBand} para eixos categóricos (anos ou faixas), \texttt{scaleLinear} para valores. Para mortalidade foi usado log10(\texttt{nMx}) para enxergar faixas idosas.
+  \item \textbf{Desenhe eixos}: \texttt{axisBottom/axisLeft} com rotações em mobile (\texttt{-65°}) para caber labels.
+  \item \textbf{Gere a linha}: \texttt{d3.line()} com \texttt{xScale(d.categoria)+bandwidth/2} e \texttt{yScale(valor)}.
+  \item \textbf{Cores por grupo}: defina mapa \{Masculino: azul, Feminino: rosa, Ambos: verde\}; se vier só o id, use fallback.
+  \item \textbf{Animação simples}: aplique \texttt{stroke-dasharray} e reduza \texttt{stroke-dashoffset} de \texttt{comprimento} para 0 em 1s.
+  \item \textbf{Tooltip opcional}: adicione círculos nos pontos e mostre \texttt{div} flutuante no \texttt{mouseover}.
+  \item \textbf{Legenda}: posicione na lateral em desktop e na base em mobile; desenhe linha + texto para cada sexo.
+\end{enumerate}
+
+\subsection*{Exemplo mínimo em pseudocódigo}
+\begin{verbatim}
+const svg = select(svgRef).attr("viewBox", `0 0 ${w} ${h}`);
+const g = svg.append("g").attr("transform", `translate(${ml},${mt})`);
+const x = scaleBand().domain(anos).range([0, innerW]).padding(0.1);
+const y = scaleLinear().domain([yMin, yMax]).range([innerH, 0]).nice();
+g.append("g").call(axisBottom(x));  g.append("g").call(axisLeft(y));
+const line = d3.line().x(d => x(d.ano)+x.bandwidth()/2).y(d => y(d.ex));
+g.append("path").datum(dados).attr("d", line).attr("stroke", cor);
+\end{verbatim}
+
+\subsection*{Gráficos já prontos no projeto}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Mortalidade por faixa etária} (\texttt{components/charts/MortalidadeD3Chart.tsx}): eixo x = faixas, y = log(nMx), linhas por sexo, legenda responsiva.
+  \item \textbf{Mortalidade por ano} (\texttt{components/charts/DadosMortalidade2.tsx}): eixo x = anos; estrutura idêntica ao anterior, mas ainda usa rótulo de faixas nos ticks (corrigível).
+  \item \textbf{Expectativa de vida} (\texttt{components/charts/expectativa.tsx}): eixo x = anos, y = ex, pontos com tooltip e animação.
+  \item \textbf{Previsões} (\texttt{components/charts/Previsoes.tsx}): é um exemplo simples de tabela; substitua por gráfico real (linhas de projeção) conforme melhoria sugerida.
+\end{itemize}
+
+\section{Exportação de dados}
+O componente \texttt{DownloadButton} exporta o dataset atual em CSV, XLSX (via import dinâmico do pacote \texttt{xlsx}) e JSON (\texttt{.parquet.json}). Ele recebe o array a partir da página e monta cabeçalhos a partir das chaves do objeto.
+
+\section{Como recriar o sistema do zero (roteiro para iniciantes)}
+\begin{enumerate}[leftmargin=*]
+  \item Inicialize projeto Vite React TS (\texttt{npm create vite@latest}) e instale Tailwind + shadcn/ui (botões, cards, tabs).
+  \item Crie \texttt{Navigation} com React Router e defina as rotas listadas acima.
+  \item Implemente \texttt{lib/api.ts} com \texttt{fetchDimensoes}, \texttt{fetchTabuaOriginal}, \texttt{fetchTabuaProjecoes}; leia as envs \texttt{VITE\_API\_URL} e \texttt{VITE\_TOKEN}.
+  \item Defina tipos em \texttt{lib/services.ts} (TabuaMortalidade, Projecoes, Dimensões).
+  \item Em cada página: carregar dimensões (\texttt{useEffect}); manter filtros em \texttt{useState}; ao mudar filtros, chamar a API e renderizar \texttt{Card + Tabs} com gráfico e tabela.
+  \item Construa gráficos seguindo o passo a passo D3; reaproveite esquema de cores e responsividade.
+  \item Adicione \texttt{DownloadButton} para exportação rápida dos dados filtrados.
+  \item Teste em mobile (breakpoint 640px) e verifique se labels cabem no eixo x (rotacionar se necessário).
+\end{enumerate}
+
+\section{Pontos de melhoria (com caminhos de ajuste)}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Corrigir serviços}: \texttt{services.ts} chama \texttt{api.get()} que não existe em \texttt{api.ts}. Solução: ou criar wrapper \texttt{api.get} baseado em \texttt{fetch}, ou trocar chamadas para \texttt{fetchTabuaOriginal/fetchTabuaProjecoes}.
+  \item \textbf{Gráfico de previsões}: \texttt{Previsoes.tsx} é um exemplo de tabela. Substituir por linha temporal usando \texttt{ex} ou \texttt{nMx} das projeções. Reutilize o esqueleto de \texttt{expectativa.tsx}.
+  \item \textbf{Rota de mortalidade infantil}: atualmente aponta para \texttt{NotFound}. Implementar página com filtros e gráfico simples (ex.: barras ou linha por ano).
+  \item \textbf{Remover duplicados/backsups}: arquivos \texttt{api copy.ts}, \texttt{services copy.ts}, \texttt{teste*.tsx}, \texttt{UsarApi backup.tsx} não são usados. Excluir para evitar confusão.
+  \item \textbf{Tabelas}: aproveitar \texttt{components/ui/data-table.tsx} (TanStack Table) para ordenar e paginar no cliente, substituindo \texttt{<table>} manual.
+  \item \textbf{Mapeamentos eficientes}: criar \texttt{Map} para faixas/locais/sexos antes do render para evitar \texttt{find} em cada célula.
+  \item \textbf{Tratamento de erros}: exibir mensagens amigáveis quando a API falhar e oferecer fallback de CSV (há CSVs em \texttt{public/dados/} no repositório original, embora não usados neste código).
+  \item \textbf{Acessibilidade}: adicionar \texttt{aria-label} nos SVGs, associar \texttt{label} a \texttt{select} via \texttt{htmlFor}, e usar \texttt{th scope="col"} nas tabelas.
+  \item \textbf{Dependências}: Recharts está instalado mas não utilizado; remover ou adotar onde fizer sentido.
+  \item \textbf{Filtros persistentes}: opcionalmente sincronizar filtros na URL para compartilhar links.
+\end{enumerate}
+
+\section{Checklist rápido de uso}
+\begin{itemize}[leftmargin=*]
+  \item Configurar \texttt{.env} e subir API (\texttt{VITE\_API\_URL}, \texttt{VITE\_TOKEN} se houver).
+  \item Rodar \texttt{npm run dev} e validar rotas principais: dados de mortalidade, expectativa de vida, previsões, metodologia.
+  \item Conferir gráficos: linhas coloridas por sexo, eixo x rotacionado em mobile, animação inicial.
+  \item Exportar CSV/XLSX a partir de filtros aplicados para validar downloads.
+\end{itemize}
+
+\end{document}

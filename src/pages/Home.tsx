@@ -15,10 +15,11 @@ import {
   Lightbulb,
   Shield,
   TrendingUpDown,
+  // 1. Importação do novo ícone
+  ChevronDown, 
 } from "lucide-react";
 import { TeamSection } from "@/components/TeamSection";
 import { motion } from "motion/react";
-import { link } from "fs";
 // Importe junto com seus outros imports (ajuste o caminho da pasta)
 import backgroundGif from '../../public/img/chart.gif';
 
@@ -72,7 +73,8 @@ const Home = () => {
     <div className="min-h-screen">
       {/* ===== HERO SECTION ===== */}
       {/* 1. Removi as cores de fundo daqui para colocá-las em camadas internas */}
-      <section className="relative overflow-hidden py-24 md:py-28">
+      {/* Adicionei 'flex flex-col justify-center' e tirei padding excessivo vertical pra focar na tela cheia se necessário */}
+      <section className="relative overflow-hidden min-h-[95dvh] flex flex-col justify-center py-24 md:py-28">
         
         {/* CAMADA 1: O GIF animado (Fica lá no fundo) */}
         <div 
@@ -178,6 +180,37 @@ const Home = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* 2. ADICIONADO AQUI: Indicador de rolagem animado (pulando) no canto direito */}
+        <motion.div
+          className="absolute bottom-10 right-10 z-20 cursor-pointer hidden md:block" // Escondido no mobile pra não poluir
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.6 }} // Aparece depois de tudo carregar
+          onClick={() => {
+            // Rolar suavemente para a próxima seção
+            // Usamos dvh (altura dinâmica da tela) para calcular a distância exata
+            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+          }}
+        >
+          {/* Este div interno é o que realmente executa a animação de pular */}
+          <motion.div
+            className="flex h-12 w-12 items-center justify-center rounded-full glass border border-white/20 transition hover:bg-white/10"
+            // Define a animação de pular (bounce)
+            animate={{
+              y: [0, -15, 0], // Move 15px para cima e volta
+            }}
+            transition={{
+              duration: 1.6, // Duração de um ciclo completo
+              ease: "easeInOut", // Suavidade na entrada e saída
+              repeat: Infinity, // Repetir para sempre
+              repeatDelay: 0.1 // Pequena pausa entre os pulos
+            }}
+          >
+            <ChevronDown className="h-6 w-6 text-white" />
+          </motion.div>
+        </motion.div>
+
       </section>
 
       {/* ===== SOBRE O PROJETO SECTION ===== */}
