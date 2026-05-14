@@ -183,7 +183,7 @@ const Home = () => {
 
         {/* 2. ADICIONADO AQUI: Indicador de rolagem animado (pulando) no canto direito */}
         <motion.div
-          className="absolute bottom-10 right-10 z-20 cursor-pointer hidden md:block" // Escondido no mobile pra não poluir
+          className="absolute bottom-28 right-7 z-20 cursor-pointer hidden md:block" // Escondido no mobile pra não poluir
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.6 }} // Aparece depois de tudo carregar

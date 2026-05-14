@@ -7,7 +7,25 @@ import MortalidadeD3Chart from "@/components/charts/MortalidadeD3Chart";
 import DownloadButton from "@/components/DownloadButton";
 import { fetchDimensoes, fetchTabuaOriginal } from "@/lib/api";
 import DadosMortalidade2 from "@/components/charts/DadosMortalidade2";
+import FloatingChat from "@/components/ChatFloat";
+import { buildDadosMortalidadeContext } from "@/lib/buildChartContext";
 
+// ============================================================================
+// FUNÇÃO EXTERNA: Fica fora do componente para não ser recriada a cada render
+// ============================================================================
+const otimizarParaIA = (dados: TabuaMortalidade[]) => {
+  return dados.map((item) => ({
+    //ano: item.ano,
+    id_sexo: item.id_sexo,
+    //id_local: item.id_local,
+    id_faixa: item.id_faixa,
+    nMx: item.nMx ? Math.log10(Number(item.nMx.toFixed(4))) : null
+  }));
+};
+
+// ============================================================================
+// COMPONENTE PRINCIPAL
+// ============================================================================
 const DadosMortalidade = () => {
   const [locais, setLocais] = useState<DimLocal[]>([]);
   const [faixas, setFaixas] = useState<DimFaixa[]>([]);
@@ -15,8 +33,13 @@ const DadosMortalidade = () => {
 
   const [dados, setDados] = useState<TabuaMortalidade[]>([]);
   const [dados2, setDados2] = useState<TabuaMortalidade[]>([]);
+  
+  // Usamos any[] aqui porque esses arrays vão guardar apenas os dados filtrados, e não a TabuaMortalidade inteira
+  const [dados_graf_1, setDadosGraf1] = useState<any[]>([]);
+  const [dados_graf_2, setDadosGraf2] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false); // Loading sutil para atualizações
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ano, setAno] = useState(2000);
   const [anoOriginal, setAnoOriginal] = useState<number[]>([]);
@@ -29,7 +52,7 @@ const DadosMortalidade = () => {
     page: 1,
     faixa: 1,
     local2: 1,
-  })
+  });
 
   useEffect(() =>{
     async function loadDims () {
@@ -51,18 +74,24 @@ const DadosMortalidade = () => {
     async function loadTable() {
       setLoading(true);
       try {
-        const apiparams: any = {page: filters.page };
+        const apiparams: Record<string, number> = { page: filters.page };
         if (filters.anoOriginal) apiparams.ano = filters.anoOriginal;
         if (filters.local) apiparams.local = filters.local;
 
-        const apiparams2: any = {page: filters.page };
+        const apiparams2: Record<string, number> = { page: filters.page };
         if (filters.local2) apiparams2.local = filters.local2;
         if (filters.faixa) apiparams2.faixa = filters.faixa;
 
         const response: PaginatedResponse<TabuaMortalidade> = await fetchTabuaOriginal(apiparams);
         const response2: PaginatedResponse<TabuaMortalidade> = await fetchTabuaOriginal(apiparams2);
+        
+        // Dados brutos e completos para os gráficos e tabela
         setDados2(response2.data);
         setDados(response.data);
+        
+        // Chamamos a função externa para salvar a versão enxuta no estado
+        setDadosGraf1(otimizarParaIA(response.data));
+        setDadosGraf2(otimizarParaIA(response2.data));
       }
       catch (error) {
         console.error("Erro ao buscar tabela", error);
@@ -73,6 +102,8 @@ const DadosMortalidade = () => {
     }
     loadTable();
   }, [filters]);
+
+  console.log(dados_graf_1, dados_graf_2);
 
   const handleFilterChange = (field: string, value: string | number) => {
     setFilters(prev => ({ ...prev, [field]: Number(value), page: 1 })); // Reseta p/ pagina 1 ao filtrar
@@ -262,6 +293,12 @@ const DadosMortalidade = () => {
           
         </div>
       </div>
+      <FloatingChat 
+        chartTitle="dados_mortalidade"
+        chartData={buildDadosMortalidadeContext({
+          dados: dados_graf_1, dados2: dados_graf_2, filters, locais, faixas, sexos,
+        })}
+      />
     </div>
   );
 };

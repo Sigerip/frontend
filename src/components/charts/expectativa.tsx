@@ -239,22 +239,22 @@ const ExpectativaVidaChart = ({
         .attr("stroke-dashoffset", 0);
 
       // Pontos interativos
-      g.selectAll(`.dot-${sexoId}`)
-        .data(dadosSexo)
-        .enter()
-        .append("circle")
-        .attr("class", `dot-${sexoId}`)
-        .attr("cx", (d) => (xScale(String(d.ano)) ?? 0) + xScale.bandwidth() / 2)
-        .attr("cy", (d) => yScale(d.ex))
-        .attr("r", 4)
-        .attr("fill", cor)
-        .attr("stroke", "white")
-        .attr("stroke-width", 1.5)
-        .style("opacity", 0)
-        .transition()
-        .delay(1000 + index * 300)
-        .duration(300)
-        .style("opacity", 1);
+      // g.selectAll(`.dot-${sexoId}`)
+      //   .data(dadosSexo)
+      //   .enter()
+      //   .append("circle")
+      //   .attr("class", `dot-${sexoId}`)
+      //   .attr("cx", (d) => (xScale(String(d.ano)) ?? 0) + xScale.bandwidth() / 2)
+      //   .attr("cy", (d) => yScale(d.ex))
+      //   .attr("r", 4)
+      //   .attr("fill", cor)
+      //   .attr("stroke", "white")
+      //   .attr("stroke-width", 1.5)
+      //   .style("opacity", 0)
+      //   .transition()
+      //   .delay(1000 + index * 300)
+      //   .duration(300)
+      //   .style("opacity", 1);
 
       // Tooltip nos pontos
       g.selectAll(`.dot-${sexoId}`)

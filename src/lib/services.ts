@@ -231,3 +231,35 @@ export const sistemaService = {
     return api.get('/routes');
   },
 };
+
+/**
+ * Interface da Resposta da IA
+ */
+export interface ChatResponse {
+  reply: string;
+  erro?: string;
+}
+
+/**
+ * Serviço: Assistente de IA (Chatbot)
+ */
+export const chatService = {
+  /**
+   * Envia uma mensagem para o Agente Ollama/Flask analisar os dados
+   */
+  async sendMessage(
+    message: string, 
+    chartData: any[] = [], 
+    chartTitle: string = "Consulta Geral"
+  ): Promise<ChatResponse> {
+    
+    // Chama a função que criamos no api.ts
+    const response = await api.fetchChatIA({
+      user_message: message,
+      chart_data: chartData,
+      //chart_title: chartTitle
+    });
+    
+    return response;
+  }
+};

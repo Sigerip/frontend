@@ -6,6 +6,8 @@ import { DimFaixa, DimLocal, DimSexo, PaginatedResponse, type TabuaMortalidade }
 import { fetchDimensoes, fetchTabuaOriginal } from "@/lib/api";
 import ExpectativaVidaChart from "@/components/charts/expectativa";
 import DownloadButton from "@/components/DownloadButton";
+import FloatingChat from "@/components/ChatFloat";
+import { buildExpectativaVidaContext } from "@/lib/buildChartContext";
 
 const ExpectativaVida = () => {
   const [locais, setLocais] = useState<DimLocal[]>([]);
@@ -215,6 +217,12 @@ const ExpectativaVida = () => {
           </Tabs>
         </div>
       </div>
+      <FloatingChat
+        chartTitle="expectativa_vida"
+        chartData={buildExpectativaVidaContext({
+          dados, filters, locais, faixas, sexos,
+        })}
+      />
     </div>
   );
 };

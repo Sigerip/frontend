@@ -6,6 +6,8 @@ import { kMaxLength } from "buffer";
 import { Loader2, Target } from "lucide-react";
 import { useEffect, useState } from "react";
 import Previsoes from "@/components/charts/Previsoes";
+import FloatingChat from "@/components/ChatFloat";
+import { buildPrevisaoMortalidadeContext } from "@/lib/buildChartContext";
 
 const DadosPrevisao = () => {
   const [dados, setDados] = useState<Projecoes[]>([]);
@@ -206,6 +208,12 @@ const DadosPrevisao = () => {
           </Tabs>
         </div>
       </div>
+      <FloatingChat
+        chartTitle="previsao_mortalidade"
+        chartData={buildPrevisaoMortalidadeContext({
+          dados, filters, locais, faixas, sexos, modelos,
+        })}
+      />
     </div>
   );
 };

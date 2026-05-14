@@ -19,31 +19,40 @@ import UsarApi from "./pages/UsarApi";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/teste2" element={<Teste />}/>
-          <Route path="/metodologia" element={<Metodologia />} />
-          <Route path="/dados-mortalidade" element={<DadosMortalidade />} />
-          <Route path="/expectativa-vida" element={<ExpectativaVida />} />
-          <Route path="/mortalidade-infantil" element={<MortalidadeInfantil />} />
-          <Route path="/previsao-mortalidade" element={<PrevisaoMortalidade />} />
-          <Route path="/mortalidade" element={<MortalidadePage />} />
-          <Route path="/previsao-expectativa" element={<PrevisaoExpectativa />} />
-          <Route path="/solicitar-token" element={<CadastroUsuario />} />
-          <Route path="/usar-api" element={<UsarApi />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  // Opcional: Se você salva o token no localStorage ao solicitar a API, você pode puxá-lo aqui.
+  // Caso contrário, você precisará gerenciar esse estado dependendo de como o usuário faz "login" na sua ferramenta.
+  const TOKEN = import.meta.env.VITE_TOKEN;
+  const userApiKey = localStorage.getItem("api_key") || TOKEN;
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Navigation />
+          
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/teste2" element={<Teste />}/>
+            <Route path="/metodologia" element={<Metodologia />} />
+            <Route path="/dados-mortalidade" element={<DadosMortalidade />} />
+            <Route path="/expectativa-vida" element={<ExpectativaVida />} />
+            <Route path="/mortalidade-infantil" element={<MortalidadeInfantil />} />
+            <Route path="/previsao-mortalidade" element={<PrevisaoMortalidade />} />
+            <Route path="/mortalidade" element={<MortalidadePage />} />
+            <Route path="/previsao-expectativa" element={<PrevisaoExpectativa />} />
+            <Route path="/solicitar-token" element={<CadastroUsuario />} />
+            <Route path="/usar-api" element={<UsarApi />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
