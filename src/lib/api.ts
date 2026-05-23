@@ -152,19 +152,21 @@ export async function fetchDimensoes() {
   return { locais, faixas, sexos, modelos, anos_original, anos_projecoes };
 }
 
-interface FilterParams {
+export interface FilterParams {
   page?: number;
-  local?: number; // Enviamos o ID
+  per_page?: number;
+  local?: number;
   ano?: number;
-  sexo?: number;  // Enviamos o ID
-  faixa?: number; // Enviamos o ID
+  sexo?: number;
+  faixa?: number;
 }
 
 export async function fetchTabuaOriginal(params: FilterParams) {
-  // Converte objeto de parametros em query string (ex: ?page=1&ano=2022)
   const query = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
-    if (value) query.append(key, value.toString());
+    if (value !== undefined && value !== null && value !== "") {
+      query.append(key, String(value));
+    }
   });
 
   const res = await fetch(`${API_URL}/original?${query.toString()}`, { headers });
@@ -173,10 +175,11 @@ export async function fetchTabuaOriginal(params: FilterParams) {
 }
 
 export async function fetchTabuaProjecoes(params: FilterParams) {
-  // Converte objeto de parametros em query string (ex: ?page=1&ano=2022)
   const query = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
-    if (value) query.append(key, value.toString());
+    if (value !== undefined && value !== null && value !== "") {
+      query.append(key, String(value));
+    }
   });
 
   const res = await fetch(`${API_URL}/previsoes?${query.toString()}`, { headers });
@@ -205,7 +208,39 @@ export async function fetchChatIA(payload: ChatPayload) {
   return res.json(); 
 }
 
+export async function get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  const query = new URLSearchParams();
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        query.append(key, String(value));
+      }
+    });
+  }
+
+  // Se o endpoint já começa com barra, remove para evitar barra dupla
+  const cleanedEndpoint = endpoint.startsWith("/") ? endpoint.substring(1) : endpoint;
+  const queryString = query.toString();
+  const url = queryString ? `${API_URL}/${cleanedEndpoint}?${queryString}` : `${API_URL}/${cleanedEndpoint}`;
+
+  const res = await fetch(url, { headers });
+  if (!res.ok) {
+    throw new Error(`Falha ao buscar dados de ${endpoint}: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function healthCheck() {
+  const res = await fetch(`${API_URL}/health`, { headers });
+  if (!res.ok) {
+    throw new Error("API Indisponível");
+  }
+  return res.json();
+}
+
 const api = {
+    get,
+    healthCheck,
     fetchDimensoes,
     fetchTabuaOriginal,
     fetchTabuaProjecoes,

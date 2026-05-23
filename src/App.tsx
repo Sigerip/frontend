@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import Metodologia from "./pages/Metodologia";
 import DadosMortalidade from "./pages/DadosMortalidade";
 import ExpectativaVida from "./pages/ExpectativaVida";
-import MortalidadeInfantil from "./pages/NotFound";
+import MortalidadeInfantil from "./pages/MortalidadeInfantil";
 import PrevisaoMortalidade from "./pages/PrevisaoMortalidade";
 import PrevisaoExpectativa from "./pages/PrevisaoExpectativa";
 import MortalidadePage from "./pages/MortalidadePage";

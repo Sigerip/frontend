@@ -17,60 +17,69 @@ export interface LocalDim {
   nome_local: string;
 }
 
-interface DadosMortalidade2Props {
+export interface ModeloDim {
+  id_modelo: number;
+  descricao: string;
+}
+
+interface MortalidadeRechartsChartProps {
   dados: TabuaMortalidade[];
-  faixas?: FaixaEtaria[];
-  sexos?: Sexo[];
-  locais?: LocalDim[];
+  faixas: FaixaEtaria[];
+  sexos: Sexo[];
+  locais: LocalDim[];
+  modelos?: ModeloDim[];
 }
 
 const GLOW_COLORS = [
-  "#3b82f6", // Azul (Masculino default)
-  "#ec4899", // Rosa (Feminino default)
-  "#10b981", // Esmeralda (Ambos default)
   "#06b6d4", // Ciano
   "#8b5cf6", // Violeta
+  "#10b981", // Esmeralda
   "#f43f5e", // Rose
   "#f59e0b", // Âmbar
   "#d946ef", // Fúcsia
   "#0ea5e9", // Sky
+  "#eab308", // Yellow
 ];
 
-export default function DadosMortalidade2({
+export default function MortalidadeRechartsChart({
   dados = [],
   faixas = [],
   sexos = [],
   locais = [],
-}: DadosMortalidade2Props) {
-  // Cria o pivô dos dados: anos nas linhas, séries comparativas nas colunas
+  modelos = [],
+}: MortalidadeRechartsChartProps) {
+  // Cria o pivô dos dados: faixas etárias nas linhas, séries comparativas nas colunas
   const pivotData = useMemo(() => {
-    if (dados.length === 0) return [];
+    if (dados.length === 0 || faixas.length === 0) return [];
 
     const map = new Map<number, any>();
-    const todosAnos = [...new Set(dados.filter((d) => d.nMx != null && d.nMx > 0).map((d) => d.ano))].sort((a, b) => a - b);
+    const sortedFaixas = [...faixas].sort((a, b) => a.id_faixa - b.id_faixa);
 
-    todosAnos.forEach((ano) => {
-      map.set(ano, {
-        ano,
+    sortedFaixas.forEach((f) => {
+      map.set(f.id_faixa, {
+        id_faixa: f.id_faixa,
+        faixaLabel: f.descricao,
       });
     });
 
     dados.forEach((d) => {
       if (d.nMx == null || d.nMx <= 0) return;
       const localName = locais.find((l) => l.id_local === d.id_local)?.nome_local || String(d.id_local);
-      const faixaName = faixas.find((f) => f.id_faixa === d.id_faixa)?.descricao || String(d.id_faixa);
       const sexoName = sexos.find((s) => s.id_sexo === d.id_sexo)?.descricao || String(d.id_sexo);
+      const modelName = d.id_modelo
+        ? modelos.find((m) => m.id_modelo === d.id_modelo)?.descricao || ""
+        : "";
 
-      const key = `${localName} · ${faixaName} · ${sexoName}`;
+      const key = [localName, d.ano, modelName, sexoName].filter(Boolean).join(" · ");
 
-      const row = map.get(d.ano);
+      const row = map.get(d.id_faixa);
       if (row) {
         row[key] = parseFloat(Math.log10(d.nMx).toFixed(4));
       }
     });
 
-    return Array.from(map.values()).filter((row) => Object.keys(row).length > 1);
-  }, [dados, faixas, sexos, locais]);
+    return Array.from(map.values()).filter((row) => Object.keys(row).length > 2);
+  }, [dados, faixas, sexos, locais, modelos]);
 
   // Coleta as chaves únicas das séries ativas
   const seriesKeys = useMemo(() => {
@@ -78,21 +87,21 @@ export default function DadosMortalidade2({
     dados.forEach((d) => {
       if (d.nMx == null || d.nMx <= 0) return;
       const localName = locais.find((l) => l.id_local === d.id_local)?.nome_local || String(d.id_local);
-      const faixaName = faixas.find((f) => f.id_faixa === d.id_faixa)?.descricao || String(d.id_faixa);
       const sexoName = sexos.find((s) => s.id_sexo === d.id_sexo)?.descricao || String(d.id_sexo);
+      const modelName = d.id_modelo
+        ? modelos.find((m) => m.id_modelo === d.id_modelo)?.descricao || ""
+        : "";
 
-      const key = `${localName} · ${faixaName} · ${sexoName}`;
+      const key = [localName, d.ano, modelName, sexoName].filter(Boolean).join(" · ");
       keys.add(key);
     });
     return Array.from(keys).sort();
-  }, [dados, locais, faixas, sexos]);
+  }, [dados, locais, sexos, modelos]);
 
   if (dados.length === 0) {
     return (
-      <div className="flex min-h-[14rem] items-center justify-center rounded-xl border border-dashed border-primary/20 bg-muted/5">
-        <p className="px-4 text-center text-sm text-muted-foreground">
-          Ajuste os filtros acima para ver linhas neste gráfico.
-        </p>
+      <div className="flex h-72 items-center justify-center rounded-xl border border-dashed border-primary/20 bg-muted/5">
+        <p className="text-sm text-muted-foreground">Ajuste os filtros acima para plotar dados no gráfico.</p>
       </div>
     );
   }
@@ -103,14 +112,14 @@ export default function DadosMortalidade2({
         <LineChart data={pivotData} margin={{ top: 20, right: 20, left: 20, bottom: 35 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
           <XAxis
-            dataKey="ano"
+            dataKey="faixaLabel"
             stroke="#71717a"
             fontSize={11}
             tickLine={false}
             axisLine={false}
             dy={10}
             label={{
-              value: "Ano de Referência",
+              value: "Faixa Etária",
               position: "insideBottom",
               offset: -10,
               style: { fill: "#71717a", fontSize: 11, fontWeight: 500 },
@@ -163,8 +172,8 @@ export default function DadosMortalidade2({
                 dataKey={key}
                 stroke={color}
                 strokeWidth={2}
-                dot={{ r: 2.5, fill: color, strokeWidth: 0 }}
-                activeDot={{ r: 5.5, stroke: "#fff", strokeWidth: 1.5 }}
+                dot={{ r: 2, fill: color, strokeWidth: 0 }}
+                activeDot={{ r: 5, stroke: "#fff", strokeWidth: 1.5 }}
                 connectNulls
                 animationDuration={600}
               />
