@@ -31,7 +31,7 @@ const teamMembers = [
   },
   {
     name: "Hugo V. S. F. Gomes",
-    role: "Pesquisadora Colaboradora",
+    role: "Pesquisador Colaborador",
     subrole: "Mortalidade Infantil",
     category: "collaboration",
     linkedin: "https://www.linkedin.com/in/hugo-gomes96/",
@@ -39,7 +39,7 @@ const teamMembers = [
   },
   {
     name: "Cleo D. Anacleto",
-    role: "Pesquisadora Colaborador",
+    role: "Pesquisador Colaborador",
     subrole: "Modelagem Atuarial",
     category: "collaboration",
     linkedin: "https://www.linkedin.com/in/cleo-decker-anacleto-66a69b133/",
@@ -47,7 +47,7 @@ const teamMembers = [
   },
   {
     name: "Isaias F. S. Sousa",
-    role: "Bolsista de Extensão",
+    role: "Desenvolvimento de Sistemas",
     subrole: "Desenvolvimento de Sistemas",
     category: "student",
     linkedin: "https://www.linkedin.com/in/isa%C3%ADas-felipe-silva-de-sousa-453902327/",
