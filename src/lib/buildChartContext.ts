@@ -122,7 +122,14 @@ function amostra<T>(dados: T[]): T[] {
 interface DadosMortalidadeInput {
   dados: Array<Record<string, unknown>>;
   dados2: Array<Record<string, unknown>>;
-  filters: { anoOriginal: number; local: number; faixa: number; local2: number; page: number };
+  filters: {
+    anoOriginal: number;
+    local: number;
+    page: number;
+    graf2LocalIds: number[];
+    graf2FaixaIds: number[];
+    graf2SexoIds: number[];
+  };
   locais: DimLocal[];
   faixas: DimFaixa[];
   sexos: DimSexo[];
@@ -136,12 +143,31 @@ export function buildDadosMortalidadeContext(input: DadosMortalidadeInput): Char
     descricao:
       "Página de dados originais de mortalidade do IBGE. " +
       "Gráfico 1 mostra taxa central de mortalidade (nMx) em escala logarítmica por faixa etária. " +
-      "Gráfico 2 mostra a mesma taxa ao longo dos anos para uma faixa etária fixa.",
+      "Gráfico 2 mostra log(nMx) ao longo dos anos para territórios, faixas etárias e sexos selecionados (cada combinação é uma linha).",
     filtros_ativos: {
       ano: { id: filters.anoOriginal, nome: String(filters.anoOriginal) },
       local_grafico1: { id: filters.local, nome: resolverLocal(filters.local, locais) },
-      faixa_grafico2: { id: filters.faixa, nome: resolverFaixa(filters.faixa, faixas) },
-      local_grafico2: { id: filters.local2, nome: resolverLocal(filters.local2, locais) },
+      locais_grafico2: {
+        id: filters.graf2LocalIds[0] ?? 0,
+        nome:
+          filters.graf2LocalIds.length > 0
+            ? filters.graf2LocalIds.map((id) => resolverLocal(id, locais)).join("; ")
+            : "(nenhum)",
+      },
+      faixas_grafico2: {
+        id: filters.graf2FaixaIds[0] ?? 0,
+        nome:
+          filters.graf2FaixaIds.length > 0
+            ? filters.graf2FaixaIds.map((id) => resolverFaixa(id, faixas)).join("; ")
+            : "(nenhuma)",
+      },
+      sexos_grafico2: {
+        id: filters.graf2SexoIds[0] ?? 0,
+        nome:
+          filters.graf2SexoIds.length > 0
+            ? filters.graf2SexoIds.map((id) => resolverSexo(id, sexos)).join("; ")
+            : "(nenhum)",
+      },
     },
     graficos: [
       {
