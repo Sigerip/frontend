@@ -47,7 +47,7 @@ const teamMembers = [
   },
   {
     name: "Isaias F. S. Sousa",
-    role: "Desenvolvimento de Sistemas",
+    role: "Bolsista",
     subrole: "Desenvolvimento de Sistemas",
     category: "student",
     linkedin: "https://www.linkedin.com/in/isa%C3%ADas-felipe-silva-de-sousa-453902327/",
@@ -120,13 +120,13 @@ export function TeamSection() {
         {/* Header da Seção */}
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
           <span className="inline-block rounded-full bg-blue-500/10 px-4 py-1 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-            Capital Humano
+            Equipe
           </span>
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white">
             Corpo Docente & Pesquisadores
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-            Uma equipe multidisciplinar de estatísticos, atuários e desenvolvedores dedicados à excelência em modelagem demográfica.
+            Uma equipe multidisciplinar de estatísticos, atuários e demógrafos dedicados à excelência em modelagem demográfica.
           </p>
         </div>
         
@@ -187,7 +187,7 @@ export function TeamSection() {
               <div className="flex items-center gap-3 border-b border-slate-200/60 dark:border-slate-800/60 pb-3">
                 <GraduationCap className="h-5 w-5 text-emerald-500" />
                 <h3 className="text-base font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
-                  Bolsistas & Corpo Técnico
+                  Discentes
                 </h3>
               </div>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

@@ -150,7 +150,7 @@ const DadosPrevisao = () => {
               Previsão de Mortalidade
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Projeções de mortalidade por faixas etárias, estimadas para os anos de 2024 a 2070 por modelos atuariais consagrados.
+              Projeções de mortalidade por faixas etárias, estimadas para os anos de 2024 a 2070.
             </p>
           </div>
 

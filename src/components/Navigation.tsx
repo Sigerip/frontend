@@ -258,13 +258,13 @@ const Navigation = () => {
               <img 
                 src="/img/brasao.png" 
                 alt="Brasão UFPB" 
-                className="h-9 w-auto object-contain opacity-55 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300 cursor-help"
+                className="h-9 w-auto object-contain"
                 title="Universidade Federal da Paraíba" 
               />
               <img 
                 src="/img/PROEXFULL.png" 
                 alt="Logo PROEX" 
-                className="h-8 w-auto object-contain opacity-55 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300 cursor-help"
+                className="h-8 w-auto object-contain"
                 title="Pró-Reitoria de Extensão UFPB" 
               />
             </div>

@@ -415,18 +415,6 @@ const Home = () => {
             {/* LEFT COLUMN: Texts and Actions */}
             <div className="lg:col-span-7 flex flex-col justify-center text-left space-y-6">
               
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: -16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="self-start"
-              >
-                <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wider uppercase text-blue-200 bg-white/5 border border-white/10 backdrop-blur-md">
-                  <Lightbulb className="h-3.5 w-3.5 animate-pulse text-blue-300" />
-                  Observatório de Inteligência
-                </span>
-              </motion.div>
 
               {/* Title */}
               <motion.h1

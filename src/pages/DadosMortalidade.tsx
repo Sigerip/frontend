@@ -321,7 +321,7 @@ const DadosMortalidade = () => {
                     Mortalidade por Faixa-Etária ({filters.anosOriginal.join(", ")} - {activeLocaisNames})
                   </CardTitle>
                   <CardDescription>
-                    Curvas do logaritmo de nMx exibidas por faixas de idade. Padrão "U" de mortalidade populacional.
+                    Curvas do logaritmo de nMx exibidas por faixas de idade.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

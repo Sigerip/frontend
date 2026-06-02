@@ -70,7 +70,7 @@ const Metodologia = () => {
             </span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-            Conheça as bases estatísticas, modelos preditivos e tratamentos demográficos utilizados para gerar as estimativas do SIGERIP.
+            Conheça as bases estatísticas, modelos preditivos e tratamentos demográficos utilizados para gerar as estimativas.
           </p>
         </motion.div>
 
@@ -131,15 +131,15 @@ const Metodologia = () => {
                   A principal variável analisada é a taxa de mortalidade infantil (TMI), definida como o número de óbitos de crianças menores de um ano por mil nascidos vivos em determinado ano e localidade. A TMI é calculada como:
                 </p>
                 
-                <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-3 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-6 px-4 text-center overflow-x-auto">
+                  <div className="inline-flex items-center justify-center gap-3 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>TMI<sub>i,t</sub> = </span>
                     <div className="inline-flex flex-col items-center justify-center mx-1.5 align-middle">
-                      <span className="text-sm md:text-base text-blue-300 pb-1 px-3 text-center font-serif">Óbitos &lt; 1 ano<sub>i,t</sub></span>
-                      <div className="w-full h-[1.5px] bg-blue-400/30" />
-                      <span className="text-sm md:text-base text-blue-300 pt-1 px-3 text-center font-serif">Nascidos Vivos<sub>i,t</sub></span>
+                      <span className="text-sm md:text-base text-black dark:text-white pb-1 px-3 text-center font-serif">Óbitos &lt; 1 ano<sub>i,t</sub></span>
+                      <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
+                      <span className="text-sm md:text-base text-black dark:text-white pt-1 px-3 text-center font-serif">Nascidos Vivos<sub>i,t</sub></span>
                     </div>
-                    <span className="text-blue-300 font-sans font-semibold">× 1000</span>
+                    <span className="text-black dark:text-white font-sans font-semibold">× 1000</span>
                   </div>
                 </div>
                 
@@ -173,7 +173,7 @@ const Metodologia = () => {
                   A construção das tábuas parte dos registros de óbitos (SIM) e das estimativas populacionais dos Censos Demográficos (2000, 2010, 2022), ajustados para cobertura e qualidade. O IBGE aplica técnicas como Busca Ativa, Captura-Recaptura e modelos logísticos para corrigir sub-registros e distorções, especialmente em idades avançadas, onde se utiliza o modelo log-quadrático de Wilmoth et al. (2012) e ajustes propostos pela ONU.
                 </p>
                 <p>
-                  As principais variáveis das tábuas incluem: probabilidade de morte (<sub>n</sub>q<sub>x</sub>), sobreviventes (l<sub>x</sub>), óbitos (d<sub>x</sub>), pessoas-ano vividas (<sub>n</sub>L<sub>x</sub>), total de pessoas-ano acima da idade x (T<sub>x</sub>), expectativa de vida (e<sub>x</sub>) e, fundamentalmente para este projeto, a taxa central de mortalidade por grupo etário (<sub>n</sub>M<sub>x</sub>). A <sub>n</sub>M<sub>x</sub> representa a razão entre o número de óbitos ajustados e a população correspondente em cada grupo etário, sendo a principal variável utilizada para as previsões de mortalidade por idade.
+                  As principais variáveis das tábuas incluem: probabilidade de morte (<sub>n</sub>q<sub>x</sub>), sobreviventes (l<sub>x</sub>), óbitos (d<sub>x</sub>), pessoas-ano vividas (<sub>n</sub>L<sub>x</sub>), total de pessoas-ano acima da idade x (T<sub>x</sub>), expectativa de vida (e<sub>x</sub>) e, fundamentalmente para este projeto, a taxa central de mortalidade por grupo etário (<sub>n</sub>M<sub>x</sub>). A <sub>n</sub>M<sub>x</sub> representa a razão entre o número de óbitos ajustados e a população correspondente em cada grupo etário, sendo a principal variável utilizada para as previsões de mortalidade por idade.Essas tábuas permitem análises detalhadas e comparáveis dos padrões de mortalidade, sendo fundamentais para a avaliação de tendências e para a calibração dos modelos preditivos.
                 </p>
               </div>
             </motion.section>
@@ -225,8 +225,8 @@ const Metodologia = () => {
                   O modelo Lee-Carter (1992) é um dos métodos mais consagrados para projeção de mortalidade, especialmente por sua capacidade de capturar tendências de longo prazo e mudanças estruturais. Ele modela a taxa central de mortalidade (<sub>n</sub>M<sub>x</sub>) por idade e ano como:
                 </p>
                 
-                <div className="my-6 py-5 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-5 px-4 text-center overflow-x-auto">
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>ln(m<sub>x,t</sub>) = a<sub>x</sub> + b<sub>x</sub>k<sub>t</sub> + ε<sub>x,t</sub></span>
                   </div>
                 </div>
@@ -251,7 +251,7 @@ const Metodologia = () => {
                   </li>
                 </ul>
                 <p className="mt-4">
-                  A estimação dos parâmetros é realizada por decomposição de valores singulares (SVD), utilizando o pacote <em>demography</em> (R). O componente temporal k<sub>t</sub> é projetado via modelo ARIMA(0,1,0) (passeio aleatório com drift), ajustado com o pacote <em>forecast</em>.
+                  A estimação dos parâmetros é realizada por decomposição de valores singulares (SVD), utilizando o pacote <em>demography</em> (R). O componente temporal k<sub>t</sub> é projetado via modelo ARIMA(0,1,0) (passeio aleatório com drift), ajustado com o pacote <em>forecast</em>. O modelo é avaliado por faixa etária, permitindo identificar a acurácia em cada grupo e facilitando a comparação com outros métodos.
                 </p>
               </div>
             </motion.section>
@@ -274,33 +274,29 @@ const Metodologia = () => {
               </div>
               <div className="space-y-4 text-justify leading-relaxed text-muted-foreground text-sm md:text-base">
                 <p>
-                  A variante Lee-Miller (2001) foi desenvolvida para corrigir a tendência do Lee-Carter de subestimar a expectativa de vida projetada, especialmente em idades avançadas. Após a aplicação da SVD, o vetor k<sub>t</sub> é reajustado numericamente para que a expectativa de vida projetada coincida com a observada. Busca-se o valor de k<sub>t</sub> tal que:
-                </p>
-                
-                <div className="my-6 py-5 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
-                    <span>e<sub>0</sub>(t, k<sub>t</sub>) = e<sub>0</sub><sup>obs</sup>(t)</span>
-                  </div>
-                </div>
-
-                <p>
-                  A otimização é resolvida numericamente através de métodos iterativos de busca de raízes, podendo ser expressa pela atualização clássica de Newton-Raphson:
+                  A variante Lee-Miller (2001) foi desenvolvida para corrigir a tendência do Lee-Carter de subestimar a expectativa de vida projetada, especialmente em idades avançadas. Após a aplicação da SVD, o vetor k<sub>t</sub> é reajustado iterativamente para que as taxas projetadas repliquem com maior precisão a expectativa de vida observada, conforme a seguinte regra:
                 </p>
 
-                <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
-                    <span>k<sub>t</sub><sup>(j+1)</sup> = k<sub>t</sub><sup>(j)</sup> − </span>
+                <div className="my-6 py-6 px-4 text-center overflow-x-auto">
+                  <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-black dark:text-white">
+                    <span>k<sub>t</sub><sup>(j+1)</sup> = k<sub>t</sub><sup>(j)</sup> + Σ<sub>x</sub> b<sub>x</sub> × </span>
+                    
+                    {/* Estrutura da Fração */}
                     <div className="inline-flex flex-col items-center justify-center mx-1.5 align-middle">
-                      <span className="text-sm md:text-base text-blue-300 pb-1 px-3 text-center">e<sub>0</sub>(t, k<sub>t</sub><sup>(j)</sup>) − e<sub>0</sub><sup>obs</sup>(t)</span>
-                      <div className="w-full h-[1.5px] bg-blue-400/30" />
-                      <div className="text-sm md:text-base text-blue-300 pt-1 px-3 text-center flex items-center justify-center">
-                        <div className="inline-flex flex-col items-center justify-center align-middle">
-                          <span className="pb-0.5 text-sm font-serif">∂e<sub>0</sub></span>
-                          <div className="w-full h-[1px] bg-blue-400/30" />
-                          <span className="pt-0.5 text-sm font-serif">∂k<sub>t</sub></span>
-                        </div>
-                      </div>
+                      {/* Numerador */}
+                      <span className="text-sm md:text-base text-black dark:text-white pb-1 px-3 text-center">
+                        L<sub>x</sub>
+                      </span>
+                      
+                      {/* Linha da Fração */}
+                      <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
+                      
+                      {/* Denominador */}
+                      <span className="text-sm md:text-base text-black dark:text-white pt-1 px-3 text-center">
+                        (e<sub>0,t</sub><sup>obs</sup> − e<sub>0,t</sub><sup>proj(j)</sup>)
+                      </span>
                     </div>
+
                   </div>
                 </div>
                 
@@ -335,8 +331,8 @@ const Metodologia = () => {
                   <strong className="text-foreground">ARIMA (AutoRegressive Integrated Moving Average):</strong> Modelo clássico para séries temporais, capaz de capturar padrões lineares, tendências e sazonalidades. A estrutura geral é:
                 </p>
                 
-                <div className="my-6 py-5 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-5 px-4 text-center overflow-x-auto">
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>Φ<sub>p</sub>(B)Φ<sub>P</sub>(B<sup>s</sup>)(1 − B)<sup>d</sup>(1 − B<sup>s</sup>)<sup>D</sup>y<sub>t</sub> = Θ<sub>q</sub>(B)Θ<sub>Q</sub>(B<sup>s</sup>)ε<sub>t</sub></span>
                   </div>
                 </div>
@@ -349,8 +345,8 @@ const Metodologia = () => {
                   <strong className="text-foreground">ETS (Error, Trend, Seasonality):</strong> Modelo que decompõe a série em componentes de erro, tendência e sazonalidade, com variantes aditivas e multiplicativas. A estrutura básica é:
                 </p>
                 
-                <div className="my-6 py-5 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-5 px-4 text-center overflow-x-auto">
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>y<sub>t</sub> = ℓ<sub>t−1</sub> + b<sub>t−1</sub> + s<sub>t−m</sub> + ε<sub>t</sub></span>
                   </div>
                 </div>
@@ -363,35 +359,35 @@ const Metodologia = () => {
                   As previsões de cada modelo são combinadas por faixa etária, utilizando pesos inversamente proporcionais ao erro quadrático médio (RMSE) obtido no conjunto de validação para cada grupo etário:
                 </p>
                 
-                <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto space-y-6 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-6 px-4 text-center overflow-x-auto space-y-6">
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>W<sub>i</sub> = </span>
                     <div className="inline-flex flex-col items-center justify-center mx-2 align-middle">
                       <div className="inline-flex flex-col items-center justify-center mx-1.5 pb-1 text-xs md:text-sm">
-                        <span className="text-blue-300">1</span>
-                        <div className="w-full h-[1px] bg-blue-400/30 my-0.5" />
-                        <span className="text-blue-300 font-serif">RMSE<sub>i</sub></span>
+                        <span className="text-black dark:text-white">1</span>
+                        <div className="w-full h-[1px] bg-black/30 dark:bg-white/30 my-0.5" />
+                        <span className="text-black dark:text-white font-serif">RMSE<sub>i</sub></span>
                       </div>
-                      <div className="w-full h-[1.5px] bg-blue-400/30" />
+                      <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
                       <div className="inline-flex items-center gap-1.5 pt-1">
                         <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-0.5">
-                          <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                          <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">j</span>
+                          <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                          <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">j</span>
                         </div>
                         <div className="inline-flex flex-col items-center justify-center mx-1">
-                          <span className="text-xs md:text-sm text-blue-300">1</span>
-                          <div className="w-full h-[1px] bg-blue-400/30 my-0.5" />
-                          <span className="text-xs md:text-sm text-blue-300 font-serif">RMSE<sub>j</sub></span>
+                          <span className="text-xs md:text-sm text-black dark:text-white">1</span>
+                          <div className="w-full h-[1px] bg-black/30 dark:bg-white/30 my-0.5" />
+                          <span className="text-xs md:text-sm text-black dark:text-white font-serif">RMSE<sub>j</sub></span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="h-[1px] bg-blue-500/10 max-w-xs mx-auto" />
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                  <div className="h-[1px] bg-black/10 dark:bg-white/10 max-w-xs mx-auto" />
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>ŷ<sub>t</sub><sup>Comb</sup> = </span>
                     <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-1">
-                      <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                      <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">i</span>
+                      <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                      <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">i</span>
                     </div>
                     <span>w<sub>i</sub>ŷ<sub>t</sub><sup>(i)</sup>,&nbsp; i ∈ {"{"} ARIMA, ETS {"}"}</span>
                   </div>
@@ -428,24 +424,24 @@ const Metodologia = () => {
                   <strong className="text-foreground">NNAR (Neural Network AutoRegressive, MLP-Shallow):</strong> Rede neural do tipo Multilayer Perceptron (MLP) com uma camada oculta, capaz de capturar padrões não-lineares. A arquitetura é:
                 </p>
                 
-                <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-1.5 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-6 px-4 text-center overflow-x-auto">
+                  <div className="inline-flex items-center justify-center gap-1.5 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>ŷ<sub>t+h</sub> = β<sub>0</sub> + </span>
                     <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-1.5">
-                      <span className="text-[10px] text-blue-400 font-semibold mb-[-2px]">k</span>
-                      <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                      <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">r=1</span>
+                      <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mb-[-2px]">k</span>
+                      <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                      <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">r=1</span>
                     </div>
                     <span>β<sub>r</sub>σ</span>
-                    <span className="text-2xl md:text-3xl font-light text-blue-400/50 hover:text-blue-400 transition-colors mx-0.5">(</span>
+                    <span className="text-2xl md:text-3xl font-light text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white transition-colors mx-0.5">(</span>
                     <span>α<sub>r0</sub> + </span>
                     <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-1.5">
-                      <span className="text-[10px] text-blue-400 font-semibold mb-[-2px]">p</span>
-                      <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                      <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">j=1</span>
+                      <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mb-[-2px]">p</span>
+                      <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                      <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">j=1</span>
                     </div>
                     <span>α<sub>rj</sub>y<sub>t−j+1</sub></span>
-                    <span className="text-2xl md:text-3xl font-light text-blue-400/50 hover:text-blue-400 transition-colors mx-0.5">)</span>
+                    <span className="text-2xl md:text-3xl font-light text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white transition-colors mx-0.5">)</span>
                   </div>
                 </div>
                 
@@ -457,35 +453,35 @@ const Metodologia = () => {
                   As previsões dos três modelos são combinadas por faixa etária, utilizando a mesma regra de pesos inversamente proporcionais ao RMSE em validação:
                 </p>
                 
-                <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto space-y-6 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                <div className="my-6 py-6 px-4 text-center overflow-x-auto space-y-6">
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>W<sub>i</sub> = </span>
                     <div className="inline-flex flex-col items-center justify-center mx-2 align-middle">
                       <div className="inline-flex flex-col items-center justify-center mx-1.5 pb-1 text-xs md:text-sm">
-                        <span className="text-blue-300">1</span>
-                        <div className="w-full h-[1px] bg-blue-400/30 my-0.5" />
-                        <span className="text-blue-300 font-serif">RMSE<sub>i</sub></span>
+                        <span className="text-black dark:text-white">1</span>
+                        <div className="w-full h-[1px] bg-black/30 dark:bg-white/30 my-0.5" />
+                        <span className="text-black dark:text-white font-serif">RMSE<sub>i</sub></span>
                       </div>
-                      <div className="w-full h-[1.5px] bg-blue-400/30" />
+                      <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
                       <div className="inline-flex items-center gap-1.5 pt-1">
                         <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-0.5">
-                          <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                          <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">j</span>
+                          <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                          <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">j</span>
                         </div>
                         <div className="inline-flex flex-col items-center justify-center mx-1">
-                          <span className="text-xs md:text-sm text-blue-300">1</span>
-                          <div className="w-full h-[1px] bg-blue-400/30 my-0.5" />
-                          <span className="text-xs md:text-sm text-blue-300 font-serif">RMSE<sub>j</sub></span>
+                          <span className="text-xs md:text-sm text-black dark:text-white">1</span>
+                          <div className="w-full h-[1px] bg-black/30 dark:bg-white/30 my-0.5" />
+                          <span className="text-xs md:text-sm text-black dark:text-white font-serif">RMSE<sub>j</sub></span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="h-[1px] bg-blue-500/10 max-w-xs mx-auto" />
-                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-blue-100">
+                  <div className="h-[1px] bg-black/10 dark:bg-white/10 max-w-xs mx-auto" />
+                  <div className="inline-flex items-center justify-center gap-2 font-serif text-lg md:text-xl italic text-black dark:text-white">
                     <span>ŷ<sub>t</sub><sup>Comb</sup> = </span>
                     <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-1">
-                      <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                      <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">i</span>
+                      <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                      <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">i</span>
                     </div>
                     <span>w<sub>i</sub>ŷ<sub>t</sub><sup>(i)</sup>,&nbsp; i ∈ {"{"} ARIMA, ETS, NNAR {"}"}</span>
                   </div>
@@ -515,7 +511,7 @@ const Metodologia = () => {
               </div>
               <div className="space-y-6 text-justify leading-relaxed text-muted-foreground text-sm md:text-base">
                 <p>
-                  Para garantir a avaliação justa e realista dos modelos, os dados foram divididos em três períodos distintos:
+                  Para garantir a avaliação justa e realista dos modelos, os dados foram divididos em três períodos:
                 </p>
                 
                 <div className="overflow-x-auto rounded-xl border border-primary/10 bg-background/20">
@@ -524,28 +520,28 @@ const Metodologia = () => {
                       <tr className="bg-primary/5 text-muted-foreground border-b border-primary/10">
                         <th className="p-4 font-semibold text-xs uppercase tracking-wider">Fase</th>
                         <th className="p-4 font-semibold text-xs uppercase tracking-wider">Anos</th>
-                        <th className="p-4 font-semibold text-xs uppercase tracking-wider">Uso do Modelo</th>
-                        <th className="p-4 font-semibold text-xs uppercase tracking-wider">Objetivo Analítico</th>
+                        <th className="p-4 font-semibold text-xs uppercase tracking-wider">Uso</th>
+                        <th className="p-4 font-semibold text-xs uppercase tracking-wider">Objetivo</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-primary/5">
                       <tr className="hover:bg-primary/5 transition-all duration-300">
                         <td className="p-4 font-bold text-foreground">Treino</td>
                         <td className="p-4 font-mono text-xs text-primary font-semibold">2000–2011</td>
-                        <td className="p-4 text-xs">Ajuste dos hiperparâmetros</td>
-                        <td className="p-4 text-xs">Estimar parâmetros centrais</td>
+                        <td className="p-4 text-xs">Ajuste dos modelos</td>
+                        <td className="p-4 text-xs">Estimar parâmetros</td>
                       </tr>
                       <tr className="hover:bg-primary/5 transition-all duration-300">
                         <td className="p-4 font-bold text-foreground">Validação</td>
                         <td className="p-4 font-mono text-xs text-primary font-semibold">2012–2015</td>
-                        <td className="p-4 text-xs">Cálculo e penalização de RMSE</td>
-                        <td className="p-4 text-xs">Definir os pesos da combinação de modelos</td>
+                        <td className="p-4 text-xs">Cálculo de RMSE</td>
+                        <td className="p-4 text-xs">Definir pesos de combinação</td>
                       </tr>
                       <tr className="hover:bg-primary/5 transition-all duration-300">
                         <td className="p-4 font-bold text-foreground">Teste</td>
                         <td className="p-4 font-mono text-xs text-primary font-semibold">2016–2019</td>
-                        <td className="p-4 text-xs">Avaliação do erro out-of-sample</td>
-                        <td className="p-4 text-xs">Medir desempenho geral fora da amostra</td>
+                        <td className="p-4 text-xs">Avaliação final</td>
+                        <td className="p-4 text-xs">Medir desempenho fora da amostra</td>
                       </tr>
                     </tbody>
                   </table>
@@ -575,7 +571,7 @@ const Metodologia = () => {
               </div>
               <div className="space-y-6 text-justify leading-relaxed text-muted-foreground text-sm md:text-base">
                 <p>
-                  A avaliação dos modelos foi realizada por faixa etária, permitindo identificar a acurácia em cada grupo e facilitando a comparação entre os métodos. As métricas matemáticas aplicadas foram:
+                  A avaliação dos modelos foi realizada por faixa etária, permitindo identificar a acurácia em cada grupo e facilitando a comparação entre métodos. As métricas utilizadas foram:
                 </p>
                 
                 <ul className="space-y-6 pl-0">
@@ -583,26 +579,23 @@ const Metodologia = () => {
                     <div className="flex items-center gap-2 mb-3">
                       <span className="font-bold text-foreground">RMSE (Root Mean Square Error)</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      Mede o desvio médio quadrático entre as projeções e os dados reais. Penaliza erros maiores de forma mais severa.
-                    </p>
-                    <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                      <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-blue-100">
+                    <div className="my-6 py-6 px-4 text-center overflow-x-auto">
+                      <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-black dark:text-white">
                         <span>RMSE = √</span>
-                        <span className="text-2xl md:text-3xl font-light text-blue-400/50 hover:text-blue-400 transition-colors mx-0.5">(</span>
+                        <span className="text-2xl md:text-3xl font-light text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white transition-colors mx-0.5">(</span>
                         <div className="inline-flex flex-col items-center justify-center mx-1.5 align-middle">
                           <div className="inline-flex items-center gap-1 pb-1">
                             <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-0.5">
-                              <span className="text-[10px] text-blue-400 font-semibold mb-[-2px]">n</span>
-                              <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                              <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">i=1</span>
+                              <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mb-[-2px]">n</span>
+                              <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                              <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">i=1</span>
                             </div>
-                            <span className="text-sm md:text-base text-blue-300 font-serif">(ŷ<sub>i</sub> − y<sub>i</sub>)²</span>
+                            <span className="text-sm md:text-base text-black dark:text-white font-serif">(ŷ<sub>i</sub> − y<sub>i</sub>)²</span>
                           </div>
-                          <div className="w-full h-[1.5px] bg-blue-400/30" />
-                          <span className="text-sm md:text-base text-blue-300 pt-1 text-center font-serif">n</span>
+                          <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
+                          <span className="text-sm md:text-base text-black dark:text-white pt-1 text-center font-serif">n</span>
                         </div>
-                        <span className="text-2xl md:text-3xl font-light text-blue-400/50 hover:text-blue-400 transition-colors mx-0.5">)</span>
+                        <span className="text-2xl md:text-3xl font-light text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white transition-colors mx-0.5">)</span>
                       </div>
                     </div>
                   </li>
@@ -611,23 +604,20 @@ const Metodologia = () => {
                     <div className="flex items-center gap-2 mb-3">
                       <span className="font-bold text-foreground">MAE (Mean Absolute Error)</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      Mede a média dos erros absolutos residuais, dando o mesmo peso a todos os desvios.
-                    </p>
-                    <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                      <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-blue-100">
+                    <div className="my-6 py-6 px-4 text-center overflow-x-auto">
+                      <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-black dark:text-white">
                         <span>MAE = </span>
                         <div className="inline-flex flex-col items-center justify-center mx-1.5 align-middle">
                           <div className="inline-flex items-center gap-1 pb-1">
                             <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-0.5">
-                              <span className="text-[10px] text-blue-400 font-semibold mb-[-2px]">n</span>
-                              <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                              <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">i=1</span>
+                              <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mb-[-2px]">n</span>
+                              <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                              <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">i=1</span>
                             </div>
-                            <span className="text-sm md:text-base text-blue-300 font-serif">|y<sub>i</sub> − ŷ<sub>i</sub>|</span>
+                            <span className="text-sm md:text-base text-black dark:text-white font-serif">|y<sub>i</sub> − ŷ<sub>i</sub>|</span>
                           </div>
-                          <div className="w-full h-[1.5px] bg-blue-400/30" />
-                          <span className="text-sm md:text-base text-blue-300 pt-1 text-center font-serif">n</span>
+                          <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
+                          <span className="text-sm md:text-base text-black dark:text-white pt-1 text-center font-serif">n</span>
                         </div>
                       </div>
                     </div>
@@ -637,33 +627,30 @@ const Metodologia = () => {
                     <div className="flex items-center gap-2 mb-3">
                       <span className="font-bold text-foreground">sMAPE (Symmetric Mean Absolute Percentage Error)</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      Fornece uma métrica percentual de erro simétrico, facilitando a comparação entre escalas populacionais distintas.
-                    </p>
-                    <div className="my-6 py-6 px-4 bg-[#030712]/60 backdrop-blur-md rounded-xl border border-blue-900/30 text-center overflow-x-auto transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                      <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-blue-100">
+                    <div className="my-6 py-6 px-4 text-center overflow-x-auto">
+                      <div className="inline-flex items-center justify-center gap-1 font-serif text-lg md:text-xl italic text-black dark:text-white">
                         <span>sMAPE = </span>
                         <div className="inline-flex flex-col items-center justify-center mx-1.5 align-middle">
-                          <span className="text-sm md:text-base text-blue-300 pb-1 px-2 text-center font-serif">100</span>
-                          <div className="w-full h-[1.5px] bg-blue-400/30" />
-                          <span className="text-sm md:text-base text-blue-300 pt-1 px-2 text-center font-serif">n</span>
+                          <span className="text-sm md:text-base text-black dark:text-white pb-1 px-2 text-center font-serif">100</span>
+                          <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
+                          <span className="text-sm md:text-base text-black dark:text-white pt-1 px-2 text-center font-serif">n</span>
                         </div>
-                        <span className="mx-1.5 font-sans font-semibold text-blue-300">×</span>
+                        <span className="mx-1.5 font-sans font-semibold text-black dark:text-white">×</span>
                         <div className="inline-flex flex-col items-center justify-center mx-1.5 align-middle">
                           <div className="inline-flex items-center gap-1 pb-1">
                             <div className="inline-flex flex-col items-center justify-center align-middle leading-none mx-0.5">
-                              <span className="text-[10px] text-blue-400 font-semibold mb-[-2px]">n</span>
-                              <span className="text-xl md:text-2xl text-blue-200">Σ</span>
-                              <span className="text-[10px] text-blue-400 font-semibold mt-[-2px]">t=1</span>
+                              <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mb-[-2px]">n</span>
+                              <span className="text-xl md:text-2xl text-black dark:text-white">Σ</span>
+                              <span className="text-[10px] text-black/70 dark:text-white/70 font-semibold mt-[-2px]">t=1</span>
                             </div>
-                            <span className="text-sm md:text-base text-blue-300 font-serif">|y<sub>t</sub> − ŷ<sub>t</sub>|</span>
+                            <span className="text-sm md:text-base text-black dark:text-white font-serif">|y<sub>t</sub> − ŷ<sub>t</sub>|</span>
                           </div>
-                          <div className="w-full h-[1.5px] bg-blue-400/30" />
+                          <div className="w-full h-[1.5px] bg-black/30 dark:bg-white/30" />
                           <div className="inline-flex flex-col items-center justify-center pt-1">
                             <div className="inline-flex flex-col items-center justify-center mx-1 align-middle">
-                              <span className="text-xs text-blue-300 pb-0.5 px-2 text-center font-serif">|y<sub>t</sub>| + |ŷ<sub>t</sub>|</span>
-                              <div className="w-full h-[1px] bg-blue-400/30" />
-                              <span className="text-xs text-blue-300 pt-0.5 px-2 text-center font-serif">2</span>
+                              <span className="text-xs text-black dark:text-white pb-0.5 px-2 text-center font-serif">|y<sub>t</sub>| + |ŷ<sub>t</sub>|</span>
+                              <div className="w-full h-[1px] bg-black/30 dark:bg-white/30" />
+                              <span className="text-xs text-black dark:text-white pt-0.5 px-2 text-center font-serif">2</span>
                             </div>
                           </div>
                         </div>

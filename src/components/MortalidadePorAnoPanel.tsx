@@ -91,30 +91,8 @@ export function MortalidadePorAnoPanel({
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-muted/20 shadow-sm">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-30%,hsl(var(--primary)/0.12),transparent)]" />
+      <div className="pointer-events-none absolute inset-0" />
       <div className="relative space-y-5 p-4 sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-1">
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Explorar série
-            </p>
-            <h4 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">
-              Mortalidade por ano
-            </h4>
-            <p className="max-w-md text-xs text-muted-foreground sm:text-sm">
-              Combine territórios, faixas e sexo. Cada combinação local × faixa × sexo vira uma linha em log(nMx).
-            </p>
-          </div>
-          <Badge
-            variant="secondary"
-            className="shrink-0 gap-1 rounded-full px-3 py-1 tabular-nums text-[0.7rem] font-medium"
-          >
-            <Sparkles className="h-3 w-3 opacity-70" aria-hidden />
-            até {linhasCombinadas} linhas
-          </Badge>
-        </div>
-
-        <Separator className="bg-border/60" />
 
         <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
           <div className="space-y-2">
