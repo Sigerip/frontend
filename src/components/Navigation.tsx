@@ -15,7 +15,9 @@ import {
   Database,
   ArrowRight,
   BrainCircuit,
-  Terminal
+  Terminal,
+  GraduationCap,
+  Library
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -64,6 +66,10 @@ const Navigation = () => {
   const apiItems = [
     { path: "/solicitar-token", label: "Solicitar Token", icon: Key, desc: "Geração de chaves de autenticação", iconColor: "text-indigo-500 bg-indigo-500/10" },
     { path: "/usar-api", label: "Documentação API", icon: Code, desc: "Integração direta com o observatório", iconColor: "text-slate-600 bg-slate-500/10 dark:text-slate-300" }
+  ];
+
+  const cursoItens = [
+    { path: "/curso-infografico", label: "Curso Infográfico", icon: GraduationCap, desc: "Construção de infográficos com IA", iconColor: "text-indigo-500 bg-indigo-500/10" }
   ];
 
   // Verifica se alguma rota de um grupo específico está ativa para destacar o menu pai
@@ -249,6 +255,44 @@ const Navigation = () => {
                 Metodologia
               </button>
             </Link>
+
+            {/* DROPDOWN: DESENVOLVEDOR / API */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={cn(
+                  "text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-1",
+                  isGroupActive(apiItems)
+                    ? "bg-slate-100 text-blue-600 dark:bg-slate-800 dark:text-blue-400 shadow-sm"
+                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                )}>
+                  <Library className="h-3.5 w-3.5 mr-1" />
+                  Cursos
+                  <ChevronDown className="h-3.5 w-3.5 opacity-60 ml-0.5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-64 p-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 rounded-2xl shadow-xl mt-1 animate-in fade-in-50 slide-in-from-top-1">
+                <DropdownMenuLabel className="text-[10px] font-bold text-slate-400 uppercase px-2.5 py-1 tracking-widest">
+                  Cursos Desenvolvidos
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800/60 my-1" />
+                {cursoItens.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <DropdownMenuItem key={item.path} asChild className="rounded-xl focus:bg-slate-50 dark:focus:bg-slate-800 p-2 cursor-pointer transition-colors duration-150">
+                      <Link to={item.path} className="flex gap-3">
+                        <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", item.iconColor)}>
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{item.label}</span>
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate mt-0.5">{item.desc}</span>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
           </div>
 

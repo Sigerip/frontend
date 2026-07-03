@@ -457,6 +457,11 @@ const Home = () => {
                     Ver Metodologia
                   </Button>
                 </Link>
+                <Link to="/curso-infografico">
+                  <Button size="lg" variant="outline" className="rounded-full px-6 font-medium border-white/20 text-white bg-white/5 hover:bg-white/10 transition-colors">
+                    Ver Curso Infográfico
+                  </Button>
+                </Link>
               </motion.div>
             </div>
 
