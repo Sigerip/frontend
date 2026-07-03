@@ -16,6 +16,7 @@ import Teste from "./pages/teste2";
 import NotFound from "./pages/NotFound";
 import CadastroUsuario from "./pages/CadastroUsuario";
 import UsarApi from "./pages/UsarApi";
+import CursoInfografico from "./pages/CursoPage";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/solicitar-token" element={<CadastroUsuario />} />
             <Route path="/usar-api" element={<UsarApi />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/curso-infografico" element={<CursoInfografico />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
 

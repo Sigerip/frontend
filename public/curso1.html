@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso OI Atuarial: análise com IA, NotebookLM e infográfico</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    /* ==========================================================================
+       Design System & Variables
+       ========================================================================== */
+    :root {
+      /* Dark Theme (Pure Black) */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #121212;
+      --text-primary: #ffffff;
+      --text-secondary: #a3a3a3;
+      --text-muted: #525252;
+      --accent: #818cf8; /* Light Indigo Pastel */
+      --accent-hover: #6366f1;
+      --accent-light: rgba(129, 140, 248, 0.1);
+      --success: #34d399; /* Green Pastel */
+      --success-light: rgba(52, 211, 153, 0.1);
+      --error: #f87171; /* Red Pastel */
+      --border-color: #1a1a1a;
+      --card-border: rgba(255, 255, 255, 0.05);
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Pastel Block Highlights for Dark Theme */
+      --code-bg: #090a0f;
+      --code-border: #2e354f;
+      --prompt-bg: #0b0c16;
+      --prompt-border: #4338ca;
+    }
+
+    .light-theme {
+      /* Light Theme (Pure White) */
+      --bg-primary: #ffffff;
+      --bg-secondary: #fafafa;
+      --bg-tertiary: #f4f4f5;
+      --text-primary: #000000;
+      --text-secondary: #525252;
+      --text-muted: #a3a3a3;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-light: rgba(79, 70, 229, 0.08);
+      --success: #059669;
+      --success-light: rgba(5, 150, 105, 0.08);
+      --error: #dc2626;
+      --border-color: #e5e5e5;
+      --card-border: rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+
+      /* Pastel Block Highlights for Light Theme */
+      --code-bg: #f0f4f8; /* Soft Pastel Blue-Gray */
+      --code-border: #cbd5e1;
+      --prompt-bg: #eef2ff; /* Soft Pastel Lavender/Indigo */
+      --prompt-border: #a5b4fc;
+    }
+
+    /* ==========================================================================
+       Reset & Base Styles
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      background-color: var(--bg-tertiary);
+      color: var(--accent);
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background-color: var(--border-color);
+      margin: 2rem 0;
+    }
+
+    /* ==========================================================================
+       Layout (App Wrapper)
+       ========================================================================== */
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* Top Sticky Header */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-between;
+      padding: 0.75rem 1.5rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .light-theme .top-header {
+      background-color: rgba(255, 255, 255, 0.85);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background-color: var(--accent-light);
+      color: var(--accent);
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(129, 140, 248, 0.2);
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      max-width: 350px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .global-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-grow: 1;
+      max-width: 400px;
+      margin: 0 2rem;
+    }
+
+    .progress-bar-container {
+      background-color: var(--bg-tertiary);
+      border-radius: 8px;
+      height: 8px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      height: 100%;
+      width: 0%;
+      border-radius: 8px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-text-percent {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--success);
+      white-space: nowrap;
+      min-width: 40px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-left: auto;
+    }
+
+    /* Base Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      padding: 0;
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    .btn-icon:hover {
+      background-color: var(--accent-light);
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(129, 140, 248, 0.25);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-primary);
+      border-color: var(--text-secondary);
+    }
+
+    /* Container holding Sidebar and Main Area */
+    .app-container {
+      display: flex;
+      flex: 1;
+      position: relative;
+    }
+
+    /* Left Sidebar */
+    .sidebar-nav {
+      width: 280px;
+      border-right: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+      padding: 1.5rem 1rem;
+      overflow-y: auto;
+      position: sticky;
+      top: 57px;
+      height: calc(100vh - 57px);
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-group {
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-group-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      padding-left: 0.75rem;
+      font-weight: 700;
+    }
+
+    .sidebar-list {
+      list-style: none;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 0.25rem;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+    }
+
+    .sidebar-item.active {
+      color: var(--accent);
+      background-color: var(--accent-light);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .sidebar-item.completed {
+      position: relative;
+    }
+    
+    .sidebar-item.completed::after {
+      content: "\F26E";
+      font-family: "bootstrap-icons";
+      color: var(--success);
+      position: absolute;
+      right: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: var(--bg-tertiary);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+
+    .sidebar-item.active .step-badge {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .sidebar-item.completed .step-badge {
+      background-color: var(--success);
+      color: #ffffff;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2.5rem 3rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      transition: padding 0.3s ease;
+    }
+
+    /* ==========================================================================
+       Content Components & Cards
+       ========================================================================== */
+    .content-section {
+      margin-bottom: 4rem;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(129, 140, 248, 0.3);
+    }
+
+    .welcome-card {
+      background: linear-gradient(135deg, var(--bg-secondary), var(--accent-light));
+      border: 1px solid var(--prompt-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .welcome-title {
+      font-size: 2.25rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .meta-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .meta-item i {
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .quick-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .spec-box {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .spec-box h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .spec-box p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       Checklist Component (State-ful)
+       ========================================================================== */
+    .checklist-container {
+      margin-top: 1.5rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .checklist-header {
+      background-color: var(--bg-tertiary);
+      padding: 0.75rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: 0;
+    }
+
+    .checklist-item:hover {
+      background-color: var(--bg-tertiary);
+    }
+
+    .checklist-checkbox-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-top: 0.15rem;
+    }
+
+    /* Custom Checkbox */
+    .checklist-checkbox-wrapper input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--text-muted);
+      border-radius: 50%;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .checklist-checkbox-wrapper input[type="checkbox"]:checked {
+      background-color: var(--success);
+      border-color: var(--success);
+    }
+
+    .checklist-checkbox-wrapper input[type="checkbox"]:checked::after {
+      content: "\F272";
+      font-family: "bootstrap-icons";
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .checklist-checkbox-wrapper input[type="checkbox"]:focus-visible {
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .checklist-item-content {
+      flex: 1;
+    }
+
+    .checklist-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: color 0.2s ease;
+    }
+
+    .checklist-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+    }
+
+    .checklist-item.checked-item .checklist-title {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       Table Custom Styling
+       ========================================================================== */
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      font-family: var(--font-heading);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      background-color: var(--bg-secondary);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody tr:hover td {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+    }
+
+    /* ==========================================================================
+       Code Blocks & Interactive Prompts (Soft Pastel Blocks Highlights)
+       ========================================================================== */
+    .code-block-wrapper {
+      position: relative;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--code-border);
+      background-color: var(--code-bg);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .code-block-header {
+      background-color: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--code-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .light-theme .code-block-header {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .code-lang-label {
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy:hover {
+      color: var(--accent);
+      background-color: var(--accent-light);
+    }
+
+    .btn-copy.copied {
+      color: var(--success);
+      background-color: var(--success-light);
+    }
+
+    pre.sourceCode {
+      padding: 1.25rem;
+      margin: 0;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      background-color: var(--code-bg);
+      transition: background-color 0.3s ease;
+    }
+
+    .light-theme pre.sourceCode {
+      color: #1e293b;
+    }
+
+    /* Code highlights */
+    .token-keyword { color: #818cf8; font-weight: bold; }
+    .token-string { color: #f472b6; }
+    .token-comment { color: #71717a; font-style: italic; }
+    .token-function { color: #fbbf24; }
+    .token-number { color: #34d399; }
+
+    .light-theme .token-keyword { color: #2563eb; }
+    .light-theme .token-string { color: #db2777; }
+    .light-theme .token-comment { color: #71717a; }
+    .light-theme .token-function { color: #b45309; }
+    .light-theme .token-number { color: #059669; }
+
+    /* Interactive Prompt Box (Highlight Soft Pastel) */
+    .prompt-box-card {
+      background-color: var(--prompt-bg);
+      border: 1px solid var(--prompt-border);
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .prompt-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .prompt-control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .prompt-control-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .prompt-select {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .prompt-select:focus {
+      border-color: var(--accent);
+    }
+
+    .prompt-content {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--text-primary);
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      max-height: 250px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .light-theme .prompt-content {
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #1e293b;
+    }
+
+    .prompt-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    /* ==========================================================================
+       Interactive Form (Workspace Log Exporter)
+       ========================================================================== */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .form-control {
+      width: 100%;
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-light);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-actions-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 2rem;
+    }
+
+    /* ==========================================================================
+       View Mode Styles: Stepper vs Continuous Scroll
+       ========================================================================== */
+    .stepper-nav-bar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border-color);
+      margin-top: 3rem;
+    }
+
+    /* Under step-by-step layout mode */
+    .step-by-step-mode .content-section {
+      display: none;
+    }
+
+    .step-by-step-mode .content-section.active-step {
+      display: block;
+    }
+
+    .step-by-step-mode .stepper-nav-bar {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       Floating Question Box (Google Sheets integration)
+       ========================================================================== */
+    /* ==========================================================================
+       Docked Question Box (Google Sheets integration)
+       ========================================================================== */
+    .question-card {
+      width: 300px;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      transition: all 0.3s ease;
+    }
+
+    .question-card.collapsed {
+      gap: 0;
+    }
+
+    .question-card.collapsed #q-form {
+      display: none !important;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .question-card.collapsed .question-header {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .question-header h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-toggle-widget {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .btn-toggle-widget:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+    }
+
+    .q-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .q-form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .q-form-control {
+      width: 100%;
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .q-form-control:focus {
+      border-color: var(--accent);
+    }
+
+    textarea.q-form-control {
+      resize: none;
+      min-height: 80px;
+    }
+
+    .q-status-msg {
+      font-size: 0.8rem;
+      font-weight: 500;
+      min-height: 1.25rem;
+    }
+
+    /* Notification Toast (Moved to Top Right) */
+    .toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--success);
+      color: var(--text-primary);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 1001;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       Responsive adjustments
+       ========================================================================== */
+    @media (max-width: 992px) {
+      .global-progress {
+        display: none;
+      }
+      .main-content {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+      }
+      
+      .sidebar-nav {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: 0;
+        border-bottom: 1px solid var(--border-color);
+        max-height: 300px;
+      }
+
+      .top-header {
+        padding: 0.5rem 1rem;
+      }
+
+      .header-title {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper" id="app">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="top-header">
+      <div class="brand-section">
+        <span class="logo-badge">OI ATUARIAL</span>
+        <h2 class="header-title" title="Curso OI Atuarial: análise com IA, NotebookLM e infográfico">Curso: Análise com IA</h2>
+      </div>
+
+      <!-- General Progress Indicator -->
+      <div class="global-progress">
+        <span class="progress-text-percent" id="progress-percentage">0%</span>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- View Mode Toggle Button -->
+        <button id="view-mode-btn" class="btn btn-secondary" onclick="toggleViewMode()" title="Mudar Modo de Visualização">
+          <i class="bi bi-collection"></i>
+          <span class="btn-text">Modo Passo a Passo</span>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button class="btn btn-icon" onclick="toggleTheme()" id="theme-btn" title="Alternar tema Claro/Escuro">
+          <i class="bi bi-sun"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="app-container">
+      
+      <!-- LEFT SIDEBAR NAVIGATION -->
+      <aside class="sidebar-nav">
+        
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">Introdução</div>
+          <ul class="sidebar-list">
+            <li class="sidebar-item active" onclick="navigateToSection('section-intro')" id="nav-section-intro">
+              <i class="bi bi-flag-fill"></i> Apresentação
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('section-context')" id="nav-section-context">
+              <i class="bi bi-journal-text"></i> Contexto da Atividade
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('section-dados')" id="nav-section-dados">
+              <i class="bi bi-database-fill"></i> Dados Disponíveis
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">As 7 Etapas do Processo</div>
+          <ul class="sidebar-list">
+            <li class="sidebar-item" onclick="navigateToSection('step-1')" id="nav-step-1">
+              <span class="step-badge">1</span> Escolher Dados
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('step-2')" id="nav-step-2">
+              <span class="step-badge">2</span> Subir no Colab
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('step-3')" id="nav-step-3">
+              <span class="step-badge">3</span> Análise Auditável
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('step-4')" id="nav-step-4">
+              <span class="step-badge">4</span> Relatório Insights
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('step-5')" id="nav-step-5">
+              <span class="step-badge">5</span> NotebookLM Fontes
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('step-6')" id="nav-step-6">
+              <span class="step-badge">6</span> Gerar Infográfico
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('step-7')" id="nav-step-7">
+              <span class="step-badge">7</span> Refinar Infográfico
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">Conclusão</div>
+          <ul class="sidebar-list">
+            <li class="sidebar-item" onclick="navigateToSection('section-variar')" id="nav-section-variar">
+              <i class="bi bi-sliders2"></i> Como Variar
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('section-registro')" id="nav-section-registro">
+              <i class="bi bi-clipboard-data-fill"></i> Registro do Aluno
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('section-apresentacao')" id="nav-section-apresentacao">
+              <i class="bi bi-people-fill"></i> Apresentação Final
+            </li>
+          </ul>
+        </div>
+
+      </aside>
+
+      <!-- MAIN CONTENT WRAPPER -->
+      <main class="main-content" id="main-content">
+
+        <!-- SECTION: PRESENTATION -->
+        <section class="content-section active-step" id="section-intro">
+          <div class="card welcome-card">
+            <h1 class="welcome-title">Curso OI Atuarial: análise com IA, NotebookLM e infográfico</h1>
+            <p>Este guia foi projetado para atuar como bússola interativa para nosso curso individual sobre análise de dados e narrativa visual com Inteligência Artificial.</p>
+            
+            <ul class="meta-list">
+              <li class="meta-item">
+                <i class="bi bi-calendar3"></i>
+                <div>
+                  <strong>Datas do curso:</strong>
+                  <div>Primeira parte: 03 de junho de 2026 (quarta-feira)</div>
+                  <div>Segunda parte: 10 de junho de 2024 (quarta-feira)</div>
+                </div>
+              </li>
+              <li class="meta-item">
+                <i class="bi bi-person-workspace"></i>
+                <div>
+                  <strong>Público-alvo:</strong>
+                  <div>Integrantes e ex-integrantes do projeto de extensão OI Atuarial</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Olá pessoal, esta semana teremos o início do nosso curso individual para testar um processo completo de análise de dados atuariais usando IA e geração de infográficos. O foco é criar um processo auditável e reproduzível, não apenas um gráfico bonito. Vamos usar os dados do OI Atuarial, analisar com o Gemini no Colab, gerar um relatório de insights e depois criar um infográfico no NotebookLM.</p>
+            <p>A ideia do curso é permitir que cada aluno rode o processo sugerido aqui neste documento no seu próprio ritmo e teste variações interessantes. No final, cada participante apresenta o que fez, o melhor insight encontrado e a primeira versão do infográfico. Durante a semana, continuamos refinando o processo e o resultado, para apresentar uma versão final na próxima semana.</p>
+            
+            <div class="quick-specs">
+              <div class="spec-box">
+                <h4>Dados</h4>
+                <p>Projeto OI Atuarial</p>
+              </div>
+              <div class="spec-box">
+                <h4>Ferramentas</h4>
+                <p>Google Colab, Gemini, NotebookLM</p>
+              </div>
+              <div class="spec-box">
+                <h4>Produto</h4>
+                <p>Relatório + Infográfico</p>
+              </div>
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>Público-alvo do infográfico:</strong> público não técnico, mas interessado em dados de mortalidade e projeções atuariais.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Metas Iniciais</span>
+              <span>Rápido Checklist</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-intro-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-intro-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Ler e compreender a proposta geral do curso</div>
+                <div class="checklist-desc">Entender que a prioridade é a auditabilidade da análise antes da estética do infográfico.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: CONTEXTO DA ATIVIDADE -->
+        <section class="content-section" id="section-context">
+          <h2 class="section-title"><i class="bi bi-journal-text text-accent"></i> Contexto da atividade</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">O objetivo principal é criar um infográfico que comunique um insight relevante sobre mortalidade e projeções atuariais, usando os dados do OI Atuarial. Mas sem recair na armadilha de aceitar a primeira resposta da IA ou de criar um gráfico bonito sem base sólida. O processo precisa ser auditável: cada conclusão deve ter uma evidência clara no notebook, seja uma tabela, um cálculo ou um gráfico. O infográfico deve ser fiel aos dados, claro para um público não técnico e visualmente atraente, mas sem exagerar nas conclusões.</p>
+            <p style="margin-bottom: 1rem;">Para isso cada aluno vai passar por 7 etapas, e é incentivado a executar o processo sugerido abaixo já pensando em variações que possam ser testadas. O objetivo é aprender fazendo, mas também aprender sobre o processo, para que possamos documentar um caminho recomendado para criar infográficos com IA e dados atuariais. No final teremos um caminho ideal para ofertarmos um curso para o público externo. Quem participar do curso além de aprender vai ter oportunidade de discutir novos caminhos.</p>
+            <p><strong>Resultado esperado hoje:</strong> cada aluno deve sair com um notebook funcional, uma análise inicial, um relatório curto de insights e uma primeira tentativa de infográfico no NotebookLM.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Alinhamento Pedagógico</span>
+              <span>Requisitos</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-context-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-context-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Foco na Auditabilidade</div>
+                <div class="checklist-desc">Garantir que todas as afirmações do infográfico possam ser traçadas de volta a uma linha de código no Colab.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: DADOS DISPONÍVEIS -->
+        <section class="content-section" id="section-dados">
+          <h2 class="section-title"><i class="bi bi-database-fill text-accent"></i> Dados disponíveis</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1.25rem;">O ponto de partida são os dados e visualizações do <a href="https://oiatuarial.vercel.app/" target="_blank">OI Atuarial <i class="bi bi-box-arrow-up-right" style="font-size:0.8rem"></i></a>. A ideia não é que todo mundo analise tudo. Cada participante deve escolher um recorte viável, entender bem esse recorte e transformá-lo em uma história clara.</p>
+            
+            <p>O site e a API indicam quatro conjuntos principais de dados:</p>
+            
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Conjunto</th>
+                    <th>O que representa</th>
+                    <th>Possíveis usos no curso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>dados_mortalidade1</code></td>
+                    <td>Dados originais de mortalidade</td>
+                    <td>Analisar séries históricas, diferenças por sexo, localidade e faixa etária.</td>
+                  </tr>
+                  <tr>
+                    <td><code>projecoes</code></td>
+                    <td>Projeções de mortalidade</td>
+                    <td>Comparar cenários futuros, modelos e anos projetados.</td>
+                  </tr>
+                  <tr>
+                    <td><code>metricas_erro</code></td>
+                    <td>Métricas de erro das projeções</td>
+                    <td>Avaliar desempenho dos modelos e discutir incerteza.</td>
+                  </tr>
+                  <tr>
+                    <td><code>nacoes_unidas</code></td>
+                    <td>Dados de mortalidade das Nações Unidas</td>
+                    <td>Adicionar contexto comparativo ou fonte complementar.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p style="margin-top: 1.5rem; margin-bottom: 0.5rem;"><strong>Dimensões úteis para pensar o recorte:</strong></p>
+            <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem;">
+              <li>Brasil, regiões e unidades federativas;</li>
+              <li>faixas etárias de 0 a 90+;</li>
+              <li>sexo feminino, masculino e ambos;</li>
+              <li>modelos como <code>ibge</code>, <code>arima-ets</code>, <code>combinado</code>, <code>lc</code> e <code>lm</code>;</li>
+              <li>anos observados de 2000 a 2023;</li>
+              <li>anos projetados de 2020 a 2070.</li>
+            </ul>
+
+            <p>Antes de começar a pedir análises para a IA, defina qual será o seu foco. Um bom foco é aquele que pode ser explicado em uma pergunta simples.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Filtro de Escopo</span>
+              <span>Ação Necessária</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-dados-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-dados-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Definir o recorte de dados do aluno</div>
+                <div class="checklist-desc">Registrar qual subconjunto e dimensões serão o alvo das análises.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 1 -->
+        <section class="content-section" id="step-1">
+          <h2 class="section-title"><span class="step-badge">1</span> Escolher os dados no OI Atuarial</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Acessem o OI Atuarial e explorem as páginas disponíveis. Escolham um recorte simples para começar: Brasil ou uma UF, uma faixa etária, um sexo, um período histórico, um ano projetado ou uma comparação entre modelos.</p>
+            <p style="margin-bottom: 1rem;">Tentem transformar o recorte em uma pergunta de trabalho. Exemplos:</p>
+            
+            <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>Como a expectativa de vida varia entre homens e mulheres?</li>
+              <li>Quais faixas etárias concentram mudanças relevantes na mortalidade?</li>
+              <li>O que as projeções sugerem para 2030, 2050 ou 2070?</li>
+              <li>Os modelos de projeção contam histórias diferentes?</li>
+              <li>Há diferenças relevantes entre Brasil, regiões e UFs?</li>
+              <li>Alguma região ou UF chama atenção quando comparada ao Brasil?</li>
+            </ul>
+
+            <p>Ao escolher a pergunta, registrem também por que ela parece interessante para virar infográfico. Isso ajuda a não perder o fio narrativo no meio da análise.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 1 Checklist</span>
+              <span>Passo a Passo</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step1-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step1-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Navegar pelo portal do OI Atuarial</div>
+                <div class="checklist-desc">Analisar as tabelas dinâmicas do site antes da exportação.</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step1-2')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step1-2" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Escrever a pergunta de pesquisa no registro</div>
+                <div class="checklist-desc">Definir o foco que guiará a análise de dados no Colab.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="content-section" id="step-2">
+          <h2 class="section-title"><span class="step-badge">2</span> Baixar os dados e subir no Google Colab</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Há duas formas possíveis de levar os dados para o Colab. Escolha a mais confortável. O importante é que o notebook registre claramente de onde os dados vieram.</p>
+            
+            <h3 style="font-size:1.15rem; margin:1.5rem 0 0.5rem 0; color:var(--accent);">Opção A: baixar pelo site e subir no Colab</h3>
+            <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+              <li>No OI Atuarial, escolha a tabela ou visualização que deseja analisar.</li>
+              <li>Use a opção de baixar ou exportar dados, quando disponível.</li>
+              <li>Salve o arquivo em formato CSV ou Excel.</li>
+              <li>No Google Colab, clique no ícone de arquivos e faça upload do arquivo baixado.</li>
+              <li>Carregue o arquivo com <code>pandas</code>.</li>
+            </ol>
+
+            <!-- CODE BLOCK A -->
+            <div class="code-block-wrapper">
+              <div class="code-block-header">
+                <span class="code-lang-label">Python (Opção A)</span>
+                <button class="btn-copy" onclick="copyCode(this, 'code-opcao-a')">
+                  <i class="bi bi-clipboard"></i> <span>Copiar</span>
+                </button>
+              </div>
+              <pre class="sourceCode"><code id="code-opcao-a"><span class="token-keyword">import</span> pandas <span class="token-keyword">as</span> pd
+
+<span class="token-comment"># Se o arquivo for CSV:</span>
+df = pd.read_csv(<span class="token-string">"nome_do_arquivo.csv"</span>)
+
+<span class="token-comment"># Se o arquivo for Excel:</span>
+df = pd.read_excel(<span class="token-string">"nome_do_arquivo.xlsx"</span>)
+
+df.head()</code></pre>
+            </div>
+            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom: 1.5rem;">Esta opção é boa para trabalhar com um recorte mais controlado e visualmente escolhido no próprio site.</p>
+
+            <hr style="margin: 1.5rem 0;">
+
+            <h3 style="font-size:1.15rem; margin:0 0 0.5rem 0; color:var(--accent);">Opção B: carregar pela API no Colab</h3>
+            <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+              <li>Acesse <a href="https://oiatuarial.vercel.app/solicitar-token" target="_blank">a página de solicitação de token <i class="bi bi-box-arrow-up-right" style="font-size:0.8rem"></i></a>.</li>
+              <li>Solicite o token e verifique o e-mail.</li>
+              <li>No Colab, use o código abaixo ou o arquivo <code>colab_carregar_dados_oiatuarial.py</code>.</li>
+            </ol>
+
+            <!-- CODE BLOCK B -->
+            <div class="code-block-wrapper">
+              <div class="code-block-header">
+                <span class="code-lang-label">Python (Opção B)</span>
+                <button class="btn-copy" onclick="copyCode(this, 'code-opcao-b')">
+                  <i class="bi bi-clipboard"></i> <span>Copiar</span>
+                </button>
+              </div>
+              <pre class="sourceCode"><code id="code-opcao-b"><span class="token-keyword">import</span> getpass
+<span class="token-keyword">import</span> requests
+<span class="token-keyword">import</span> pandas <span class="token-keyword">as</span> pd
+
+BASE_URL = <span class="token-string">"https://backend-weld-five-44.vercel.app/oiatuarial_api"</span>
+token = getpass.getpass(<span class="token-string">"Cole seu token da API OI Atuarial: "</span>)
+
+<span class="token-keyword">def</span> <span class="token-function">carregar_oiatuarial</span>(endpoint):
+    url = <span class="token-string">f"{BASE_URL}/{endpoint}"</span>
+    headers = {<span class="token-string">"Authorization"</span>: <span class="token-string">f"Bearer {token}"</span>}
+    response = requests.get(url, headers=headers, timeout=<span class="token-number">60</span>)
+    response.raise_for_status()
+    data = response.json()
+    <span class="token-keyword">return</span> pd.read_parquet(data[<span class="token-string">"url_download"</span>])
+
+dados_mortalidade = carregar_oiatuarial(<span class="token-string">"dados_mortalidade1"</span>)
+projecoes = carregar_oiatuarial(<span class="token-string">"projecoes"</span>)
+metricas_erro = carregar_oiatuarial(<span class="token-string">"metricas_erro"</span>)
+nacoes_unidas = carregar_oiatuarial(<span class="token-string">"nacoes_unidas"</span>)
+
+dados_mortalidade.head()</code></pre>
+            </div>
+            <p style="font-size:0.9rem; color:var(--text-secondary);">Esta opção é boa para testar um fluxo mais automatizado e reproduzível, especialmente se você quiser comparar vários recortes.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 2 Checklist</span>
+              <span>Passo a Passo</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step2-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step2-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Importar os dados no Google Colab</div>
+                <div class="checklist-desc">Garantir que os conjuntos de dados foram importados com sucesso via Upload ou API.</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step2-2')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step2-2" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Executar visualização inicial (head/info)</div>
+                <div class="checklist-desc">Confirmar que as colunas e os tipos de dados estão íntegros no DataFrame.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="content-section" id="step-3">
+          <h2 class="section-title"><span class="step-badge">3</span> Produzir uma análise com IA de forma auditável</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Use o Gemini no Colab como parceiro de análise, mas não aceite conclusões sem verificar o código, as tabelas intermediárias e os gráficos. A IA acelera o trabalho, mas você precisa saber explicar o que aconteceu.</p>
+            <p style="margin-bottom: 1.5rem;"><strong>Regra prática:</strong> toda conclusão deve ter uma evidência visível no notebook: uma tabela, um cálculo, um gráfico ou uma célula de código que possa ser revisada.</p>
+            
+            <h3 style="font-size:1.1rem; margin-bottom:0.75rem;">Prompt Sugerido para Iniciar:</h3>
+
+            <!-- INTERACTIVE PROMPT CARD 1 -->
+            <div class="prompt-box-card">
+              <div class="prompt-controls">
+                <div class="prompt-control-group">
+                  <label for="p1-regional">Escopo Regional</label>
+                  <select id="p1-regional" class="prompt-select" onchange="updatePrompt1()">
+                    <option value="Brasil">Brasil Inteiro</option>
+                    <option value="regiões brasileiras">Regiões</option>
+                    <option value="UFs específicas (ex: SP, RJ, RS)">UFs Específicas</option>
+                  </select>
+                </div>
+                <div class="prompt-control-group">
+                  <label for="p1-lib">Biblioteca Visual</label>
+                  <select id="p1-lib" class="prompt-select" onchange="updatePrompt1()">
+                    <option value="matplotlib ou seaborn">Matplotlib / Seaborn</option>
+                    <option value="plotly (interativo)">Plotly (Interativo)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="prompt-content" id="prompt-content-1">Você é um analista de dados atuariais e um consultor de visualização de dados.
+
+Analise o DataFrame carregado neste notebook com foco em Brasil.
+
+Faça:
+1. explique o que cada coluna parece representar;
+2. proponha 5 perguntas de análise que possam virar um infográfico;
+3. indique quais colunas usar em cada pergunta;
+4. gere código pandas simples para responder à pergunta mais promissora;
+5. crie tabelas intermediárias que permitam auditar os resultados;
+6. gere 2 visualizações simples com matplotlib ou seaborn.
+
+Responda em português do Brasil e não tire conclusões sem indicar a evidência usada.</div>
+              
+              <div class="prompt-footer">
+                <button class="btn btn-primary" onclick="copyPrompt('prompt-content-1', this)">
+                  <i class="bi bi-clipboard-fill"></i> Copiar Prompt
+                </button>
+              </div>
+            </div>
+
+            <hr style="margin: 1.5rem 0;">
+
+            <h3 style="font-size:1.1rem; margin-bottom:0.75rem;">Prompt para Aprofundar uma Pergunta Específica:</h3>
+
+            <!-- INTERACTIVE PROMPT CARD 2 -->
+            <div class="prompt-box-card">
+              <div class="prompt-controls">
+                <div class="prompt-control-group" style="width: 100%;">
+                  <label for="p2-question">Pergunta Customizada</label>
+                  <select id="p2-question" class="prompt-select" onchange="updatePrompt2()" style="width: 100%;">
+                    <option value="Como a expectativa de vida varia entre homens e mulheres ao longo do tempo?">Gênero: Como a expectativa de vida varia entre homens e mulheres ao longo do tempo?</option>
+                    <option value="Quais faixas etárias concentram as maiores mudanças na mortalidade histórica?">Idade: Quais faixas etárias concentram as maiores mudanças na mortalidade histórica?</option>
+                    <option value="O que as projeções atuariais sugerem sobre a mortalidade em 2050?">Projeções: O que as projeções atuariais sugerem sobre a mortalidade em 2050?</option>
+                    <option value="Como os modelos IBGE e ARIMA-ETS se diferenciam nas projeções futuras?">Modelos: Como os modelos IBGE e ARIMA-ETS se diferenciam nas projeções futuras?</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="prompt-content" id="prompt-content-2">Quero investigar a seguinte pergunta:
+
+"Como a expectativa de vida varia entre homens e mulheres ao longo do tempo?"
+
+Gere uma análise auditável em Python com pandas.
+
+Inclua:
+- filtros aplicados;
+- tabela-resumo;
+- cálculos de diferença absoluta e percentual, quando fizer sentido;
+- gráficos simples;
+- interpretação dos resultados;
+- limitações da análise.
+
+Diferencie dados observados, projeções e interpretação.</div>
+
+              <div class="prompt-footer">
+                <button class="btn btn-primary" onclick="copyPrompt('prompt-content-2', this)">
+                  <i class="bi bi-clipboard-fill"></i> Copiar Prompt
+                </button>
+              </div>
+            </div>
+
+            <p style="margin-top: 1rem;">Depois que o Gemini gerar código, rode célula por célula. Se algo parecer estranho, peça explicação, altere filtros e confira os resultados. O curso é também um teste de como trabalhar com IA sem perder controle analítico.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 3 Checklist</span>
+              <span>Passo a Passo</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step3-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step3-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Rodar prompts de análise inicial</div>
+                <div class="checklist-desc">Executar os códigos gerados e inspecionar os logs/tabelas intermediárias.</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step3-2')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step3-2" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Verificar auditabilidade do notebook</div>
+                <div class="checklist-desc">Validar se todas as conclusões estão amparadas em dados matemáticos visíveis nas células.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 4 -->
+        <section class="content-section" id="step-4">
+          <h2 class="section-title"><span class="step-badge">4</span> Gerar um relatório final com os insights</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Depois da análise, produza um relatório curto. Esse relatório será a fonte principal para o NotebookLM. Ele deve ser claro o bastante para que alguém que não abriu o notebook entenda a história dos dados.</p>
+            
+            <p style="margin-bottom: 0.5rem;"><strong>Estrutura recomendada:</strong></p>
+            <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>título;</li>
+              <li>pergunta orientadora;</li>
+              <li>mensagem central;</li>
+              <li>3 a 5 achados principais;</li>
+              <li>evidências numéricas;</li>
+              <li>gráficos ou tabelas usados;</li>
+              <li>limitações;</li>
+              <li>recomendação de narrativa visual.</li>
+            </ul>
+
+            <h3 style="font-size:1.1rem; margin-bottom:0.75rem;">Prompt Sugerido para gerar o relatório:</h3>
+
+            <!-- INTERACTIVE PROMPT CARD 3 -->
+            <div class="prompt-box-card">
+              <div class="prompt-content" id="prompt-content-3">Transforme a análise deste notebook em um relatório curto para orientar a criação de um infográfico.
+
+O relatório deve conter:
+- título;
+- pergunta orientadora;
+- mensagem central;
+- principais achados com números;
+- explicação dos dados usados;
+- limitações e cuidados de interpretação;
+- sugestões de estrutura visual para o infográfico;
+- glossário curto para termos técnicos, se necessário.
+
+Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
+              <div class="prompt-footer">
+                <button class="btn btn-primary" onclick="copyPrompt('prompt-content-3', this)">
+                  <i class="bi bi-clipboard-fill"></i> Copiar Prompt
+                </button>
+              </div>
+            </div>
+
+            <p style="margin: 1.5rem 0 0.5rem 0;"><strong>Para salvar o relatório no Colab:</strong></p>
+
+            <!-- CODE BLOCK RELATORIO -->
+            <div class="code-block-wrapper">
+              <div class="code-block-header">
+                <span class="code-lang-label">Python (Salvar Relatório)</span>
+                <button class="btn-copy" onclick="copyCode(this, 'code-salvar-relatorio')">
+                  <i class="bi bi-clipboard"></i> <span>Copiar</span>
+                </button>
+              </div>
+              <pre class="sourceCode"><code id="code-salvar-relatorio">texto_insights = <span class="token-string">"""Cole aqui o relatório final revisado."""</span>
+
+<span class="token-keyword">with</span> <span class="token-function">open</span>(<span class="token-string">"insights_oiatuarial.md"</span>, <span class="token-string">"w"</span>, encoding=<span class="token-string">"utf-8"</span>) <span class="token-keyword">as</span> f:
+    f.write(texto_insights)</code></pre>
+            </div>
+
+            <p style="margin-top: 1rem;">Antes de seguir, revise o relatório. Ele não deve ser apenas uma resposta copiada da IA. Ajuste termos, confira números e retire afirmações que não estejam apoiadas no notebook.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 4 Checklist</span>
+              <span>Passo a Passo</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step4-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step4-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Gerar rascunho de insights via IA</div>
+                <div class="checklist-desc">Extrair os principais números e limitações da análise.</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step4-2')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step4-2" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Salvar arquivo Markdown de insights</div>
+                <div class="checklist-desc">Criar o arquivo <code>insights_oiatuarial.md</code> e fazer download.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 5 -->
+        <section class="content-section" id="step-5">
+          <h2 class="section-title"><span class="step-badge">5</span> Baixar o relatório e subir no NotebookLM</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Baixe o arquivo <code>insights_oiatuarial.md</code> gerado no Colab. Em seguida, crie um novo projeto no NotebookLM e envie esse arquivo como fonte.</p>
+            
+            <p style="margin-bottom: 0.5rem;">Se achar útil, também pode subir fontes adicionais:</p>
+            <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>tabelas-resumo exportadas do Colab;</li>
+              <li>imagens dos gráficos exploratórios;</li>
+              <li>uma explicação curta sobre o significado das variáveis usadas;</li>
+              <li>notas sobre público-alvo, tom e mensagem desejada;</li>
+              <li>um pequeno glossário de termos técnicos.</li>
+            </ul>
+            
+            <p>O NotebookLM tende a funcionar melhor quando a fonte já contém uma história bem organizada. Por isso, o relatório de insights é uma peça importante do processo.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 5 Checklist</span>
+              <span>Passo a Passo</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step5-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step5-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Criar projeto no NotebookLM</div>
+                <div class="checklist-desc">Carregar as fontes textuais e tabelas exportadas para a ferramenta de inteligência.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 6 -->
+        <section class="content-section" id="step-6">
+          <h2 class="section-title"><span class="step-badge">6</span> Gerar o infográfico no NotebookLM</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">No NotebookLM, peça primeiro alternativas de narrativa visual. Depois, escolha a melhor e peça uma versão mais refinada. O ideal é iterar, não aceitar a primeira resposta.</p>
+            
+            <h3 style="font-size:1.1rem; margin-bottom:0.75rem;">Prompt Sugerido para o NotebookLM:</h3>
+
+            <!-- INTERACTIVE PROMPT CARD 4 -->
+            <div class="prompt-box-card">
+              <div class="prompt-content" id="prompt-content-4">Crie um infográfico em português do Brasil com base nas fontes deste projeto.
+
+Objetivo: comunicar a principal história encontrada nos dados de mortalidade e projeções da OI Atuarial.
+
+O infográfico deve:
+- ter um título forte e informativo;
+- destacar 3 achados principais com números;
+- separar dados observados, projeções e interpretação;
+- incluir uma nota curta sobre limitações;
+- usar linguagem acessível para público não técnico;
+- sugerir uma hierarquia visual clara, com blocos, chamadas e conclusão final.
+
+Antes da versão final, proponha 3 alternativas de narrativa visual e explique qual delas é mais forte.</div>
+              <div class="prompt-footer">
+                <button class="btn btn-primary" onclick="copyPrompt('prompt-content-4', this)">
+                  <i class="bi bi-clipboard-fill"></i> Copiar Prompt
+                </button>
+              </div>
+            </div>
+
+            <p style="margin-top: 1rem;">Depois da primeira resposta, escolha uma direção e peça ajustes. Exemplos: deixar mais didático, tornar mais executivo, reduzir texto, destacar comparação regional, deixar as limitações mais visíveis ou reforçar a diferença entre observado e projetado.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 6 Checklist</span>
+              <span>Passo a Passo</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step6-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step6-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Gerar as 3 alternativas de infográfico</div>
+                <div class="checklist-desc">Analisar qual das abordagens geradas pelo NotebookLM conta melhor a história dos dados.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 7 -->
+        <section class="content-section" id="step-7">
+          <h2 class="section-title"><span class="step-badge">7</span> Refinar o infográfico</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1.5rem;">A primeira versão não precisa ser a final. Revise a fidelidade aos dados, a clareza da mensagem e a força visual. O objetivo é melhorar o processo, não apenas aceitar a primeira saída da ferramenta.</p>
+            
+            <h3 style="font-size:1.1rem; margin-bottom:0.75rem;">Prompt de Refinamento:</h3>
+
+            <!-- INTERACTIVE PROMPT CARD 5 -->
+            <div class="prompt-box-card">
+              <div class="prompt-content" id="prompt-content-5">Revise o infográfico proposto.
+
+Verifique:
+- se a mensagem central está clara;
+- se os números estão fiéis ao relatório;
+- se há confusão entre dados observados e projeções;
+- se a linguagem está adequada para público não técnico;
+- se a estrutura visual pode ser simplificada.
+
+Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas de cautela quando necessário.</div>
+              <div class="prompt-footer">
+                <button class="btn btn-primary" onclick="copyPrompt('prompt-content-5', this)">
+                  <i class="bi bi-clipboard-fill"></i> Copiar Prompt
+                </button>
+              </div>
+            </div>
+
+            <p style="margin-top: 1.5rem;">Registre o que mudou entre a primeira versão e a versão refinada. Essa comparação ajuda a entender quais prompts e decisões melhoram o resultado.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa 7 Checklist de Refinamento</span>
+              <span>Critérios de Qualidade</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">O título comunica a mensagem central?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-2')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-2" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Os números batem com o relatório e com o notebook?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-3')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-3" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Está claro o que é dado observado e o que é projeção?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-4')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-4" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">O infográfico evita conclusões causais exageradas?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-5')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-5" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">A hierarquia visual ajuda o leitor a entender a história?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-6')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-6" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Há uma conclusão ou recomendação explícita?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-7')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-7" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">O aluno consegue explicar como chegou ao resultado?</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: COMO VARIAR O PROCESSO -->
+        <section class="content-section" id="section-variar">
+          <h2 class="section-title"><i class="bi bi-sliders2 text-accent"></i> Como variar o processo</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1.25rem;">Cada aluno deve experimentar pelo menos uma variação. A ideia é que o curso gere aprendizado comparativo e discussões ricas de técnicas.</p>
+            
+            <p style="margin-bottom: 0.75rem;"><strong>Algumas opções de variação:</strong></p>
+            <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li style="margin-bottom: 0.35rem;">mudar o prompt de análise para uma abordagem mais técnica, mais executiva ou mais jornalística;</li>
+              <li style="margin-bottom: 0.35rem;">usar apenas dados baixados do site, sem API;</li>
+              <li style="margin-bottom: 0.35rem;">usar a API para carregar mais dados e comparar múltiplos recortes;</li>
+              <li style="margin-bottom: 0.35rem;">comparar Brasil, regiões e UFs;</li>
+              <li style="margin-bottom: 0.35rem;">comparar sexo masculino e feminino;</li>
+              <li style="margin-bottom: 0.35rem;">comparar modelos de projeção;</li>
+              <li style="margin-bottom: 0.35rem;">focar em um ano projetado, como 2030, 2050 ou 2070;</li>
+              <li style="margin-bottom: 0.35rem;">subir no NotebookLM apenas o relatório final ou incluir também tabelas-resumo e gráficos;</li>
+              <li style="margin-bottom: 0.35rem;">pedir ao NotebookLM primeiro um briefing editorial e só depois o infográfico;</li>
+              <li style="margin-bottom: 0.35rem;">usar o Gemini para criticar o infográfico e propor uma segunda versão;</li>
+              <li style="margin-bottom: 0.35rem;">testar outra ferramenta de visualização ou geração visual e comparar com o NotebookLM.</li>
+            </ul>
+
+            <p>Ao final, tente responder: qual variação melhorou o resultado? Qual só gerou mais trabalho? O que vale recomendar para um curso externo?</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Variações Experimentais</span>
+              <span>Checklist</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-variar-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-variar-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Escolher e executar pelo menos uma variação do processo</div>
+                <div class="checklist-desc">Testar novos prompts, novos recortes ou novas ferramentas adicionais.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: REGISTRO DA EXPERIÊNCIA DO ALUNO (INTERACTIVE FORM) -->
+        <section class="content-section" id="section-registro">
+          <h2 class="section-title"><i class="bi bi-clipboard-data-fill text-accent"></i> Registro da experiência do aluno</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1.5rem;">Durante o curso, preencha este registro de experiência. Ao terminar, você poderá copiar a tabela formatada em Markdown ou fazer download do arquivo para entrega.</p>
+            
+            <form id="registro-form" oninput="saveFormState()">
+              
+              <div class="form-group">
+                <label for="reg-pergunta">Pergunta investigada</label>
+                <input type="text" id="reg-pergunta" class="form-control" placeholder="Ex: Como a mortalidade de jovens adultos varia entre UFs?">
+              </div>
+
+              <div class="form-group">
+                <label for="reg-dados">Dados usados</label>
+                <input type="text" id="reg-dados" class="form-control" placeholder="Ex: dados_mortalidade1 + projecoes">
+              </div>
+
+              <div class="form-group">
+                <label for="reg-caminho">Caminho escolhido</label>
+                <select id="reg-caminho" class="form-control">
+                  <option value="Download manual">Download manual pelo site</option>
+                  <option value="Carregar via API">Integração direta via API</option>
+                  <option value="Ambos / Outro">Ambos ou outra abordagem</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-prompt-gemini">Prompt principal no Gemini</label>
+                <textarea id="reg-prompt-gemini" class="form-control" placeholder="Descreva ou cole o prompt chave que usou no Google Colab..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-prompt-notebook">Prompt principal no NotebookLM</label>
+                <textarea id="reg-prompt-notebook" class="form-control" placeholder="Descreva ou cole o prompt chave que usou para gerar o infográfico..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-insight">Melhor insight encontrado</label>
+                <textarea id="reg-insight" class="form-control" placeholder="Descreva o insight central embasado nos dados do notebook..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-dificuldade">Principal dificuldade</label>
+                <textarea id="reg-dificuldade" class="form-control" placeholder="Qual foi a maior barreira enfrentada (técnica ou analítica)?"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-mudanca">O que mudou após refinar prompts</label>
+                <textarea id="reg-mudanca" class="form-control" placeholder="Comparação entre a primeira versão gerada e o resultado final refinado..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-recomendacao">Recomendação de processo</label>
+                <textarea id="reg-recomendacao" class="form-control" placeholder="O que você recomenda ou não para os futuros alunos do curso externo?"></textarea>
+              </div>
+
+              <div class="form-actions-bar">
+                <button type="button" class="btn btn-secondary" onclick="exportMarkdownTable()">
+                  <i class="bi bi-clipboard-check"></i> Copiar Tabela MD
+                </button>
+                <button type="button" class="btn btn-primary" onclick="downloadMarkdownFile()">
+                  <i class="bi bi-download"></i> Baixar Relatório (.md)
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </section>
+
+        <!-- SECTION: APRESENTAÇÃO E TRABALHO -->
+        <section class="content-section" id="section-apresentacao">
+          <h2 class="section-title"><i class="bi bi-people-fill text-accent"></i> Apresentação e trabalho final</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Ao final do curso individual, cada participante apresenta rapidamente:</p>
+            <ol style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li style="margin-bottom: 0.35rem;">a pergunta escolhida;</li>
+              <li style="margin-bottom: 0.35rem;">a abordagem de análise;</li>
+              <li style="margin-bottom: 0.35rem;">o melhor insight;</li>
+              <li style="margin-bottom: 0.35rem;">a primeira versão ou rascunho do infográfico;</li>
+              <li style="margin-bottom: 0.35rem;">o que funcionou bem no uso de IA;</li>
+              <li style="margin-bottom: 0.35rem;">o que precisa ser melhorado para os próximos passos.</li>
+            </ol>
+
+            <p style="margin-bottom: 1rem;">Durante a semana, continue trabalhando no storytelling com dados. Na semana seguinte, apresente o resultado refinado, uma recomendação de processo para gerar o infográfico e um relato da experiência de desenvolvimento desse processo.</p>
+            <p><strong>Critério central:</strong> o melhor resultado não é apenas o infográfico mais bonito. É aquele que combina clareza, fidelidade aos dados, boa narrativa visual e processo reproduzível.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Entrega Final</span>
+              <span>Requisitos da Apresentação</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-apres-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-apres-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Preparar o Pitch do Curso</div>
+                <div class="checklist-desc">Apresentação rápida contendo os 6 tópicos do checklist acima.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEPPER NAV BAR (Visible in step-by-step mode) -->
+        <div class="stepper-nav-bar" id="stepper-nav">
+          <button class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Anterior</button>
+          <span style="font-weight:600; color:var(--text-muted);" id="step-indicator">Passo 1 de 13</span>
+          <button class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+        </div>
+
+      </main>
+
+    </div>
+
+    <!-- DOCKED QUESTION WIDGET -->
+    <div class="question-card" id="q-card">
+      <div class="question-header">
+        <h4><i class="bi bi-patch-question-fill text-accent"></i> Dúvidas do Curso</h4>
+        <button class="btn-toggle-widget" onclick="toggleQuestionCard()" title="Minimizar / Maximizar formulário">
+          <i class="bi bi-dash-lg" id="q-toggle-icon"></i>
+        </button>
+      </div>
+      
+      <form id="q-form" onsubmit="submitQuestion(event)">
+        <div class="q-form-group">
+          <label for="q-name">Seu Nome (opcional)</label>
+          <input type="text" id="q-name" class="q-form-control" placeholder="Seu nome">
+        </div>
+        <div class="q-form-group">
+          <label for="q-text">Sua Pergunta</label>
+          <textarea id="q-text" class="q-form-control" placeholder="Escreva sua dúvida aqui..." required></textarea>
+        </div>
+        
+        <div class="q-status-msg" id="q-status"></div>
+        
+        <button type="submit" class="btn btn-primary" id="q-submit-btn" style="width: 100%; font-size: 0.88rem; padding: 0.45rem;">
+          Enviar Pergunta
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="copy-toast" class="toast">
+    <i class="bi bi-check-circle-fill" style="color:var(--success)"></i>
+    <span id="toast-message">Copiado com sucesso!</span>
+  </div>
+
+  <!-- ==========================================================================
+       Javascript Logic
+       ========================================================================== */ -->
+  <script>
+    // ==========================================================================
+    // CONFIGURAÇÃO DO GOOGLE SHEETS
+    // Para conectar com sua planilha do Google Sheets:
+    // 1. Crie uma planilha nova no Google Sheets.
+    // 2. Acesse Extensões > Apps Script.
+    // 3. Apague o código padrão e cole o seguinte script:
+    // 
+    //    function doPost(e) {
+    //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    //      var name = e.parameter.name || "Anônimo";
+    //      var question = e.parameter.question;
+    //      var timestamp = e.parameter.timestamp || new Date().toLocaleString();
+    //      sheet.appendRow([timestamp, name, question]);
+    //      
+    //      return ContentService.createTextOutput(JSON.stringify({"status": "success"}))
+    //                           .setMimeType(ContentService.MimeType.JSON);
+    //    }
+    //
+    // 4. Clique em Implantações > Nova implantação.
+    // 5. Escolha o tipo "App da Web".
+    // 6. Defina "Executar como: Eu" e "Quem tem acesso: Qualquer pessoa".
+    // 7. Clique em "Implantar" e autorize as permissões.
+    // 8. Copie a URL do App da Web gerada e cole na constante abaixo.
+    // ==========================================================================
+    const GOOGLE_SHEETS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylKAnqBZM4OfX4xXSQX8Vi_hT79aGEG3ZdlBSzDaJmnK-JxPqxwjp9Z7LOHHMFu19f/exec";
+
+    const sectionIds = [
+      'section-intro',
+      'section-context',
+      'section-dados',
+      'step-1',
+      'step-2',
+      'step-3',
+      'step-4',
+      'step-5',
+      'step-6',
+      'step-7',
+      'section-variar',
+      'section-registro',
+      'section-apresentacao'
+    ];
+
+    let currentSectionIndex = 0;
+    let isStepByStep = false;
+
+    // Load state on mount
+    document.addEventListener("DOMContentLoaded", function() {
+      // Load Theme
+      const savedTheme = localStorage.getItem("oi-theme") || "dark";
+      if (savedTheme === "light") {
+        document.documentElement.classList.add("light-theme");
+        document.getElementById("theme-btn").innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+      }
+
+      // Load View Mode
+      const savedMode = localStorage.getItem("oi-view-mode") || "scroll";
+      if (savedMode === "step") {
+        enableStepByStep();
+      }
+
+      // Load Checkbox state
+      loadCheckboxStates();
+
+      // Load Form state
+      loadFormState();
+
+      // Calculate initial progress
+      updateProgress();
+
+      // Setup window resize hooks if needed
+      updateActiveSidebarItem();
+    });
+
+    // Toggle Themes (Pure Black / Pure White)
+    function toggleTheme() {
+      const isLight = document.documentElement.classList.toggle("light-theme");
+      localStorage.setItem("oi-theme", isLight ? "light" : "dark");
+      document.getElementById("theme-btn").innerHTML = isLight 
+        ? '<i class="bi bi-moon-stars-fill"></i>' 
+        : '<i class="bi bi-sun"></i>';
+    }
+
+    // Toggle View Modes (Continuous scroll vs Stepper)
+    function toggleViewMode() {
+      if (isStepByStep) {
+        disableStepByStep();
+      } else {
+        enableStepByStep();
+      }
+    }
+
+    function enableStepByStep() {
+      isStepByStep = true;
+      document.body.classList.add("step-by-step-mode");
+      localStorage.setItem("oi-view-mode", "step");
+      document.getElementById("view-mode-btn").innerHTML = '<i class="bi bi-justify"></i> <span class="btn-text">Modo Leitura</span>';
+      
+      showCurrentStepSection();
+    }
+
+    function disableStepByStep() {
+      isStepByStep = false;
+      document.body.classList.remove("step-by-step-mode");
+      localStorage.setItem("oi-view-mode", "scroll");
+      document.getElementById("view-mode-btn").innerHTML = '<i class="bi bi-collection"></i> <span class="btn-text">Modo Passo a Passo</span>';
+      
+      const targetId = sectionIds[currentSectionIndex];
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Navigate to a section (triggered by sidebar click or stepper)
+    function navigateToSection(id) {
+      const index = sectionIds.indexOf(id);
+      if (index === -1) return;
+      
+      currentSectionIndex = index;
+      
+      if (isStepByStep) {
+        showCurrentStepSection();
+      } else {
+        const targetEl = document.getElementById(id);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        updateActiveSidebarItem();
+      }
+    }
+
+    // Stepper Navigation Helpers
+    function showCurrentStepSection() {
+      sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove("active-step");
+      });
+
+      const activeId = sectionIds[currentSectionIndex];
+      const activeEl = document.getElementById(activeId);
+      if (activeEl) {
+        activeEl.classList.add("active-step");
+      }
+
+      updateActiveSidebarItem();
+
+      document.getElementById("step-indicator").textContent = `Passo ${currentSectionIndex + 1} de ${sectionIds.length}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function prevStep() {
+      if (currentSectionIndex > 0) {
+        currentSectionIndex--;
+        showCurrentStepSection();
+      }
+    }
+
+    function nextStep() {
+      if (currentSectionIndex < sectionIds.length - 1) {
+        currentSectionIndex++;
+        showCurrentStepSection();
+      }
+    }
+
+    // Update the visual active state on left sidebar
+    function updateActiveSidebarItem() {
+      const activeId = sectionIds[currentSectionIndex];
+      
+      document.querySelectorAll(".sidebar-item").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      const activeNav = document.getElementById(`nav-${activeId}`);
+      if (activeNav) {
+        activeNav.classList.add("active");
+        activeNav.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // Checkbox and Progress Calculations
+    function toggleCheckbox(id) {
+      const chk = document.getElementById(id);
+      if (chk) {
+        chk.checked = !chk.checked;
+        saveCheckboxState(id, chk.checked);
+        updateProgress();
+      }
+    }
+
+    // Handle standard checkbox click propagation prevention
+    document.querySelectorAll('.checklist-checkbox-wrapper input[type="checkbox"]').forEach(chk => {
+      chk.addEventListener('change', function(e) {
+        saveCheckboxState(this.id, this.checked);
+        updateProgress();
+      });
+    });
+
+    function saveCheckboxState(id, isChecked) {
+      localStorage.setItem(`chk-${id}`, isChecked ? "true" : "false");
+      
+      const parentCard = document.getElementById(id).closest('.checklist-item');
+      if (parentCard) {
+        if (isChecked) {
+          parentCard.classList.add("checked-item");
+        } else {
+          parentCard.classList.remove("checked-item");
+        }
+      }
+    }
+
+    function loadCheckboxStates() {
+      document.querySelectorAll('.checklist-checkbox-wrapper input[type="checkbox"]').forEach(chk => {
+        const val = localStorage.getItem(`chk-${chk.id}`);
+        if (val === "true") {
+          chk.checked = true;
+          const parentCard = chk.closest('.checklist-item');
+          if (parentCard) parentCard.classList.add("checked-item");
+        }
+      });
+    }
+
+    function updateProgress() {
+      const allCheckboxes = document.querySelectorAll('.checklist-checkbox-wrapper input[type="checkbox"]');
+      const checkedCheckboxes = document.querySelectorAll('.checklist-checkbox-wrapper input[type="checkbox"]:checked');
+      
+      const total = allCheckboxes.length;
+      const completed = checkedCheckboxes.length;
+      
+      const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+      
+      document.getElementById("progress-percentage").textContent = `${percent}%`;
+      document.getElementById("progress-fill").style.width = `${percent}%`;
+
+      updateSidebarNodeStatus();
+    }
+
+    // Auto-mark sidebar items with checklist completion flags
+    function updateSidebarNodeStatus() {
+      const sections = {
+        'section-intro': ['chk-intro-1'],
+        'section-context': ['chk-context-1'],
+        'section-dados': ['chk-dados-1'],
+        'step-1': ['chk-step1-1', 'chk-step1-2'],
+        'step-2': ['chk-step2-1', 'chk-step2-2'],
+        'step-3': ['chk-step3-1', 'chk-step3-2'],
+        'step-4': ['chk-step4-1', 'chk-step4-2'],
+        'step-5': ['chk-step5-1'],
+        'step-6': ['chk-step6-1'],
+        'step-7': ['chk-step7-1', 'chk-step7-2', 'chk-step7-3', 'chk-step7-4', 'chk-step7-5', 'chk-step7-6', 'chk-step7-7'],
+        'section-variar': ['chk-variar-1'],
+        'section-apresentacao': ['chk-apres-1']
+      };
+
+      for (const [sectionId, checkboxIds] of Object.entries(sections)) {
+        const sidebarNavNode = document.getElementById(`nav-${sectionId}`);
+        if (!sidebarNavNode) continue;
+
+        let allCompleted = true;
+        checkboxIds.forEach(cid => {
+          const chk = document.getElementById(cid);
+          if (!chk || !chk.checked) allCompleted = false;
+        });
+
+        if (allCompleted) {
+          sidebarNavNode.classList.add("completed");
+        } else {
+          sidebarNavNode.classList.remove("completed");
+        }
+      }
+    }
+
+    // Prompt Interactive Parameter Updates
+    function updatePrompt1() {
+      const scope = document.getElementById("p1-regional").value;
+      const lib = document.getElementById("p1-lib").value;
+      const text = `Você é um analista de dados atuariais e um consultor de visualização de dados.
+
+Analise o DataFrame carregado neste notebook com foco em ${scope}.
+
+Faça:
+1. explique o que cada coluna parece representar;
+2. proponha 5 perguntas de análise que possam virar um infográfico;
+3. indique quais colunas usar em cada pergunta;
+4. gere código pandas simples para responder à pergunta mais promissora;
+5. crie tabelas intermediárias que permitam auditar os resultados;
+6. gere 2 visualizações simples com ${lib}.
+
+Responda em português do Brasil e não tire conclusões sem indicar a evidência usada.`;
+      
+      document.getElementById("prompt-content-1").textContent = text;
+    }
+
+    function updatePrompt2() {
+      const question = document.getElementById("p2-question").value;
+      const text = `Quero investigar a seguinte pergunta:
+
+"${question}"
+
+Gere uma análise auditável em Python com pandas.
+
+Inclua:
+- filtros aplicados;
+- tabela-resumo;
+- cálculos de diferença absoluta e percentual, quando fizer sentido;
+- gráficos simples;
+- interpretação dos resultados;
+- limitações da análise.
+
+Diferencie dados observados, projeções e interpretação.`;
+
+      document.getElementById("prompt-content-2").textContent = text;
+    }
+
+    // Copiador de Prompts
+    function copyPrompt(elementId, btn) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Copiado!';
+        btn.classList.remove('btn-primary');
+        btn.style.backgroundColor = 'var(--success)';
+        btn.style.color = '#ffffff';
+
+        showToast("Prompt copiado para a área de transferência!");
+
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.add('btn-primary');
+          btn.style.backgroundColor = '';
+          btn.style.color = '';
+        }, 1500);
+      });
+    }
+
+    // Copy Code Blocks Helper
+    function copyCode(btn, codeId) {
+      const codeElement = document.getElementById(codeId);
+      if (!codeElement) return;
+
+      navigator.clipboard.writeText(codeElement.innerText).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = '<i class="bi bi-check-lg"></i> <span>Copiado</span>';
+        
+        showToast("Código copiado!");
+
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<i class="bi bi-clipboard"></i> <span>Copiar</span>';
+        }, 1500);
+      });
+    }
+
+    // Toast Notification helper (Top Right)
+    function showToast(message) {
+      const toast = document.getElementById("copy-toast");
+      document.getElementById("toast-message").textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+
+    // Form Auto-save & Exporter Log Logic
+    function saveFormState() {
+      const formFields = [
+        'reg-pergunta',
+        'reg-dados',
+        'reg-caminho',
+        'reg-prompt-gemini',
+        'reg-prompt-notebook',
+        'reg-insight',
+        'reg-dificuldade',
+        'reg-mudanca',
+        'reg-recomendacao'
+      ];
+      formFields.forEach(fieldId => {
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) {
+          localStorage.setItem(`form-${fieldId}`, inputEl.value);
+        }
+      });
+    }
+
+    function loadFormState() {
+      const formFields = [
+        'reg-pergunta',
+        'reg-dados',
+        'reg-caminho',
+        'reg-prompt-gemini',
+        'reg-prompt-notebook',
+        'reg-insight',
+        'reg-dificuldade',
+        'reg-mudanca',
+        'reg-recomendacao'
+      ];
+      formFields.forEach(fieldId => {
+        const inputEl = document.getElementById(fieldId);
+        const savedVal = localStorage.getItem(`form-${fieldId}`);
+        if (inputEl && savedVal !== null) {
+          inputEl.value = savedVal;
+        }
+      });
+    }
+
+    function buildMarkdownTable() {
+      const fields = {
+        'Pergunta investigada': document.getElementById('reg-pergunta').value || 'Não preenchido',
+        'Dados usados': document.getElementById('reg-dados').value || 'Não preenchido',
+        'Caminho escolhido': document.getElementById('reg-caminho').value || 'Não preenchido',
+        'Prompt principal no Gemini': document.getElementById('reg-prompt-gemini').value || 'Não preenchido',
+        'Prompt principal no NotebookLM': document.getElementById('reg-prompt-notebook').value || 'Não preenchido',
+        'Melhor insight encontrado': document.getElementById('reg-insight').value || 'Não preenchido',
+        'Principal dificuldade': document.getElementById('reg-dificuldade').value || 'Não preenchido',
+        'O que mudou após refinar prompts': document.getElementById('reg-mudanca').value || 'Não preenchido',
+        'Recomendação de processo': document.getElementById('reg-recomendacao').value || 'Não preenchido'
+      };
+
+      let md = `## Registro da Experiência do Aluno - Curso OI Atuarial\n\n`;
+      md += `| Item | Registro |\n`;
+      md += `| :--- | :--- |\n`;
+      
+      for (const [key, val] of Object.entries(fields)) {
+        const cleanedVal = val.replace(/\r?\n/g, '<br>');
+        md += `| **${key}** | ${cleanedVal} |\n`;
+      }
+      
+      return md;
+    }
+
+    function exportMarkdownTable() {
+      const mdTable = buildMarkdownTable();
+      navigator.clipboard.writeText(mdTable).then(() => {
+        showToast("Tabela Markdown copiada!");
+      });
+    }
+
+    function downloadMarkdownFile() {
+      const mdTable = buildMarkdownTable();
+      const blob = new Blob([mdTable], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "registro_curso_oiatuarial.md");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Download iniciado!");
+    }
+
+    // Floating Question Widget Toggle
+    // Question Widget Minimize/Maximize Toggle
+    function toggleQuestionCard() {
+      const card = document.getElementById("q-card");
+      const icon = document.getElementById("q-toggle-icon");
+      const isCollapsed = card.classList.toggle("collapsed");
+      icon.className = isCollapsed ? "bi bi-plus-lg" : "bi bi-dash-lg";
+    }
+
+    // Submit question form directly to Google Sheets Web App URL
+    function submitQuestion(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById("q-name").value || "Anônimo";
+      const question = document.getElementById("q-text").value;
+      const statusEl = document.getElementById("q-status");
+      const submitBtn = document.getElementById("q-submit-btn");
+
+      if (!question.trim()) {
+        statusEl.textContent = "Digite uma pergunta válida.";
+        statusEl.style.color = "var(--error)";
+        return;
+      }
+
+      statusEl.textContent = "Enviando para o Sheets...";
+      statusEl.style.color = "var(--accent)";
+      submitBtn.disabled = true;
+
+      // Mock if placeholder URL
+      if (GOOGLE_SHEETS_SCRIPT_URL.includes("AKfycbz...")) {
+        setTimeout(() => {
+          statusEl.textContent = "Dúvida registrada! (Modo de demonstração)";
+          statusEl.style.color = "var(--success)";
+          submitBtn.disabled = false;
+          document.getElementById("q-text").value = "";
+          showToast("Pergunta mockada enviada com sucesso!");
+          setTimeout(() => {
+            toggleQuestionCard();
+            statusEl.textContent = "";
+          }, 1500);
+        }, 1000);
+        return;
+      }
+
+      // Append query parameters for Google App Web GET/POST submission
+      const scriptUrl = `${GOOGLE_SHEETS_SCRIPT_URL}?name=${encodeURIComponent(name)}&question=${encodeURIComponent(question)}&timestamp=${encodeURIComponent(new Date().toLocaleString())}`;
+      
+      // Use JSONP/no-cors fetch since Google Apps Script web apps block normal CORS preflights
+      fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors'
+      })
+      .then(() => {
+        statusEl.textContent = "Pergunta enviada com sucesso!";
+        statusEl.style.color = "var(--success)";
+        document.getElementById("q-text").value = "";
+        submitBtn.disabled = false;
+        showToast("Sua pergunta foi gravada no Sheets!");
+        setTimeout(() => {
+          toggleQuestionCard();
+          statusEl.textContent = "";
+        }, 1500);
+      })
+      .catch(error => {
+        console.error("Erro na conexão com Sheets:", error);
+        statusEl.textContent = "Erro ao enviar. Tente novamente.";
+        statusEl.style.color = "var(--error)";
+        submitBtn.disabled = false;
+      });
+    }
+
+    // Scroll Spy for Sidebar Active Node (only in continuous read mode)
+    window.addEventListener('scroll', function() {
+      if (isStepByStep) return;
+
+      let activeSectionId = sectionIds[0];
+      const scrollPos = window.scrollY + 200;
+
+      for (let i = 0; i < sectionIds.length; i++) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el && el.offsetTop <= scrollPos) {
+          activeSectionId = sectionIds[i];
+        }
+      }
+
+      currentSectionIndex = sectionIds.indexOf(activeSectionId);
+      
+      document.querySelectorAll(".sidebar-item").forEach(item => {
+        item.classList.remove("active");
+      });
+      const activeNav = document.getElementById(`nav-${activeSectionId}`);
+      if (activeNav) {
+        activeNav.classList.add("active");
+      }
+    });
+
+  </script>
+</body>
+</html>
