@@ -334,7 +334,7 @@ const ExpectativaVida = () => {
           </Tabs>
 
           {/* Seção Informativa de Apoio */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-1 gap-6 mt-8">
             <Card className="md:col-span-2 border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg">
               <CardHeader>
                 <CardTitle className="text-md flex items-center gap-2 text-primary">
@@ -349,23 +349,6 @@ const ExpectativaVida = () => {
                 <p>
                   Estes indicadores subsidiam diretamente a elaboração de <strong>Tábuas de Mortalidade Projetadas (Tábuas Geracionais)</strong>, vitais para mitigar o <strong>risco de longevidade</strong> em fundos de pensão de benefício definido e precificar rendas vitalícias estruturadas por seguradoras reguladas pela SUSEP.
                 </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg flex flex-col justify-between">
-              <CardHeader>
-                <CardTitle className="text-md text-primary">Detalhamento dos Dados</CardTitle>
-                <CardDescription>Escopo</CardDescription>
-              </CardHeader>
-              <CardContent className="text-xs text-muted-foreground space-y-2">
-                <div>
-                  <span className="font-semibold block text-foreground">Abrangência Temporal:</span>
-                  Projeções geracionais calculadas para o horizonte de 2024 até 2070.
-                </div>
-                <div>
-                  <span className="font-semibold block text-foreground">Nomenclatura Mantida:</span>
-                  A métrica e<sub>x</sub> permanece strictly técnica para facilitar o drop-in e o consumo direto por analistas atuariais.
-                </div>
               </CardContent>
             </Card>
           </div>

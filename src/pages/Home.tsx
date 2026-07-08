@@ -20,6 +20,9 @@ import {
   Play,
   Pause,
   Loader2,
+  ShieldCheck,
+  Radar,
+  BrainCircuit
 } from "lucide-react";
 import { TeamSection } from "@/components/TeamSection";
 import { fetchTabuaOriginal, fetchTabuaProjecoes } from "@/lib/api";
@@ -29,11 +32,11 @@ import backgroundGif from "../../public/img/chart.gif";
 // Módulos principais (Cards interativos na página inicial)
 const features = [
   {
-    icon: BarChart3,
+    icon: ShieldCheck,
     title: "Dados de Mortalidade",
     description: "Análise demográfica detalhada das taxas de óbito distribuídas por faixa etária e estados brasileiros.",
     link: "/dados-mortalidade",
-    badge: "Oficial",
+    badge: "",
     color: "from-blue-500/20 to-indigo-500/20",
     iconColor: "text-blue-500",
   },
@@ -42,25 +45,25 @@ const features = [
     title: "Expectativa de Vida",
     description: "Séries históricas e evolução da longevidade média da população sob diferentes recortes geográficos.",
     link: "/expectativa-vida",
-    badge: "Atualizado",
+    badge: "",
     color: "from-emerald-500/20 to-teal-500/20",
     iconColor: "text-emerald-500",
   },
   {
-    icon: Activity,
+    icon: Radar,
     title: "Mortalidade Infantil",
     description: "Painéis de monitoramento de óbitos infantis e indicadores associados ao desenvolvimento social.",
     link: "/mortalidade-infantil",
-    badge: "Monitoramento",
+    badge: "",
     color: "from-rose-500/20 to-orange-500/20",
     iconColor: "text-rose-500",
   },
   {
-    icon: Target,
+    icon: BrainCircuit,
     title: "Modelos Preditivos",
     description: "Algoritmos avançados para projeção probabilística de tábuas de mortalidade e cenários futuros.",
     link: "/previsao-mortalidade",
-    badge: "Inteligência AI",
+    badge: "",
     color: "from-purple-500/20 to-pink-500/20",
     iconColor: "text-purple-500",
   },
@@ -803,33 +806,6 @@ const Home = () => {
 
                     </div>
 
-                    {/* Dynamic Actuarial Insight & Metrics Panel */}
-                    <div className="mt-3 p-3 bg-white/5 border border-white/10 rounded-2xl flex flex-col gap-2 backdrop-blur-md">
-                      <div className="text-[8px] font-bold text-white/40 uppercase tracking-widest text-center">
-                        Diagnóstico Demográfico do Ano
-                      </div>
-                      
-                      {/* Metric cards grid */}
-                      <div className="grid grid-cols-2 gap-2 text-center">
-                        <div className="bg-white/5 border border-white/5 p-1.5 rounded-xl">
-                          <span className="block text-[8px] text-white/50 uppercase font-medium">Expectativa ao Nascer</span>
-                          <span className="text-[11px] font-extrabold text-cyan-300 font-mono">
-                            {activeData.metricE0}
-                          </span>
-                        </div>
-                        <div className="bg-white/5 border border-white/5 p-1.5 rounded-xl">
-                          <span className="block text-[8px] text-white/50 uppercase font-medium">Mortalidade Infantil</span>
-                          <span className="text-[11px] font-extrabold text-rose-300 font-mono">
-                            {activeData.metricIMR}
-                          </span>
-                        </div>
-                      </div>
-
-                      <p className="text-[9px] text-slate-200 leading-normal font-normal text-center italic">
-                        "{activeData.insight}"
-                      </p>
-                    </div>
-
                     {/* Footer Details */}
                     <div className="mt-3 pt-3 border-t border-white/10 flex justify-between items-center text-[9px] text-white/40">
                       <span className="flex items-center gap-1 font-medium">
@@ -990,7 +966,7 @@ const Home = () => {
                 O OI Atuarial é um observatório de pesquisa e extensão da Universidade Federal da Paraíba (UFPB) focado no desenvolvimento de ferramentas inovadoras para análise demográfica e atuarial.
               </p>
               <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base text-justify">
-                Utilizando bases de dados de alta credibilidade do SIM/DATASUS e IBGE, criamos tábuas de mortalidade personalizadas, projeções de expectativa de vida e inteligência artificial voltada ao cálculo de riscos demográficos e atuaríeis de forma transparente e acessível.
+                Utilizando bases de dados de alta credibilidade do SIM/DATASUS e IBGE, criamos tábuas de mortalidade personalizadas, projeções de expectativa de vida e inteligência artificial voltada ao cálculo de riscos demográficos e atuariais de forma transparente e acessível.
               </p>
               
               <div className="pt-2">

@@ -331,7 +331,7 @@ const DadosPrevisao = () => {
           </Tabs>
 
           {/* Seção Informativa de Apoio */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-1 gap-6 mt-8">
             <Card className="md:col-span-2 border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg">
               <CardHeader>
                 <CardTitle className="text-md flex items-center gap-2 text-primary">
@@ -346,23 +346,6 @@ const DadosPrevisao = () => {
                 <p>
                   Diferente de abordagens estáticas puras, a incorporação de técnicas de <em>machine learning</em> e séries temporais avançadas capta tendências de redução de mortalidade de forma mais coerente para cada território e faixa etária específica.
                 </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg flex flex-col justify-between">
-              <CardHeader>
-                <CardTitle className="text-md text-primary">Detalhamento dos Modelos</CardTitle>
-                <CardDescription>Escopo e Horizonte</CardDescription>
-              </CardHeader>
-              <CardContent className="text-xs text-muted-foreground space-y-2">
-                <div>
-                  <span className="font-semibold block text-foreground">Abrangência Temporal:</span>
-                  Previsões para 2024 até o horizonte de 2070.
-                </div>
-                <div>
-                  <span className="font-semibold block text-foreground">Garantia Atuarial:</span>
-                  Nomenclaturas mantidas em termos puramente técnicos (<sub>n</sub>M<sub>x</sub>, e<sub>x</sub>) para conformidade com normas reguladoras do setor de previdência.
-                </div>
               </CardContent>
             </Card>
           </div>

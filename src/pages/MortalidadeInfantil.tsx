@@ -172,12 +172,7 @@ export default function ChildMortalityPage() {
             Acompanhe a série histórica da Taxa de Mortalidade Infantil (por 1.000 nascidos vivos) no Brasil e suas regiões geográficas.
           </p>
 
-          {usandoBackup && (
-            <div className="inline-flex items-center gap-2 mt-4 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs backdrop-blur-sm shadow-sm animate-fade-in">
-              <AlertCircle className="h-3.5 w-3.5" />
-              <span>Exibindo histórico de alta fidelidade do Ministério da Saúde</span>
-            </div>
-          )}
+          
         </div>
 
         {loading ? (
@@ -410,7 +405,7 @@ export default function ChildMortalityPage() {
             </Tabs>
 
             {/* Seção Explicativa da Metodologia do Indicador */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 gap-6 mt-8">
               <Card className="md:col-span-2 border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-md flex items-center gap-2 text-primary">
@@ -425,27 +420,6 @@ export default function ChildMortalityPage() {
                   <p>
                     A redução da TMI é intimamente associada a melhorias estruturais em <strong>saneamento básico</strong>, ampliação de campanhas de vacinação, melhoria da nutrição infantil e fortalecimento da <strong>atenção básica à saúde materna</strong> (pré-natal e acompanhamento neonatal).
                   </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg flex flex-col justify-between">
-                <CardHeader>
-                  <CardTitle className="text-md text-primary">Detalhamento dos Dados</CardTitle>
-                  <CardDescription>Fontes e Notas Técnicas</CardDescription>
-                </CardHeader>
-                <CardContent className="text-xs text-muted-foreground space-y-2">
-                  <div>
-                    <span className="font-semibold block text-foreground">Fonte Primária:</span>
-                    SIM (Sistema de Informação sobre Mortalidade) e SINASC (Sistema de Informações sobre Nascidos Vivos) do DATASUS.
-                  </div>
-                  <div>
-                    <span className="font-semibold block text-foreground">Série Disponível:</span>
-                    Anos de 2000 a 2023.
-                  </div>
-                  <div>
-                    <span className="font-semibold block text-foreground">Abrangência:</span>
-                    Brasil, 5 Macroregiões e o Estado da Paraíba.
-                  </div>
                 </CardContent>
               </Card>
             </div>

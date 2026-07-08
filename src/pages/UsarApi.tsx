@@ -180,9 +180,9 @@ export default function ApiDocs() {
             Área do Desenvolvedor
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-            Documentação da{' '}
+            Instruções de uso da{' '}
             <span className="bg-gradient-to-r from-blue-400 via-blue-200 to-indigo-300 bg-clip-text text-transparent">
-              API Atuarial
+              API
             </span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed text-center">
@@ -223,7 +223,7 @@ export default function ApiDocs() {
                 </div>
                 <p className="text-xs leading-relaxed text-muted-foreground text-justify">
                   Navegue até a página de{' '}
-                  <a href="/cadastro-usuario" className="text-primary font-medium hover:underline inline-flex items-center gap-0.5">
+                  <a href="/solicitar-token" className="text-primary font-medium hover:underline inline-flex items-center gap-0.5">
                     Cadastro de Usuário
                     <ArrowRight size={10} />
                   </a>{' '}

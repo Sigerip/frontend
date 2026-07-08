@@ -302,7 +302,7 @@ const ExpectativaVida = () => {
           </Tabs>
 
           {/* Seção Informativa de Apoio */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-1 gap-6 mt-8">
             <Card className="md:col-span-2 border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg">
               <CardHeader>
                 <CardTitle className="text-md flex items-center gap-2 text-primary">
@@ -320,26 +320,7 @@ const ExpectativaVida = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-primary/10 bg-card/25 backdrop-blur-sm shadow-lg flex flex-col justify-between">
-              <CardHeader>
-                <CardTitle className="text-md text-primary">Detalhamento dos Dados</CardTitle>
-                <CardDescription>Fontes e Escopo</CardDescription>
-              </CardHeader>
-              <CardContent className="text-xs text-muted-foreground space-y-2">
-                <div>
-                  <span className="font-semibold block text-foreground">Fonte:</span>
-                  Tábuas Abreviadas de Mortalidade oficiais do IBGE, adjusted para sub-registro.
-                </div>
-                <div>
-                  <span className="font-semibold block text-foreground">Série Disponível:</span>
-                  Anos de 2000 a 2023.
-                </div>
-                <div>
-                  <span className="font-semibold block text-foreground">Aplicação Atuarial:</span>
-                  Cálculo de anuidades, seguros de vida e projeções de encargos atuariais públicos ou privados.
-                </div>
-              </CardContent>
-            </Card>
+            
           </div>
 
         </div>
