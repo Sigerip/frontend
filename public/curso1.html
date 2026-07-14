@@ -1214,16 +1214,16 @@
 
           <div class="checklist-container">
             <div class="checklist-header">
-              <span>Alinhamento Pedagógico</span>
-              <span>Requisitos</span>
+              <span>CHECKLIST</span>
+              <span>Introdução</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-context-1')">
               <div class="checklist-checkbox-wrapper">
                 <input type="checkbox" id="chk-context-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Foco na Auditabilidade</div>
-                <div class="checklist-desc">Garantir que todas as afirmações do infográfico possam ser traçadas de volta a uma linha de código no Colab.</div>
+                <div class="checklist-title">Entendendo a Dinâmica</div>
+                <div class="checklist-desc">Iniciando o processo de criação de infográficos com IA e dados atuariais.</div>
               </div>
             </div>
           </div>
@@ -1287,7 +1287,7 @@
 
           <div class="checklist-container">
             <div class="checklist-header">
-              <span>Filtro de Escopo</span>
+              <span>DIRECIONAMENTO</span>
               <span>Ação Necessária</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-dados-1')">
@@ -1295,8 +1295,8 @@
                 <input type="checkbox" id="chk-dados-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Definir o recorte de dados do aluno</div>
-                <div class="checklist-desc">Registrar qual subconjunto e dimensões serão o alvo das análises.</div>
+                <div class="checklist-title">Definindo o Escopo do Infográfico</div>
+                <div class="checklist-desc">Analisar e definir quais os insights serão explorados.</div>
               </div>
             </div>
           </div>
@@ -1333,16 +1333,7 @@
               </div>
               <div class="checklist-item-content">
                 <div class="checklist-title">Navegar pelo portal do OI Atuarial</div>
-                <div class="checklist-desc">Analisar as tabelas dinâmicas do site antes da exportação.</div>
-              </div>
-            </div>
-            <div class="checklist-item" onclick="toggleCheckbox('chk-step1-2')">
-              <div class="checklist-checkbox-wrapper">
-                <input type="checkbox" id="chk-step1-2" onclick="event.stopPropagation()">
-              </div>
-              <div class="checklist-item-content">
-                <div class="checklist-title">Escrever a pergunta de pesquisa no registro</div>
-                <div class="checklist-desc">Definir o foco que guiará a análise de dados no Colab.</div>
+                <div class="checklist-desc">Analisar quais tabelas e filtros a serem utilizados para o infográfico.</div>
               </div>
             </div>
           </div>
@@ -1350,43 +1341,14 @@
 
         <!-- STEP 2 -->
         <section class="content-section" id="step-2">
-          <h2 class="section-title"><span class="step-badge">2</span> Baixar os dados e subir no Google Colab</h2>
+          <h2 class="section-title"><span class="step-badge">2</span> Importar os dados no Google Colab</h2>
           
           <div class="card">
             <p style="margin-bottom: 1rem;">Há duas formas possíveis de levar os dados para o Colab. Escolha a mais confortável. O importante é que o notebook registre claramente de onde os dados vieram.</p>
-            
-            <h3 style="font-size:1.15rem; margin:1.5rem 0 0.5rem 0; color:var(--accent);">Opção A: baixar pelo site e subir no Colab</h3>
-            <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
-              <li>No OI Atuarial, escolha a tabela ou visualização que deseja analisar.</li>
-              <li>Use a opção de baixar ou exportar dados, quando disponível.</li>
-              <li>Salve o arquivo em formato CSV ou Excel.</li>
-              <li>No Google Colab, clique no ícone de arquivos e faça upload do arquivo baixado.</li>
-              <li>Carregue o arquivo com <code>pandas</code>.</li>
-            </ol>
-
-            <!-- CODE BLOCK A -->
-            <div class="code-block-wrapper">
-              <div class="code-block-header">
-                <span class="code-lang-label">Python (Opção A)</span>
-                <button class="btn-copy" onclick="copyCode(this, 'code-opcao-a')">
-                  <i class="bi bi-clipboard"></i> <span>Copiar</span>
-                </button>
-              </div>
-              <pre class="sourceCode"><code id="code-opcao-a"><span class="token-keyword">import</span> pandas <span class="token-keyword">as</span> pd
-
-<span class="token-comment"># Se o arquivo for CSV:</span>
-df = pd.read_csv(<span class="token-string">"nome_do_arquivo.csv"</span>)
-
-<span class="token-comment"># Se o arquivo for Excel:</span>
-df = pd.read_excel(<span class="token-string">"nome_do_arquivo.xlsx"</span>)
-
-df.head()</code></pre>
-            </div>
-            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom: 1.5rem;">Esta opção é boa para trabalhar com um recorte mais controlado e visualmente escolhido no próprio site.</p>
 
             <hr style="margin: 1.5rem 0;">
 
-            <h3 style="font-size:1.15rem; margin:0 0 0.5rem 0; color:var(--accent);">Opção B: carregar pela API no Colab</h3>
+            <h3 style="font-size:1.15rem; margin:0 0 0.5rem 0; color:var(--accent);">Opção A: carregar pela API no Colab</h3>
             <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
               <li>Acesse <a href="https://oiatuarial.vercel.app/solicitar-token" target="_blank">a página de solicitação de token <i class="bi bi-box-arrow-up-right" style="font-size:0.8rem"></i></a>.</li>
               <li>Solicite o token e verifique o e-mail.</li>
@@ -1394,14 +1356,16 @@ df.head()</code></pre>
             </ol>
 
             <!-- CODE BLOCK B -->
+
             <div class="code-block-wrapper">
               <div class="code-block-header">
-                <span class="code-lang-label">Python (Opção B)</span>
+                <span class="code-lang-label">Python (Opção A)</span>
                 <button class="btn-copy" onclick="copyCode(this, 'code-opcao-b')">
                   <i class="bi bi-clipboard"></i> <span>Copiar</span>
                 </button>
               </div>
-              <pre class="sourceCode"><code id="code-opcao-b"><span class="token-keyword">import</span> getpass
+              <pre class="sourceCode"><code id="code-opcao-b">
+<span class="token-keyword">import</span> getpass
 <span class="token-keyword">import</span> requests
 <span class="token-keyword">import</span> pandas <span class="token-keyword">as</span> pd
 
@@ -1425,6 +1389,36 @@ dados_mortalidade.head()</code></pre>
             </div>
             <p style="font-size:0.9rem; color:var(--text-secondary);">Esta opção é boa para testar um fluxo mais automatizado e reproduzível, especialmente se você quiser comparar vários recortes.</p>
           </div>
+            
+            <h3 style="font-size:1.15rem; margin:1.5rem 0 0.5rem 0; color:var(--accent);">Opção B: baixar pelo site e subir no Colab</h3>
+            <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+              <li>No OI Atuarial, escolha a tabela ou visualização que deseja analisar.</li>
+              <li>Use a opção de baixar ou exportar dados, quando disponível.</li>
+              <li>Salve o arquivo em formato CSV ou Excel.</li>
+              <li>No Google Colab, clique no ícone de arquivos e faça upload do arquivo baixado.</li>
+              <li>Carregue o arquivo com <code>pandas</code>.</li>
+            </ol>
+
+            <!-- CODE BLOCK A -->
+            <div class="code-block-wrapper">
+              <div class="code-block-header">
+                <span class="code-lang-label">Python (Opção B)</span>
+                <button class="btn-copy" onclick="copyCode(this, 'code-opcao-a')">
+                  <i class="bi bi-clipboard"></i> <span>Copiar</span>
+                </button>
+              </div>
+              <pre class="sourceCode"><code id="code-opcao-a">
+<span class="token-keyword">import</span> pandas <span class="token-keyword">as</span> pd
+
+<span class="token-comment"># Se o arquivo for CSV:</span>
+df = pd.read_csv(<span class="token-string">"nome_do_arquivo.csv"</span>)
+
+<span class="token-comment"># Se o arquivo for Excel:</span>
+df = pd.read_excel(<span class="token-string">"nome_do_arquivo.xlsx"</span>)
+
+df.head()</code></pre>
+            </div>
+            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom: 1.5rem;">Esta opção é boa para trabalhar com um recorte mais controlado e visualmente escolhido no próprio site.</p>
 
           <div class="checklist-container">
             <div class="checklist-header">
@@ -1436,17 +1430,8 @@ dados_mortalidade.head()</code></pre>
                 <input type="checkbox" id="chk-step2-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Importar os dados no Google Colab</div>
-                <div class="checklist-desc">Garantir que os conjuntos de dados foram importados com sucesso via Upload ou API.</div>
-              </div>
-            </div>
-            <div class="checklist-item" onclick="toggleCheckbox('chk-step2-2')">
-              <div class="checklist-checkbox-wrapper">
-                <input type="checkbox" id="chk-step2-2" onclick="event.stopPropagation()">
-              </div>
-              <div class="checklist-item-content">
-                <div class="checklist-title">Executar visualização inicial (head/info)</div>
-                <div class="checklist-desc">Confirmar que as colunas e os tipos de dados estão íntegros no DataFrame.</div>
+                <div class="checklist-title">Importar e conferir os dados no Google Colab</div>
+                <div class="checklist-desc">Garantir que os conjuntos de dados foram importados com sucesso.</div>
               </div>
             </div>
           </div>
@@ -1557,17 +1542,8 @@ Diferencie dados observados, projeções e interpretação.</div>
                 <input type="checkbox" id="chk-step3-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Rodar prompts de análise inicial</div>
-                <div class="checklist-desc">Executar os códigos gerados e inspecionar os logs/tabelas intermediárias.</div>
-              </div>
-            </div>
-            <div class="checklist-item" onclick="toggleCheckbox('chk-step3-2')">
-              <div class="checklist-checkbox-wrapper">
-                <input type="checkbox" id="chk-step3-2" onclick="event.stopPropagation()">
-              </div>
-              <div class="checklist-item-content">
-                <div class="checklist-title">Verificar auditabilidade do notebook</div>
-                <div class="checklist-desc">Validar se todas as conclusões estão amparadas em dados matemáticos visíveis nas células.</div>
+                <div class="checklist-title">Rodar prompts e validação dos dados</div>
+                <div class="checklist-desc">Executar os códigos gerados e inspecionar os dados para garantir sua integridade.</div>
               </div>
             </div>
           </div>
@@ -1616,7 +1592,7 @@ Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
               </div>
             </div>
 
-            <p style="margin: 1.5rem 0 0.5rem 0;"><strong>Para salvar o relatório no Colab:</strong></p>
+            <p style="margin: 1.5rem 0 0.5rem 0;"><strong>Caso opte em salvar o relatório em markdown siga o procedimento no Colab:</strong></p>
 
             <!-- CODE BLOCK RELATORIO -->
             <div class="code-block-wrapper">
@@ -1626,7 +1602,8 @@ Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
                   <i class="bi bi-clipboard"></i> <span>Copiar</span>
                 </button>
               </div>
-              <pre class="sourceCode"><code id="code-salvar-relatorio">texto_insights = <span class="token-string">"""Cole aqui o relatório final revisado."""</span>
+              <pre class="sourceCode">
+<code id="code-salvar-relatorio">texto_insights = <span class="token-string">"""Cole aqui o relatório final revisado."""</span>
 
 <span class="token-keyword">with</span> <span class="token-function">open</span>(<span class="token-string">"insights_oiatuarial.md"</span>, <span class="token-string">"w"</span>, encoding=<span class="token-string">"utf-8"</span>) <span class="token-keyword">as</span> f:
     f.write(texto_insights)</code></pre>
@@ -1645,17 +1622,8 @@ Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
                 <input type="checkbox" id="chk-step4-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Gerar rascunho de insights via IA</div>
+                <div class="checklist-title">Gerar relatório de insights via IA</div>
                 <div class="checklist-desc">Extrair os principais números e limitações da análise.</div>
-              </div>
-            </div>
-            <div class="checklist-item" onclick="toggleCheckbox('chk-step4-2')">
-              <div class="checklist-checkbox-wrapper">
-                <input type="checkbox" id="chk-step4-2" onclick="event.stopPropagation()">
-              </div>
-              <div class="checklist-item-content">
-                <div class="checklist-title">Salvar arquivo Markdown de insights</div>
-                <div class="checklist-desc">Criar o arquivo <code>insights_oiatuarial.md</code> e fazer download.</div>
               </div>
             </div>
           </div>
@@ -2003,7 +1971,7 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
 
     </div>
 
-    <!-- DOCKED QUESTION WIDGET -->
+    <!-- DOCKED QUESTION WIDGET 
     <div class="question-card" id="q-card">
       <div class="question-header">
         <h4><i class="bi bi-patch-question-fill text-accent"></i> Dúvidas do Curso</h4>
@@ -2028,7 +1996,7 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
           Enviar Pergunta
         </button>
       </form>
-    </div>
+    </div> -->
 
   </div>
 
