@@ -1026,6 +1026,89 @@
       transform: translateY(0);
     }
 
+    /* Success Confirmation Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.25rem 2rem;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.show .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-img {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      margin-bottom: 1.25rem;
+      animation: popIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      font-family: var(--font-heading);
+    }
+
+    .modal-message {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
     /* ==========================================================================
        Responsive adjustments
        ========================================================================== */
@@ -1086,6 +1169,7 @@
         <button id="view-mode-btn" class="btn btn-secondary" onclick="toggleViewMode()" title="Mudar Modo de Visualização">
           <i class="bi bi-collection"></i>
           <span class="btn-text">Modo Passo a Passo</span>
+        </button>
       </div>
     </header>
 
@@ -1146,6 +1230,12 @@
             <li class="sidebar-item" onclick="navigateToSection('section-registro')" id="nav-section-registro">
               <i class="bi bi-clipboard-data-fill"></i> Registro do Aluno
             </li>
+            <li class="sidebar-item" onclick="navigateToSection('section-duvidas')" id="nav-section-duvidas">
+              <i class="bi bi-patch-question-fill"></i> Dúvidas do Curso
+            </li>
+            <li class="sidebar-item" onclick="navigateToSection('section-apresentacao')" id="nav-section-apresentacao">
+              <i class="bi bi-people-fill"></i> Apresentação Final
+            </li>
           </ul>
         </div>
 
@@ -1194,22 +1284,6 @@
             </div>
           </div>
 
-          <div class="checklist-container">
-            <div class="checklist-header">
-              <span>Etapa Apresentação</span>
-              <span>Checkpoint Único</span>
-            </div>
-            <div class="checklist-item" onclick="toggleCheckbox('chk-intro-1')">
-              <div class="checklist-checkbox-wrapper">
-                <input type="checkbox" id="chk-intro-1" onclick="event.stopPropagation()">
-              </div>
-              <div class="checklist-item-content">
-                <div class="checklist-title">Compreender a Apresentação da Oficina</div>
-                <div class="checklist-desc">Entender os objetivos gerais, público-alvo e fluxo de trabalho.</div>
-              </div>
-            </div>
-          </div>
-
         </section>
 
         <!-- SECTION: CONTEXTO DA ATIVIDADE -->
@@ -1224,16 +1298,16 @@
 
           <div class="checklist-container">
             <div class="checklist-header">
-              <span>Alinhamento Pedagógico</span>
-              <span>Requisitos</span>
+              <span>CHECKLIST</span>
+              <span>Introdução</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-context-1')">
               <div class="checklist-checkbox-wrapper">
                 <input type="checkbox" id="chk-context-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Foco na Auditabilidade</div>
-                <div class="checklist-desc">Garantir que todas as afirmações do infográfico possam ser traçadas de volta a uma linha de código no Colab.</div>
+                <div class="checklist-title">Entendendo a Dinâmica</div>
+                <div class="checklist-desc">Iniciando o processo de criação de infográficos com IA e dados atuariais.</div>
               </div>
             </div>
           </div>
@@ -1297,7 +1371,7 @@
 
           <div class="checklist-container">
             <div class="checklist-header">
-              <span>Filtro de Escopo</span>
+              <span>DIRECIONAMENTO</span>
               <span>Ação Necessária</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-dados-1')">
@@ -1305,8 +1379,8 @@
                 <input type="checkbox" id="chk-dados-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Definir o recorte de dados do aluno</div>
-                <div class="checklist-desc">Registrar qual subconjunto e dimensões serão o alvo das análises.</div>
+                <div class="checklist-title">Definindo o Escopo do Infográfico</div>
+                <div class="checklist-desc">Analisar e definir quais os insights serão explorados.</div>
               </div>
             </div>
           </div>
@@ -1335,21 +1409,21 @@
           <div class="checklist-container">
             <div class="checklist-header">
               <span>Etapa 1 Checklist</span>
-              <span>Checkpoint Único</span>
+              <span>Passo a Passo</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-step1-1')">
               <div class="checklist-checkbox-wrapper">
                 <input type="checkbox" id="chk-step1-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Escolher Dados e Definir Pergunta Orientadora</div>
-                <div class="checklist-desc">Navegar pelo OI Atuarial, selecionar o recorte e definir a pergunta de pesquisa.</div>
+                <div class="checklist-title">Navegar pelo portal do OI Atuarial</div>
+                <div class="checklist-desc">Analisar quais tabelas e filtros a serem utilizados para o infográfico.</div>
               </div>
             </div>
           </div>
         </section>
 
-<!-- STEP 2 -->
+        <!-- STEP 2 -->
         <section class="content-section" id="step-2">
           <h2 class="section-title"><span class="step-badge">2</span> Importar os dados no Google Colab</h2>
           
@@ -1446,7 +1520,6 @@ df.head()</code></pre>
             </div>
           </div>
         </section>
-
 
         <!-- STEP 3 -->
         <section class="content-section" id="step-3">
@@ -1546,15 +1619,15 @@ Diferencie dados observados, projeções e interpretação.</div>
           <div class="checklist-container">
             <div class="checklist-header">
               <span>Etapa 3 Checklist</span>
-              <span>Checkpoint Único</span>
+              <span>Passo a Passo</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-step3-1')">
               <div class="checklist-checkbox-wrapper">
                 <input type="checkbox" id="chk-step3-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Executar a Análise Auditável com Gemini</div>
-                <div class="checklist-desc">Rodar prompts de análise no Colab e conferir as evidências numéricas nas células de código.</div>
+                <div class="checklist-title">Rodar prompts e validação dos dados</div>
+                <div class="checklist-desc">Executar os códigos gerados e inspecionar os dados para garantir sua integridade.</div>
               </div>
             </div>
           </div>
@@ -1603,7 +1676,7 @@ Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
               </div>
             </div>
 
-            <p style="margin: 1.5rem 0 0.5rem 0;"><strong>Para salvar o relatório no Colab:</strong></p>
+            <p style="margin: 1.5rem 0 0.5rem 0;"><strong>Caso opte em salvar o relatório em markdown siga o procedimento no Colab:</strong></p>
 
             <!-- CODE BLOCK RELATORIO -->
             <div class="code-block-wrapper">
@@ -1613,7 +1686,8 @@ Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
                   <i class="bi bi-clipboard"></i> <span>Copiar</span>
                 </button>
               </div>
-              <pre class="sourceCode"><code id="code-salvar-relatorio">texto_insights = <span class="token-string">"""Cole aqui o relatório final revisado."""</span>
+              <pre class="sourceCode">
+<code id="code-salvar-relatorio">texto_insights = <span class="token-string">"""Cole aqui o relatório final revisado."""</span>
 
 <span class="token-keyword">with</span> <span class="token-function">open</span>(<span class="token-string">"insights_oiatuarial.md"</span>, <span class="token-string">"w"</span>, encoding=<span class="token-string">"utf-8"</span>) <span class="token-keyword">as</span> f:
     f.write(texto_insights)</code></pre>
@@ -1625,15 +1699,15 @@ Escreva em português do Brasil. Seja claro, sintético e fiel aos dados.</div>
           <div class="checklist-container">
             <div class="checklist-header">
               <span>Etapa 4 Checklist</span>
-              <span>Checkpoint Único</span>
+              <span>Passo a Passo</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-step4-1')">
               <div class="checklist-checkbox-wrapper">
                 <input type="checkbox" id="chk-step4-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Gerar e Salvar o Relatório de Insights</div>
-                <div class="checklist-desc">Sintetizar os principais achados numéricos e salvar o arquivo <code>insights_oiatuarial.md</code>.</div>
+                <div class="checklist-title">Gerar relatório de insights via IA</div>
+                <div class="checklist-desc">Extrair os principais números e limitações da análise.</div>
               </div>
             </div>
           </div>
@@ -1760,15 +1834,62 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
           <div class="checklist-container">
             <div class="checklist-header">
               <span>Etapa 7 Checklist de Refinamento</span>
-              <span>Checkpoint Único</span>
+              <span>Critérios de Qualidade</span>
             </div>
             <div class="checklist-item" onclick="toggleCheckbox('chk-step7-1')">
               <div class="checklist-checkbox-wrapper">
                 <input type="checkbox" id="chk-step7-1" onclick="event.stopPropagation()">
               </div>
               <div class="checklist-item-content">
-                <div class="checklist-title">Refinar e Finalizar o Infográfico</div>
-                <div class="checklist-desc">Validar fidelidade dos dados, clareza das mensagens, diferenciação de projeções e hierarquia visual.</div>
+                <div class="checklist-title">O título comunica a mensagem central?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-2')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-2" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Os números batem com o relatório e com o notebook?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-3')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-3" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Está claro o que é dado observado e o que é projeção?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-4')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-4" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">O infográfico evita conclusões causais exageradas?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-5')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-5" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">A hierarquia visual ajuda o leitor a entender a história?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-6')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-6" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Há uma conclusão ou recomendação explícita?</div>
+              </div>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-step7-7')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-step7-7" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">O aluno consegue explicar como chegou ao resultado?</div>
               </div>
             </div>
           </div>
@@ -1818,12 +1939,12 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
 
         <!-- SECTION: REGISTRO DA EXPERIÊNCIA DO ALUNO (INTERACTIVE FORM) -->
         <section class="content-section" id="section-registro">
-          <h2 class="section-title"><i class="bi bi-clipboard-data-fill text-accent"></i> Registro do Aluno</h2>
+          <h2 class="section-title"><i class="bi bi-clipboard-data-fill text-accent"></i> Registro do Aluno & Envio para Página 2</h2>
           
           <div class="card">
-            <p style="margin-bottom: 1.5rem;">Preencha o formulário simples abaixo com o seu registro da oficina. Ao final, clique no botão verde para salvar.</p>
+            <p style="margin-bottom: 1.5rem;">Preencha o formulário simples abaixo com o seu registro da oficina. Ao final, clique no botão verde para salvar automaticamente na <strong>Página 2</strong> da sua planilha do Google Sheets.</p>
             
-            <form id="registro-form" oninput="saveFormState()">
+            <form id="registro-form" oninput="saveFormState()" onsubmit="salvarNaPagina2(event)">
               
               <div class="form-group">
                 <label for="reg-nome">Nome do Aluno</label>
@@ -1882,13 +2003,200 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
               <div id="registro-sheets-status" style="margin-bottom: 1rem; font-weight: 600;"></div>
 
               <div class="form-actions-bar" style="flex-wrap: wrap; gap: 0.75rem;">
-                <button type="button" id="btn-save-pagina2" class="btn btn-primary" onclick="salvarNaPagina2(event)" style="background-color: var(--success); border-color: var(--success); color: #ffffff; font-weight: 700;">
-                  <i class="bi bi-file-earmark-spreadsheet-fill"></i> Salvar
+                <button type="submit" id="btn-save-pagina2" class="btn btn-primary" style="background-color: var(--success); border-color: var(--success); color: #ffffff; font-weight: 700;">
+                  <i class="bi bi-file-earmark-spreadsheet-fill"></i> Salvar na Página 2 da Planilha
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="exportMarkdownTable()">
+                  <i class="bi bi-clipboard-check"></i> Copiar Tabela MD
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="downloadMarkdownFile()">
+                  <i class="bi bi-download"></i> Baixar Relatório (.md)
                 </button>
               </div>
 
             </form>
           </div>
+
+          <!-- Script Google Apps Script Helper Card -->
+          <div class="card" style="border-left: 4px solid var(--success); background-color: var(--bg-tertiary);">
+            <h3 style="font-size:1.05rem; margin-bottom: 0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <i class="bi bi-google text-success"></i> Configuração do Google Apps Script para a Página 2:
+            </h3>
+            <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:0.75rem;">
+              No Google Sheets, acesse <strong>Extensões > Apps Script</strong> e cole o código abaixo para que os dados caiam na aba <strong>Página 2</strong>:
+            </p>
+            <div class="code-block-wrapper" style="margin: 0;">
+              <div class="code-block-header">
+                <span class="code-lang-label">Google Apps Script (Página 2)</span>
+                <button class="btn-copy" onclick="copyCode(this, 'code-apps-script')">
+                  <i class="bi bi-clipboard"></i> <span>Copiar</span>
+                </button>
+              </div>
+              <pre class="sourceCode"><code id="code-apps-script"><span class="token-comment">// ===== FUNÇÃO AUXILIAR: Lê dados JSON do corpo ou parâmetros da URL =====</span>
+<span class="token-keyword">function</span> <span class="token-function">extrairParametros</span>(e) {
+  <span class="token-keyword">if</span> (e &amp;&amp; e.postData &amp;&amp; e.postData.contents) {
+    <span class="token-keyword">try</span> { <span class="token-keyword">return</span> JSON.parse(e.postData.contents); } <span class="token-keyword">catch</span>(err) {}
+  }
+  <span class="token-keyword">return</span> (e &amp;&amp; e.parameter) ? e.parameter : {};
+}
+
+<span class="token-comment">// ===== FUNÇÃO 1: Salva dúvidas do widget flutuante (Aba Principal) =====</span>
+<span class="token-keyword">function</span> <span class="token-function">salvarDuvida</span>(e) {
+  <span class="token-keyword">var</span> ss = SpreadsheetApp.getActiveSpreadsheet();
+  <span class="token-keyword">var</span> sheet = ss.getActiveSheet();
+  <span class="token-keyword">var</span> p = extrairParametros(e);
+
+  <span class="token-keyword">var</span> name = p.name || p.nome || <span class="token-string">"Anônimo"</span>;
+  <span class="token-keyword">var</span> question = p.question || p.duvida || <span class="token-string">"Sem dúvida"</span>;
+  <span class="token-keyword">var</span> timestamp = p.timestamp || <span class="token-keyword">new</span> Date().toLocaleString(<span class="token-string">"pt-BR"</span>);
+
+  sheet.appendRow([timestamp, name, question]);
+  <span class="token-keyword">return</span> ContentService.createTextOutput(JSON.stringify({<span class="token-string">"status"</span>: <span class="token-string">"success"</span>})).setMimeType(ContentService.MimeType.JSON);
+}
+
+<span class="token-comment">// ===== FUNÇÃO 2: Salva registro do aluno + imagem no Drive (Página 2) =====</span>
+<span class="token-keyword">function</span> <span class="token-function">salvarRegistroPagina2</span>(e) {
+  <span class="token-keyword">var</span> ss = SpreadsheetApp.getActiveSpreadsheet();
+  <span class="token-keyword">var</span> sheet = ss.getSheetByName(<span class="token-string">"Página 2"</span>);
+  <span class="token-keyword">if</span> (!sheet) {
+    sheet = ss.insertSheet(<span class="token-string">"Página 2"</span>);
+    sheet.appendRow([<span class="token-string">"Data/Hora"</span>, <span class="token-string">"Nome"</span>, <span class="token-string">"Tema"</span>, <span class="token-string">"Ferramenta"</span>, <span class="token-string">"Avaliação"</span>, <span class="token-string">"Aprendizado"</span>, <span class="token-string">"Melhorias"</span>, <span class="token-string">"Imagem"</span>]);
+  }
+
+  <span class="token-keyword">var</span> p = extrairParametros(e);
+  <span class="token-keyword">var</span> name = p.name || p.nome || <span class="token-string">"Anônimo"</span>;
+  <span class="token-keyword">var</span> tema = p.tema || <span class="token-string">"Não informado"</span>;
+  <span class="token-keyword">var</span> ferramenta = p.ferramenta || <span class="token-string">"Não informado"</span>;
+  <span class="token-keyword">var</span> avaliacao = p.avaliacao || <span class="token-string">"Não informado"</span>;
+  <span class="token-keyword">var</span> aprendizado = p.aprendizado || <span class="token-string">"Não informado"</span>;
+  <span class="token-keyword">var</span> melhorias = p.melhorias || <span class="token-string">"Nenhuma"</span>;
+  <span class="token-keyword">var</span> timestamp = p.timestamp || <span class="token-keyword">new</span> Date().toLocaleString(<span class="token-string">"pt-BR"</span>);
+
+  <span class="token-comment">// Processa imagem: salva no Drive e insere =IMAGE() na célula</span>
+  <span class="token-keyword">var</span> celulaImagem = <span class="token-string">"Sem imagem"</span>;
+  <span class="token-keyword">if</span> (p.imagemData &amp;&amp; p.imagemData.indexOf(<span class="token-string">"base64,"</span>) !== -1) {
+    <span class="token-keyword">try</span> {
+      <span class="token-keyword">var</span> parts = p.imagemData.split(<span class="token-string">"base64,"</span>);
+      <span class="token-keyword">var</span> ct = parts[0].replace(<span class="token-string">"data:"</span>,<span class="token-string">""</span>).replace(<span class="token-string">";"</span>,<span class="token-string">""</span>);
+      <span class="token-keyword">var</span> blob = Utilities.newBlob(Utilities.base64Decode(parts[1]), ct, p.imagemName || <span class="token-string">"infografico.jpg"</span>);
+      <span class="token-keyword">var</span> file = DriveApp.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      celulaImagem = <span class="token-string">'=IMAGE("https://lh3.googleusercontent.com/d/'</span> + file.getId() + <span class="token-string">'")'</span>;
+    } <span class="token-keyword">catch</span>(err) { celulaImagem = <span class="token-string">"Erro: "</span> + err; }
+  }
+
+  sheet.appendRow([timestamp, name, tema, ferramenta, avaliacao, aprendizado, melhorias, celulaImagem]);
+  <span class="token-keyword">return</span> ContentService.createTextOutput(JSON.stringify({<span class="token-string">"status"</span>:<span class="token-string">"success"</span>})).setMimeType(ContentService.MimeType.JSON);
+}
+
+<span class="token-comment">// ===== ROTEADOR: doPost recebe tudo e redireciona =====</span>
+<span class="token-keyword">function</span> <span class="token-function">doPost</span>(e) {
+  <span class="token-keyword">var</span> p = extrairParametros(e);
+  <span class="token-keyword">if</span> (p.pagina === <span class="token-string">"Pagina2"</span> || p.tema || p.aprendizado || p.imagemData) {
+    <span class="token-keyword">return</span> salvarRegistroPagina2(e);
+  }
+  <span class="token-keyword">return</span> salvarDuvida(e);
+}
+
+<span class="token-keyword">function</span> <span class="token-function">doGet</span>(e) { <span class="token-keyword">return</span> doPost(e); }</code></pre>
+            </div>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa Registro do Aluno</span>
+              <span>Checkpoint Único</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-registro-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-registro-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Preencher Registro e Salvar na Página 2 da Planilha</div>
+                <div class="checklist-desc">Enviar as respostas simples da oficina para a Página 2 da planilha Google Sheets.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: DÚVIDAS DO CURSO -->
+        <section class="content-section" id="section-duvidas">
+          <h2 class="section-title"><i class="bi bi-patch-question-fill text-accent"></i> Dúvidas do Curso</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1.5rem;">Tem alguma dúvida sobre o conteúdo do curso ou sobre a atividade prática? Envie sua pergunta abaixo. Ela será registrada diretamente em nossa planilha de acompanhamento no Google Sheets.</p>
+            
+            <form id="main-q-form" onsubmit="submitMainQuestion(event)">
+              <div class="form-group">
+                <label for="main-q-name">Seu Nome (opcional)</label>
+                <input type="text" id="main-q-name" class="form-control" placeholder="Seu nome">
+              </div>
+              <div class="form-group" style="margin-top: 1rem;">
+                <label for="main-q-text">Sua Pergunta</label>
+                <textarea id="main-q-text" class="form-control" placeholder="Escreva sua dúvida aqui..." required style="min-height: 100px; resize: vertical;"></textarea>
+              </div>
+              
+              <div class="q-status-msg" id="main-q-status" style="margin-top: 1rem; margin-bottom: 1rem; font-weight: 600;"></div>
+              
+              <button type="submit" class="btn btn-primary" id="main-q-submit-btn">
+                <i class="bi bi-send-fill"></i> Enviar Dúvida
+              </button>
+            </form>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Dúvidas e Suporte</span>
+              <span>Checkpoint</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-duvidas-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-duvidas-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Enviar dúvida (se aplicável) ou revisar dúvidas enviadas</div>
+                <div class="checklist-desc">Utilizar o formulário acima para enviar perguntas se houver alguma dificuldade.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: APRESENTAÇÃO FINAL -->
+        <section class="content-section" id="section-apresentacao">
+          <h2 class="section-title"><i class="bi bi-people-fill text-accent"></i> Apresentação Final</h2>
+          
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Ao final da oficina, cada time apresenta rapidamente:</p>
+            <ol style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li style="margin-bottom: 0.35rem;">a pergunta escolhida;</li>
+              <li style="margin-bottom: 0.35rem;">a abordagem de análise;</li>
+              <li style="margin-bottom: 0.35rem;">o melhor insight;</li>
+              <li style="margin-bottom: 0.35rem;">a primeira versão ou rascunho do infográfico;</li>
+              <li style="margin-bottom: 0.35rem;">o que funcionou bem no uso de IA;</li>
+              <li style="margin-bottom: 0.35rem;">o que precisa ser melhorado durante a semana.</li>
+            </ol>
+            <p style="margin-bottom: 1rem;">Durante a semana, o time deve continuar trabalhando no storytelling com dados. Na semana seguinte, cada time apresenta o resultado refinado, uma recomendação de processo para gerar o infográfico e um relato da experiência de desenvolvimento desse processo.</p>
+            <p><strong>Critério central:</strong> o melhor resultado não é apenas o infográfico mais bonito. É aquele que combina clareza, fidelidade aos dados, boa narrativa visual e processo reproduzível.</p>
+          </div>
+
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <span>Etapa Apresentação</span>
+              <span>Checkpoint Único</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheckbox('chk-apres-1')">
+              <div class="checklist-checkbox-wrapper">
+                <input type="checkbox" id="chk-apres-1" onclick="event.stopPropagation()">
+              </div>
+              <div class="checklist-item-content">
+                <div class="checklist-title">Apresentar o Infográfico e Compartilhar Aprendizados</div>
+                <div class="checklist-desc">Apresentar o resultado final e debater os aprendizados da atividade com a turma.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
 
         <!-- STEPPER NAV BAR (Visible in step-by-step mode) -->
         <div class="stepper-nav-bar" id="stepper-nav">
@@ -1936,6 +2244,19 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
     <span id="toast-message">Copiado com sucesso!</span>
   </div>
 
+  <!-- SUCCESS CONFIRMATION MODAL -->
+  <div id="success-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-close" onclick="closeSuccessModal()">&times;</div>
+      <img src="img/success_check.png" alt="Envio Confirmado" class="modal-img">
+      <h3 class="modal-title">Registro Enviado!</h3>
+      <p class="modal-message">Sua experiência foi registrada com sucesso e enviada para a Página 2 da planilha.</p>
+      <button class="btn btn-primary" onclick="closeSuccessModal()" style="background-color: var(--success); border-color: var(--success); width: 100%; font-weight: 700; margin-top: 1rem;">
+        Entendido
+      </button>
+    </div>
+  </div>
+
   <!-- ==========================================================================
        Javascript Logic
        ========================================================================== */ -->
@@ -1979,6 +2300,7 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
       'step-7',
       'section-variar',
       'section-registro',
+      'section-duvidas',
       'section-apresentacao'
     ];
 
@@ -2175,6 +2497,7 @@ Proponha uma versão refinada, com título melhor, hierarquia mais clara e notas
         'step-7': ['chk-step7-1'],
         'section-variar': ['chk-variar-1'],
         'section-registro': ['chk-registro-1'],
+        'section-duvidas': ['chk-duvidas-1'],
         'section-apresentacao': ['chk-apres-1']
       };
 
@@ -2398,9 +2721,6 @@ Diferencie dados observados, projeções e interpretação.`;
         const savedVal = localStorage.getItem(`form-${fieldId}`);
         if (inputEl && savedVal !== null) {
           inputEl.value = savedVal;
-        }
-      });
-
       // Load saved image preview if exists
       const savedImg = localStorage.getItem('form-reg-imagem-base64');
       const savedName = localStorage.getItem('form-reg-imagem-name') || 'infográfico.png';
@@ -2429,7 +2749,7 @@ Diferencie dados observados, projeções e interpretação.`;
         'Imagem do Infográfico': uploadedFileName ? `[Imagem anexada: ${uploadedFileName}]` : 'Nenhuma imagem anexada'
       };
 
-      let md = `## Registro da Experiência do Aluno - Curso OI Atuarial\n\n`;
+      let md = `## Registro da Experiência do Aluno - Curso OI Atuarial (Página 2)\n\n`;
       md += `| Item | Registro |\n`;
       md += `| :--- | :--- |\n`;
       
@@ -2445,46 +2765,77 @@ Diferencie dados observados, projeções e interpretação.`;
       return md;
     }
 
+    function showSuccessModal() {
+      const modal = document.getElementById("success-modal");
+      if (modal) {
+        modal.style.display = "flex";
+        setTimeout(() => {
+          modal.classList.add("show");
+        }, 10);
+      }
+    }
+
+    function closeSuccessModal() {
+      const modal = document.getElementById("success-modal");
+      if (modal) {
+        modal.classList.remove("show");
+        setTimeout(() => {
+          modal.style.display = "none";
+        }, 300);
+      }
+    }
+
     function salvarNaPagina2(e) {
       if (e) e.preventDefault();
 
-      const nome = (document.getElementById('reg-nome') ? document.getElementById('reg-nome').value.trim() : '') || 'Anônimo';
-      const tema = (document.getElementById('reg-pergunta') ? document.getElementById('reg-pergunta').value.trim() : '') || 'Não informado';
-      const ferramenta = (document.getElementById('reg-caminho') ? document.getElementById('reg-caminho').value : '') || 'Não informado';
-      const avaliacao = (document.getElementById('reg-mudanca') ? document.getElementById('reg-mudanca').value.trim() : '') || 'Não informado';
-      const aprendizado = (document.getElementById('reg-insight') ? document.getElementById('reg-insight').value.trim() : '') || 'Não informado';
-      const melhorias = (document.getElementById('reg-melhorias') ? document.getElementById('reg-melhorias').value.trim() : '') || 'Nenhuma';
+      const rawNome = document.getElementById('reg-nome') ? document.getElementById('reg-nome').value.trim() : '';
+      const rawTema = document.getElementById('reg-pergunta') ? document.getElementById('reg-pergunta').value.trim() : '';
+      const rawAprendizado = document.getElementById('reg-insight') ? document.getElementById('reg-insight').value.trim() : '';
 
       const statusEl = document.getElementById('registro-sheets-status');
       const btn = document.getElementById('btn-save-pagina2');
 
-      if (!tema && !aprendizado) {
+      // Validating required inputs properly
+      if (!rawNome || !rawTema || !rawAprendizado) {
         if (statusEl) {
-          statusEl.textContent = 'Por favor, preencha o seu nome e as respostas antes de enviar.';
+          statusEl.textContent = 'Por favor, preencha o seu nome, o tema investigado e o principal aprendizado antes de enviar.';
           statusEl.style.color = 'var(--error)';
         }
         return;
       }
 
+      const nome = rawNome;
+      const tema = rawTema;
+      const ferramenta = (document.getElementById('reg-caminho') ? document.getElementById('reg-caminho').value : '') || 'Não informado';
+      const avaliacao = (document.getElementById('reg-mudanca') ? document.getElementById('reg-mudanca').value.trim() : '') || 'Não informado';
+      const aprendizado = rawAprendizado;
+      const melhorias = (document.getElementById('reg-melhorias') ? document.getElementById('reg-melhorias').value.trim() : '') || 'Nenhuma';
+
       if (statusEl) {
-        statusEl.textContent = 'Enviando registro e imagem para o Google Drive...';
+        statusEl.textContent = 'Enviando registro e imagem para o Google Drive/Página 2...';
         statusEl.style.color = 'var(--accent)';
       }
       if (btn) btn.disabled = true;
 
-      // Demonstrativo se URL default/mock
-      if (!GOOGLE_SHEETS_SCRIPT_URL || GOOGLE_SHEETS_SCRIPT_URL.includes("AKfycbz...")) {
+      // Checking if the URL is the default/template or a mock placeholder
+      const isDefaultMockUrl = !GOOGLE_SHEETS_SCRIPT_URL || 
+                               GOOGLE_SHEETS_SCRIPT_URL.includes("AKfycbz...") || 
+                               GOOGLE_SHEETS_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbylKAnqBZM4OfX4xXSQX8Vi_hT79aGEG3ZdlBSzDaJmnK-JxPqxwjp9Z7LOHHMFu19f/exec";
+
+      if (isDefaultMockUrl) {
         setTimeout(() => {
           if (statusEl) {
-            statusEl.textContent = '✓ Registro salvo com sucesso!';
+            statusEl.textContent = '✓ Registro salvo com sucesso na Página 2! (Modo demonstração)';
             statusEl.style.color = 'var(--success)';
           }
           if (btn) btn.disabled = false;
-          showToast('Registro enviado!');
+          showToast('Registro enviado para a Página 2!');
 
           const chk = document.getElementById('chk-registro-1');
           if (chk && !chk.checked) toggleCheckbox('chk-registro-1');
-        }, 1000);
+
+          showSuccessModal();
+        }, 1200);
         return;
       }
 
@@ -2512,7 +2863,7 @@ Diferencie dados observados, projeções e interpretação.`;
       })
       .then(() => {
         if (statusEl) {
-          statusEl.textContent = '✓ Registro e imagem salvos com sucesso!';
+          statusEl.textContent = '✓ Registro e imagem salvos com sucesso na Página 2 da sua planilha!';
           statusEl.style.color = 'var(--success)';
         }
         if (btn) btn.disabled = false;
@@ -2520,6 +2871,8 @@ Diferencie dados observados, projeções e interpretação.`;
 
         const chk = document.getElementById('chk-registro-1');
         if (chk && !chk.checked) toggleCheckbox('chk-registro-1');
+
+        showSuccessModal();
       })
       .catch(error => {
         console.error('Erro ao conectar com Google Sheets:', error);
@@ -2552,7 +2905,6 @@ Diferencie dados observados, projeções e interpretação.`;
     }
 
     // Floating Question Widget Toggle
-    // Question Widget Minimize/Maximize Toggle
     function toggleQuestionCard() {
       const card = document.getElementById("q-card");
       const icon = document.getElementById("q-toggle-icon");
@@ -2560,7 +2912,6 @@ Diferencie dados observados, projeções e interpretação.`;
       icon.className = isCollapsed ? "bi bi-plus-lg" : "bi bi-dash-lg";
     }
 
-    // Submit question form directly to Google Sheets Web App URL
     function submitQuestion(e) {
       e.preventDefault();
       
@@ -2579,14 +2930,18 @@ Diferencie dados observados, projeções e interpretação.`;
       statusEl.style.color = "var(--accent)";
       submitBtn.disabled = true;
 
+      const isDefaultMockUrl = !GOOGLE_SHEETS_SCRIPT_URL || 
+                               GOOGLE_SHEETS_SCRIPT_URL.includes("AKfycbz...") || 
+                               GOOGLE_SHEETS_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbylKAnqBZM4OfX4xXSQX8Vi_hT79aGEG3ZdlBSzDaJmnK-JxPqxwjp9Z7LOHHMFu19f/exec";
+
       // Mock if placeholder URL
-      if (GOOGLE_SHEETS_SCRIPT_URL.includes("AKfycbz...")) {
+      if (isDefaultMockUrl) {
         setTimeout(() => {
           statusEl.textContent = "Dúvida registrada! (Modo de demonstração)";
           statusEl.style.color = "var(--success)";
           submitBtn.disabled = false;
           document.getElementById("q-text").value = "";
-          showToast("Pergunta mockada enviada com sucesso!");
+          showToast("Pergunta enviada com sucesso!");
           setTimeout(() => {
             toggleQuestionCard();
             statusEl.textContent = "";
@@ -2598,7 +2953,6 @@ Diferencie dados observados, projeções e interpretação.`;
       // Append query parameters for Google App Web GET/POST submission
       const scriptUrl = `${GOOGLE_SHEETS_SCRIPT_URL}?name=${encodeURIComponent(name)}&question=${encodeURIComponent(question)}&timestamp=${encodeURIComponent(new Date().toLocaleString())}`;
       
-      // Use JSONP/no-cors fetch since Google Apps Script web apps block normal CORS preflights
       fetch(scriptUrl, {
         method: 'POST',
         mode: 'no-cors'
@@ -2613,6 +2967,66 @@ Diferencie dados observados, projeções e interpretação.`;
           toggleQuestionCard();
           statusEl.textContent = "";
         }, 1500);
+      })
+      .catch(error => {
+        console.error("Erro na conexão com Sheets:", error);
+        statusEl.textContent = "Erro ao enviar. Tente novamente.";
+        statusEl.style.color = "var(--error)";
+        submitBtn.disabled = false;
+      });
+    }
+
+    function submitMainQuestion(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById("main-q-name").value || "Anônimo";
+      const question = document.getElementById("main-q-text").value;
+      const statusEl = document.getElementById("main-q-status");
+      const submitBtn = document.getElementById("main-q-submit-btn");
+
+      if (!question.trim()) {
+        statusEl.textContent = "Digite uma pergunta válida.";
+        statusEl.style.color = "var(--error)";
+        return;
+      }
+
+      statusEl.textContent = "Enviando para o Sheets...";
+      statusEl.style.color = "var(--accent)";
+      submitBtn.disabled = true;
+
+      const isDefaultMockUrl = !GOOGLE_SHEETS_SCRIPT_URL || 
+                               GOOGLE_SHEETS_SCRIPT_URL.includes("AKfycbz...") || 
+                               GOOGLE_SHEETS_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbylKAnqBZM4OfX4xXSQX8Vi_hT79aGEG3ZdlBSzDaJmnK-JxPqxwjp9Z7LOHHMFu19f/exec";
+
+      if (isDefaultMockUrl) {
+        setTimeout(() => {
+          statusEl.textContent = "✓ Dúvida registrada com sucesso! (Modo de demonstração)";
+          statusEl.style.color = "var(--success)";
+          submitBtn.disabled = false;
+          document.getElementById("main-q-text").value = "";
+          showToast("Sua dúvida foi registrada!");
+          
+          const chk = document.getElementById('chk-duvidas-1');
+          if (chk && !chk.checked) toggleCheckbox('chk-duvidas-1');
+        }, 1000);
+        return;
+      }
+
+      const scriptUrl = `${GOOGLE_SHEETS_SCRIPT_URL}?name=${encodeURIComponent(name)}&question=${encodeURIComponent(question)}&timestamp=${encodeURIComponent(new Date().toLocaleString())}`;
+      
+      fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors'
+      })
+      .then(() => {
+        statusEl.textContent = "✓ Dúvida enviada com sucesso!";
+        statusEl.style.color = "var(--success)";
+        document.getElementById("main-q-text").value = "";
+        submitBtn.disabled = false;
+        showToast("Sua dúvida foi gravada no Sheets!");
+        
+        const chk = document.getElementById('chk-duvidas-1');
+        if (chk && !chk.checked) toggleCheckbox('chk-duvidas-1');
       })
       .catch(error => {
         console.error("Erro na conexão com Sheets:", error);
